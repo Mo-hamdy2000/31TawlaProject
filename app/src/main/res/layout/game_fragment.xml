@@ -150,125 +150,101 @@
             android:paddingTop="7dp"
             android:weightSum="120">
 
-            <ImageView
-                android:id="@+id/imageView109"
+            <LinearLayout
+                android:id="@+id/cell_12"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/cell_16"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell101" />
+                android:background="@drawable/cell102"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView108"
+            <LinearLayout
+                android:id="@+id/cell_11"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/cell_16"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell102" />
+                android:background="@drawable/cell101"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView107"
+            <LinearLayout
+                android:id="@+id/cell_10"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/cell_24"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell101" />
+                android:background="@drawable/cell102"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView106"
+            <LinearLayout
+                android:id="@+id/cell_9"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/cell_24"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell102" />
+                android:background="@drawable/cell101"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView105"
+            <LinearLayout
+                android:id="@+id/cell_8"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/cell_24"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell101" />
+                android:background="@drawable/cell102"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView103"
+            <LinearLayout
+                android:id="@+id/cell_7"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/cell_24"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell102" />
+                android:background="@drawable/cell101"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView102"
+            <LinearLayout
+                android:id="@+id/cell_4"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="25dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/cell_24"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell101" />
+                android:background="@drawable/cell102"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView101"
+            <LinearLayout
+                android:id="@+id/cell_5"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/cell_24"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell102" />
+                android:background="@drawable/cell101"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView100"
+            <LinearLayout
+                android:id="@+id/cell_6"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/cell_24"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell101" />
+                android:background="@drawable/cell102"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView99"
+            <LinearLayout
+                android:id="@+id/cell_3"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/cell_24"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell102" />
+                android:background="@drawable/cell101"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView98"
+            <LinearLayout
+                android:id="@+id/cell_2"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/cell_24"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell101" />
+                android:background="@drawable/cell102"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView97"
+            <LinearLayout
+                android:id="@+id/cell_1"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:layout_weight="1"
-                android:contentDescription="@string/cell_24"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell102" />
+                android:background="@drawable/cell101"
+                android:orientation="vertical"></LinearLayout>
 
         </LinearLayout>
 
@@ -279,114 +255,101 @@
             android:orientation="horizontal"
             android:paddingBottom="7dp">
 
-            <ImageView
-                android:id="@+id/imageView74"
+            <LinearLayout
+                android:id="@+id/cell_13"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="10dp"
-                android:contentDescription="@string/cell_13"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell100" />
+                android:background="@drawable/cell100"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView75"
+            <LinearLayout
+                android:id="@+id/cell_14"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:contentDescription="@string/cell_14"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell103" />
+                android:background="@drawable/cell103"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView76"
+            <LinearLayout
+                android:id="@+id/cell_15"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:contentDescription="@string/cell_15"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell100" />
+                android:background="@drawable/cell100"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView77"
+            <LinearLayout
+                android:id="@+id/cell_16"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:contentDescription="@string/cell_16"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell103" />
+                android:background="@drawable/cell103"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView78"
+            <LinearLayout
+                android:id="@+id/cell_17"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:contentDescription="@string/cell_17"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell100" />
+                android:background="@drawable/cell100"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView79"
+            <LinearLayout
+                android:id="@+id/cell_18"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:contentDescription="@string/cell_18"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell103" />
+                android:background="@drawable/cell103"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView69"
+            <LinearLayout
+                android:id="@+id/cell_19"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="25dp"
-                android:contentDescription="@string/cell_19"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell100" />
+                android:background="@drawable/cell100"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView70"
+            <LinearLayout
+                android:id="@+id/cell_20"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:contentDescription="@string/cell_20"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell103" />
+                android:background="@drawable/cell103"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView71"
+            <LinearLayout
+                android:id="@+id/cell_21"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:contentDescription="@string/cell_21"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell100" />
+                android:background="@drawable/cell100"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView72"
+            <LinearLayout
+                android:id="@+id/cell_22"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:contentDescription="@string/cell_22"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell103" />
+                android:background="@drawable/cell103"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView73"
+            <LinearLayout
+                android:id="@+id/cell_23"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:contentDescription="@string/cell_23"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell100" />
+                android:background="@drawable/cell100"
+                android:orientation="vertical"></LinearLayout>
 
-            <ImageView
-                android:id="@+id/imageView48"
+            <LinearLayout
+                android:id="@+id/cell_24"
                 android:layout_width="40dp"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_marginStart="3dp"
-                android:contentDescription="@string/cell_24"
-                android:scaleType="fitXY"
-                app:srcCompat="@drawable/cell103" />
-
+                android:background="@drawable/cell103"
+                android:orientation="vertical"></LinearLayout>
         </LinearLayout>
 
     </LinearLayout>
