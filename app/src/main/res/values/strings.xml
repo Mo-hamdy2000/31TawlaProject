@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">31 Tawla Project</string>
+    <string name="cell_24">cell 24</string>
+    <string name="cell_23">cell 23</string>
+    <string name="cell_22">cell 22</string>
+    <string name="cell_21">cell 21</string>
+    <string name="cell_20">cell 20</string>
+    <string name="cell_19">cell 19</string>
+    <string name="cell_18">cell 18</string>
+    <string name="cell_17">cell 17</string>
+    <string name="cell_16">cell 16</string>
+    <string name="cell_15">cell 15</string>
+    <string name="cell_14">cell 14</string>
+    <string name="cell_13">cell 13</string>
+</resources>
