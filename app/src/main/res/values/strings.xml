@@ -12,4 +12,7 @@
     <string name="cell_15">cell 15</string>
     <string name="cell_14">cell 14</string>
     <string name="cell_13">cell 13</string>
+    <string name="player_2_score">Player 2 score</string>
+    <string name="score_one_text" />
+    <string name="player_1_score">Player 1 score</string>
 </resources>
