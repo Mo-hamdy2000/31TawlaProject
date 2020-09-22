@@ -1,357 +1,631 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable name="gameViewModel" type="com.example.android.a31tawlaproject.GameViewModel"/>
+    </data>
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/diceLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:layout_gravity="bottom">
 
-        android:background="@color/white"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/boardLayout"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/textView3"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="@string/player_1_score"
-            android:textColor="@color/darkPurple"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/scoreOneText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/scoreOneText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/score_one_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3" />
-
-        <TextView
-            android:id="@+id/textView5"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="8dp"
-            android:text="@string/player_2_score"
-            android:textColor="@color/darkPurple"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toTopOf="@id/scoreTwoText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.504"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scoreOneText" />
-
-        <TextView
-            android:id="@+id/scoreTwoText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text=" "
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView5"
-            app:layout_constraintBottom_toTopOf="@id/diceImg1"
-
-            />
-
-        <ImageView
-            android:id="@+id/diceImg1"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginBottom="32dp"
-            android:background="@drawable/dice1"
-            android:scaleType="fitCenter"
-            app:layout_constraintBottom_toTopOf="@+id/rollButton"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/diceImg2"
-            app:layout_constraintTop_toBottomOf="@+id/scoreTwoText"
-            android:contentDescription="TODO" />
-
-        <ImageView
-            android:id="@+id/diceImg2"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/diceLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginRight="8dp"
-            android:layout_marginBottom="32dp"
-            android:background="@drawable/dice6"
-            android:scaleType="fitCenter"
-            app:layout_constraintBottom_toTopOf="@+id/rollButton"
-            app:layout_constraintEnd_toStartOf="@+id/diceImg1"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/scoreTwoText"
-            app:layout_constraintVertical_bias="1.0" />
-
-        <Button
-            android:id="@+id/rollButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:background="@drawable/roll_button"
-            android:text="Roll"
-            android:textAllCaps="false"
-            android:textColor="@color/darkPurple"
-            android:textSize="24sp"
-            android:textStyle="bold"
+
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/boardLayout"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <TextView
+                android:id="@+id/textView3"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/player_1_score"
+                android:textColor="@color/darkPurple"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@id/scoreOneText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/scoreOneText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/score_one_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView3" />
+
+            <TextView
+                android:id="@+id/textView5"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
+                android:text="@string/player_2_score"
+                android:textColor="@color/darkPurple"
+                android:textSize="16sp"
+                app:layout_constraintBottom_toTopOf="@id/scoreTwoText"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.504"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/scoreOneText" />
+
+            <TextView
+                android:id="@+id/scoreTwoText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" "
+                app:layout_constraintBottom_toTopOf="@id/diceImg1"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView5"
+
+                />
+
+            <ImageView
+                android:id="@+id/diceImg1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/dice1"
+                android:contentDescription="TODO"
+                android:scaleType="fitCenter"
+                app:layout_constraintBottom_toTopOf="@+id/rollButton"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/diceImg2"
+                app:layout_constraintTop_toBottomOf="@+id/scoreTwoText" />
+
+            <ImageView
+                android:id="@+id/diceImg2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginLeft="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:layout_marginBottom="32dp"
+                android:background="@drawable/dice6"
+                android:scaleType="fitCenter"
+                app:layout_constraintBottom_toTopOf="@+id/rollButton"
+                app:layout_constraintEnd_toStartOf="@+id/diceImg1"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/scoreTwoText"
+                app:layout_constraintVertical_bias="1.0" />
+
+            <Button
+                android:id="@+id/rollButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:background="@drawable/roll_button"
+                android:text="Roll"
+                android:textAllCaps="false"
+                android:textColor="@color/darkPurple"
+                android:textSize="24sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        <LinearLayout
+            android:id="@+id/boardLayout"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_marginStart="1dp"
+            android:background="@drawable/woodenbackground"
+            android:orientation="vertical"
+            android:padding="3dp"
+            android:weightSum="100"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toEndOf="@+id/diceLayout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintWidth_percent=".8">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="50"
+                android:orientation="horizontal"
+                android:paddingTop="7dp"
+                android:weightSum="120">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_1"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="15dp"
+                    android:background="@drawable/cell102"
+                    android:onClick="@{()-> gameViewModel.addPiece(1)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_2"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell101"
+                    android:onClick="@{()-> gameViewModel.addPiece(2)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_3"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell102"
+                    android:onClick="@{()-> gameViewModel.addPiece(3)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_3"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_4"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell101"
+                    android:onClick="@{()-> gameViewModel.addPiece(4)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_4"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_5"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell102"
+                    android:onClick="@{()-> gameViewModel.addPiece(5)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_5"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_6"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell101"
+                    android:onClick="@{()-> gameViewModel.addPiece(6)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_6"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_7"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="25dp"
+                    android:background="@drawable/cell102"
+                    android:onClick="@{()-> gameViewModel.addPiece(7)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_7"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_8"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell101"
+                    android:onClick="@{()-> gameViewModel.addPiece(8)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_8"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_9"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell102"
+                    android:onClick="@{()-> gameViewModel.addPiece(9)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_9"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_10"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell101"
+                    android:onClick="@{()-> gameViewModel.addPiece(10)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_10"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_11"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell102"
+                    android:onClick="@{()-> gameViewModel.addPiece(11)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_11"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_12"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell101"
+                    android:onClick="@{()-> gameViewModel.addPiece(12)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_12"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="50"
+                android:orientation="horizontal"
+                android:paddingBottom="7dp">
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_13"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="15dp"
+                    android:background="@drawable/cell100"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="@{()-> gameViewModel.addPiece(13)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_13"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_14"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell103"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="@{()-> gameViewModel.addPiece(14)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_14"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_15"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell100"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="@{()-> gameViewModel.addPiece(15)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_15"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_16"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell103"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="@{()-> gameViewModel.addPiece(16)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_16"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_17"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell100"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="@{()-> gameViewModel.addPiece(17)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_17"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_18"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell103"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="@{()-> gameViewModel.addPiece(18)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_18"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_19"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="25dp"
+                    android:background="@drawable/cell100"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="@{()-> gameViewModel.addPiece(19)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_19"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_20"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell103"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="@{()-> gameViewModel.addPiece(20)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_20"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_21"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell100"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="@{()-> gameViewModel.addPiece(21)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_21"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_22"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell103"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="@{()-> gameViewModel.addPiece(22)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_22"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_23"
+                    android:layout_width="@dimen/cell_width"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell100"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="@{()-> gameViewModel.addPiece(23)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_23"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/cell_24"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="4dp"
+                    android:background="@drawable/cell103"
+                    android:clickable="true"
+                    android:focusable="true"
+                    android:onClick="@{()-> gameViewModel.addPiece(24)}">
+
+                    <TextView
+                        android:id="@+id/textView_cell_24"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    <LinearLayout
-        android:id="@+id/boardLayout"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="1dp"
-        android:background="@drawable/woodenbackground"
-        android:orientation="vertical"
-        android:padding="3dp"
-        android:weightSum="100"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/diceLayout"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintWidth_percent=".8">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="50"
-            android:orientation="horizontal"
-            android:paddingTop="7dp"
-            android:weightSum="120">
-
-            <LinearLayout
-                android:id="@+id/cell_12"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/cell102"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_11"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell101"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_10"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell102"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_9"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell101"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_8"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell102"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_7"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell101"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_4"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="25dp"
-                android:background="@drawable/cell102"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_5"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell101"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_6"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell102"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_3"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell101"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_2"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell102"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_1"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell101"
-                android:orientation="vertical"></LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_weight="50"
-            android:orientation="horizontal"
-            android:paddingBottom="7dp">
-
-            <LinearLayout
-                android:id="@+id/cell_13"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="10dp"
-                android:background="@drawable/cell100"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_14"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell103"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_15"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell100"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_16"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell103"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_17"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell100"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_18"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell103"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_19"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="25dp"
-                android:background="@drawable/cell100"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_20"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell103"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_21"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell100"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_22"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell103"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_23"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell100"
-                android:orientation="vertical"></LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/cell_24"
-                android:layout_width="40dp"
-                android:layout_height="match_parent"
-                android:layout_marginStart="3dp"
-                android:background="@drawable/cell103"
-                android:orientation="vertical"></LinearLayout>
-        </LinearLayout>
-
-    </LinearLayout>
-
-</androidx.constraintlayout.widget.ConstraintLayout>
+</layout>
