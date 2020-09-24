@@ -1,19 +1,14 @@
 package com.example.android.a31tawlaproject
 
-import android.app.ActionBar
 import android.app.Application
-import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.TextView
-import androidx.constraintlayout.solver.state.State
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 import androidx.lifecycle.AndroidViewModel
 import com.example.android.a31tawlaproject.databinding.GameFragmentBinding
+
 
 class GameViewModel(application: Application, val binding: GameFragmentBinding) : AndroidViewModel(application) {
 
@@ -78,7 +73,6 @@ class GameViewModel(application: Application, val binding: GameFragmentBinding) 
     }
 
     fun addPiece(cellNum: Int){
-        println("Wslnaaaaaaaaaaaaaaa")
         val cell = getCell(cellNum)
         val cellText = getCellText(cellNum)
         if (cellText.text != "") {
@@ -87,21 +81,108 @@ class GameViewModel(application: Application, val binding: GameFragmentBinding) 
         else
         {
             cellText.text = "1"
+            val image = ImageView(getApplication())
+            // If statement will be added here so that piece image depends on player
+            image.setImageResource(R.drawable.piece1)
+            if (cellNum <= 12) {
+                image.scaleType = ImageView.ScaleType.FIT_START
+                cell.addView(image, 0)
+            }
+            else {
+                image.scaleType = ImageView.ScaleType.FIT_END
+                cell.addView(image)
+            }
         }
-        val image = ImageView(getApplication())
-        image.setImageResource(R.drawable.piece10)
-        if (cellNum <= 12) {
-            image.scaleType = ImageView.ScaleType.FIT_START
-            cell.addView(image, 0)
+    }
+
+    fun removePiece(cellNum: Int){
+        val cell = getCell(cellNum)
+        val cellText = getCellText(cellNum)
+        if (cellText.text.toString().toInt() > 1) {
+            cellText.text = (cellText.text.toString().toInt() - 1).toString()
         }
         else {
-            image.scaleType = ImageView.ScaleType.FIT_END
-            cell.addView(image)
+            cellText.text = ""
+            if (cellNum <= 12) {
+                cell.removeViewAt(0)
+            }
+            else {
+                cell.removeViewAt(1)
+            }
+
         }
 
-        println("Wslnaaaaaaaaaaaaaaa")
 
-        Log.i("hi", "Wslnaaaaaaaaaaaaaaa")
+    }
+
+    fun highlightCell(cellNum: Int) {
+        val cell = getCell(cellNum)
+        if (cellNum <= 12 && cellNum % 2 == 0) {
+            cell.setBackgroundResource(R.drawable.cell_gold_upper_highlighted)
+        }
+        else if (cellNum > 12 && cellNum % 2 == 0) {
+            cell.setBackgroundResource(R.drawable.cell_gold_lower_highlighted)
+        }
+        else if (cellNum <= 12 && cellNum % 2 != 0) {
+            cell.setBackgroundResource(R.drawable.cell_blue_upper_highlighted)
+        }
+        else {
+            cell.setBackgroundResource(R.drawable.cell_blue_lower_highlighted)
+        }
+    }
+
+    fun unhighlightCell(cellNum: Int) {
+        val cell = getCell(cellNum)
+        if (cellNum <= 12 && cellNum % 2 == 0) {
+            cell.setBackgroundResource(R.drawable.cell_gold_upper)
+        }
+        else if (cellNum > 12 && cellNum % 2 == 0) {
+            cell.setBackgroundResource(R.drawable.cell_gold_lower)
+        }
+        else if (cellNum <= 12 && cellNum % 2 != 0) {
+            cell.setBackgroundResource(R.drawable.cell_blue_upper)
+        }
+        else {
+            cell.setBackgroundResource(R.drawable.cell_blue_lower)
+        }
+    }
+
+    fun highlightPiece(cellNum: Int, playerNum: Int) {
+        val cell = getCell(cellNum)
+        if (cell.childCount > 1) {
+            lateinit var piece: ImageView
+            if (cellNum <= 12) {
+                piece = cell.getChildAt(0) as ImageView
+            }
+            else {
+                piece = cell.getChildAt(1) as ImageView
+            }
+            if (playerNum == 1) {
+                piece.setImageResource(R.drawable.piece1_highlighted)
+            }
+            else {
+                piece.setImageResource(R.drawable.piece2_highlighted)
+            }
+        }
+    }
+
+    fun unhighlightPiece(cellNum: Int, playerNum: Int) {
+        val cell = getCell(cellNum)
+        if (cell.childCount > 1) {
+            lateinit var piece: ImageView
+            if (cellNum <= 12) {
+                piece = cell.getChildAt(0) as ImageView
+            }
+            else {
+                piece = cell.getChildAt(1) as ImageView
+            }
+            if (playerNum == 1) {
+                piece.setImageResource(R.drawable.piece1)
+            }
+            else {
+                piece.setImageResource(R.drawable.piece2)
+            }
+        }
 
     }
 }

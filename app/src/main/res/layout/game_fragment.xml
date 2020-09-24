@@ -163,13 +163,16 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="15dp"
-                    android:background="@drawable/cell102"
-                    android:onClick="@{()-> gameViewModel.addPiece(1)}">
+                    android:background="@drawable/cell_gold_upper"
+                    android:onClick="@{()-> gameViewModel.addPiece(1)}"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -181,13 +184,16 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell101"
-                    android:onClick="@{()-> gameViewModel.addPiece(2)}">
+                    android:background="@drawable/cell_blue_upper"
+                    android:onClick="@{()-> gameViewModel.addPiece(2)}"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -199,13 +205,16 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell102"
-                    android:onClick="@{()-> gameViewModel.addPiece(3)}">
+                    android:background="@drawable/cell_gold_upper"
+                    android:onClick="@{()-> gameViewModel.addPiece(3)}"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -217,13 +226,16 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell101"
-                    android:onClick="@{()-> gameViewModel.addPiece(4)}">
+                    android:background="@drawable/cell_blue_upper"
+                    android:onClick="@{()-> gameViewModel.addPiece(4)}"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -235,13 +247,16 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell102"
-                    android:onClick="@{()-> gameViewModel.addPiece(5)}">
+                    android:background="@drawable/cell_gold_upper"
+                    android:onClick="@{()-> gameViewModel.addPiece(5)}"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -253,13 +268,16 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell101"
-                    android:onClick="@{()-> gameViewModel.addPiece(6)}">
+                    android:background="@drawable/cell_blue_upper"
+                    android:onClick="@{()-> gameViewModel.addPiece(6)}"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -271,13 +289,16 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="25dp"
-                    android:background="@drawable/cell102"
-                    android:onClick="@{()-> gameViewModel.addPiece(7)}">
+                    android:background="@drawable/cell_gold_upper"
+                    android:onClick="@{()-> gameViewModel.addPiece(7)}"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -289,13 +310,16 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell101"
-                    android:onClick="@{()-> gameViewModel.addPiece(8)}">
+                    android:background="@drawable/cell_blue_upper"
+                    android:onClick="@{()-> gameViewModel.addPiece(8)}"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -307,13 +331,16 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell102"
-                    android:onClick="@{()-> gameViewModel.addPiece(9)}">
+                    android:background="@drawable/cell_gold_upper"
+                    android:onClick="@{()-> gameViewModel.addPiece(9)}"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_9"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -325,13 +352,16 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell101"
-                    android:onClick="@{()-> gameViewModel.addPiece(10)}">
+                    android:background="@drawable/cell_blue_upper"
+                    android:onClick="@{()-> gameViewModel.addPiece(10)}"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -343,13 +373,16 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell102"
-                    android:onClick="@{()-> gameViewModel.addPiece(11)}">
+                    android:background="@drawable/cell_gold_upper"
+                    android:onClick="@{()-> gameViewModel.addPiece(11)}"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_11"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -361,13 +394,16 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell101"
-                    android:onClick="@{()-> gameViewModel.addPiece(12)}">
+                    android:background="@drawable/cell_blue_upper"
+                    android:onClick="@{()-> gameViewModel.addPiece(12)}"
+                    android:paddingTop="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_12"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginBottom="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -388,19 +424,24 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="15dp"
-                    android:background="@drawable/cell100"
+                    android:background="@drawable/cell_blue_lower"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(13)}">
+                    android:onClick="@{()-> gameViewModel.addPiece(13)}"
+                    android:paddingBottom="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_13"
+                        style="@style/Widget.AppCompat.TextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -408,15 +449,18 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell103"
+                    android:background="@drawable/cell_gold_lower"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(14)}">
+                    android:onClick="@{()-> gameViewModel.addPiece(14)}"
+                    android:paddingBottom="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_14"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -428,15 +472,18 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell100"
+                    android:background="@drawable/cell_blue_lower"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(15)}">
+                    android:onClick="@{()-> gameViewModel.addPiece(15)}"
+                    android:paddingBottom="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_15"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -448,15 +495,18 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell103"
+                    android:background="@drawable/cell_gold_lower"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(16)}">
+                    android:onClick="@{()-> gameViewModel.addPiece(16)}"
+                    android:paddingBottom="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -468,15 +518,18 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell100"
+                    android:background="@drawable/cell_blue_lower"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(17)}">
+                    android:onClick="@{()-> gameViewModel.addPiece(17)}"
+                    android:paddingBottom="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_17"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -488,15 +541,18 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell103"
+                    android:background="@drawable/cell_gold_lower"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(18)}">
+                    android:onClick="@{()-> gameViewModel.addPiece(18)}"
+                    android:paddingBottom="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_18"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -508,15 +564,18 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="25dp"
-                    android:background="@drawable/cell100"
+                    android:background="@drawable/cell_blue_lower"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(19)}">
+                    android:onClick="@{()-> gameViewModel.addPiece(19)}"
+                    android:paddingBottom="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_19"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -528,15 +587,18 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell103"
+                    android:background="@drawable/cell_gold_lower"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(20)}">
+                    android:onClick="@{()-> gameViewModel.addPiece(20)}"
+                    android:paddingBottom="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_20"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -548,15 +610,18 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell100"
+                    android:background="@drawable/cell_blue_lower"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(21)}">
+                    android:onClick="@{()-> gameViewModel.addPiece(21)}"
+                    android:paddingBottom="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_21"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -568,15 +633,18 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell103"
+                    android:background="@drawable/cell_gold_lower"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(22)}">
+                    android:onClick="@{()-> gameViewModel.addPiece(22)}"
+                    android:paddingBottom="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_22"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -588,15 +656,18 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell100"
+                    android:background="@drawable/cell_blue_lower"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(23)}">
+                    android:onClick="@{()-> gameViewModel.addPiece(23)}"
+                    android:paddingBottom="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_23"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -608,19 +679,23 @@
                     android:layout_width="40dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell103"
+                    android:background="@drawable/cell_gold_lower"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(24)}">
+                    android:onClick="@{()-> gameViewModel.addPiece(24)}"
+                    android:paddingBottom="10dp">
 
                     <TextView
                         android:id="@+id/textView_cell_24"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
+
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
