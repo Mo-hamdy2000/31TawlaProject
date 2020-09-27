@@ -1,19 +1,46 @@
 package com.example.android.a31tawlaproject
 
 import android.app.Application
-import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.lifecycle.AndroidViewModel
 import com.example.android.a31tawlaproject.databinding.GameFragmentBinding
 
+class GameViewModel(application: Application, private val binding: GameFragmentBinding) : AndroidViewModel(application) {
 
-class GameViewModel(application: Application, val binding: GameFragmentBinding) : AndroidViewModel(application) {
+        private lateinit var firstCell: Cell // -> first dice outcome
+        private lateinit var secondCell: Cell // -> second dice outcome
+        private var startingPointSelected = false // -> flag for selecting source cell
+        private lateinit var sourceCell : Cell
+        private var cellOnePlayed = false
+        private var cellTwoPlayed = false
+        private var currentColor = 1
+        private var scoreOne = 0
+        private var scoreTwo = 0
+         val cellsArray: Array<Cell> = Array(24) {
+            Cell(it + 1, 0, 0, getCell(it + 1), getCellText(it + 1))
+        }
 
-    private fun getCell(cellNum: Int): ConstraintLayout{
-        return when(cellNum) {
+
+    init {
+        currentColor = 2
+        addPiece(cellsArray[12])
+        currentColor = 1
+        addPiece(cellsArray[0])
+
+        cellsArray[0].cellText.text = 12.toString()
+        cellsArray[12].cellText.text = 12.toString()
+        cellsArray[0].numberOfPieces =12
+        cellsArray[12].numberOfPieces =12
+        cellsArray[0].color =1
+        cellsArray[12].color =2
+        rollDice(binding.diceImg1,binding.diceImg2)
+    }
+
+    private fun getCell(cellNum: Int): ConstraintLayout {
+        return when (cellNum) {
             1 -> binding.cell1
             2 -> binding.cell2
             3 -> binding.cell3
@@ -42,8 +69,8 @@ class GameViewModel(application: Application, val binding: GameFragmentBinding) 
         }
     }
 
-    private fun getCellText(cellNum: Int): TextView{
-        return when(cellNum) {
+    private fun getCellText(cellNum: Int): TextView {
+        return when (cellNum) {
             1 -> binding.textViewCell1
             2 -> binding.textViewCell2
             3 -> binding.textViewCell3
@@ -72,92 +99,51 @@ class GameViewModel(application: Application, val binding: GameFragmentBinding) 
         }
     }
 
-    fun addPiece(cellNum: Int){
-        val cell = getCell(cellNum)
-        val cellText = getCellText(cellNum)
-        if (cellText.text != "") {
-            cellText.text = (cellText.text.toString().toInt() + 1).toString()
-        }
-        else
-        {
-            cellText.text = "1"
-            val image = ImageView(getApplication())
-            // If statement will be added here so that piece image depends on player
-            image.setImageResource(R.drawable.piece1)
-            if (cellNum <= 12) {
-                image.scaleType = ImageView.ScaleType.FIT_START
-                cell.addView(image, 0)
-            }
-            else {
-                image.scaleType = ImageView.ScaleType.FIT_END
-                cell.addView(image)
-            }
-        }
-    }
+    private fun highlightCell(cell: Cell) {
 
-    fun removePiece(cellNum: Int){
-        val cell = getCell(cellNum)
-        val cellText = getCellText(cellNum)
-        if (cellText.text.toString().toInt() > 1) {
-            cellText.text = (cellText.text.toString().toInt() - 1).toString()
+        if (cell.cellNumber <= 12 && cell.cellNumber % 2 == 0) {
+            cell.cellID.setBackgroundResource(R.drawable.cell_gold_upper_highlighted)
+        }
+        else if (cell.cellNumber > 12 && cell.cellNumber % 2 == 0) {
+            cell.cellID.setBackgroundResource(R.drawable.cell_gold_lower_highlighted)
+        }
+        else if (cell.cellNumber <= 12 && cell.cellNumber % 2 != 0) {
+            cell.cellID.setBackgroundResource(R.drawable.cell_blue_upper_highlighted)
         }
         else {
-            cellText.text = ""
-            if (cellNum <= 12) {
-                cell.removeViewAt(0)
-            }
-            else {
-                cell.removeViewAt(1)
-            }
-
+            cell.cellID.setBackgroundResource(R.drawable.cell_blue_lower_highlighted)
         }
-
-
     }
 
-    fun highlightCell(cellNum: Int) {
-        val cell = getCell(cellNum)
-        if (cellNum <= 12 && cellNum % 2 == 0) {
-            cell.setBackgroundResource(R.drawable.cell_gold_upper_highlighted)
+    private fun unhighlightCell(cell: Cell) {
+        if (cell.cellNumber <= 12 && cell.cellNumber % 2 == 0) {
+            cell.cellID.setBackgroundResource(R.drawable.cell_gold_upper)
         }
-        else if (cellNum > 12 && cellNum % 2 == 0) {
-            cell.setBackgroundResource(R.drawable.cell_gold_lower_highlighted)
+        else if (cell.cellNumber > 12 && cell.cellNumber % 2 == 0) {
+            cell.cellID.setBackgroundResource(R.drawable.cell_gold_lower)
         }
-        else if (cellNum <= 12 && cellNum % 2 != 0) {
-            cell.setBackgroundResource(R.drawable.cell_blue_upper_highlighted)
+        else if (cell.cellNumber <= 12 && cell.cellNumber % 2 != 0) {
+            cell.cellID.setBackgroundResource(R.drawable.cell_blue_upper)
         }
         else {
-            cell.setBackgroundResource(R.drawable.cell_blue_lower_highlighted)
+            cell.cellID.setBackgroundResource(R.drawable.cell_blue_lower)
         }
     }
 
-    fun unhighlightCell(cellNum: Int) {
-        val cell = getCell(cellNum)
-        if (cellNum <= 12 && cellNum % 2 == 0) {
-            cell.setBackgroundResource(R.drawable.cell_gold_upper)
-        }
-        else if (cellNum > 12 && cellNum % 2 == 0) {
-            cell.setBackgroundResource(R.drawable.cell_gold_lower)
-        }
-        else if (cellNum <= 12 && cellNum % 2 != 0) {
-            cell.setBackgroundResource(R.drawable.cell_blue_upper)
-        }
-        else {
-            cell.setBackgroundResource(R.drawable.cell_blue_lower)
-        }
-    }
 
-    fun highlightPiece(cellNum: Int, playerNum: Int) {
-        val cell = getCell(cellNum)
-        if (cell.childCount > 1) {
+
+
+    private fun highlightPiece(cell: Cell) {
+
+        if (cell.cellID.childCount > 1) {
             lateinit var piece: ImageView
-            if (cellNum <= 12) {
-                piece = cell.getChildAt(0) as ImageView
+            if (cell.cellNumber <= 12) {
+                piece = cell.cellID.getChildAt(0) as ImageView
             }
             else {
-                piece = cell.getChildAt(1) as ImageView
+                piece = cell.cellID.getChildAt(1) as ImageView
             }
-            if (playerNum == 1) {
+            if (currentColor == 1) {
                 piece.setImageResource(R.drawable.piece1_highlighted)
             }
             else {
@@ -166,23 +152,145 @@ class GameViewModel(application: Application, val binding: GameFragmentBinding) 
         }
     }
 
-    fun unhighlightPiece(cellNum: Int, playerNum: Int) {
-        val cell = getCell(cellNum)
-        if (cell.childCount > 1) {
+    private fun unhighlightPiece(cell: Cell) {
+        if (cell.cellID.childCount > 1) {
             lateinit var piece: ImageView
-            if (cellNum <= 12) {
-                piece = cell.getChildAt(0) as ImageView
+            if (cell.cellNumber <= 12) {
+                piece = cell.cellID.getChildAt(0) as ImageView
             }
             else {
-                piece = cell.getChildAt(1) as ImageView
+                piece = cell.cellID.getChildAt(1) as ImageView
             }
-            if (playerNum == 1) {
+            if (currentColor == 1) {
                 piece.setImageResource(R.drawable.piece1)
             }
             else {
                 piece.setImageResource(R.drawable.piece2)
             }
         }
+
+
+    }
+
+
+
+
+    fun selectCell(cell: Cell) {
+        println("Wslnaaaaaaaaaaaaaaa")
+        if (!startingPointSelected) {
+            if (cell.numberOfPieces > 0 && cell.color == currentColor) {
+                // awwel ma ydous 3ala piece at2akked ennaha bta3to w fi pieces fel 5ana di
+                Toast.makeText(getApplication(), "YOU SELECTED ME", Toast.LENGTH_LONG).show()
+                getPossibleMoves(cell)
+                startingPointSelected = true
+                highlightPiece(cell)
+                sourceCell = cell
+            }
+        } else {
+            if (cell == firstCell && !cellOnePlayed && (firstCell.color == currentColor || cell.color == 0)) {
+                // lamma ydous 3ala cell tania ba3d elawwalaneyya at2akkedd ennaha men el highlighted
+                addPiece(cell)
+                cellOnePlayed = true
+                unhighlightCell(firstCell)
+                unhighlightCell(secondCell)
+                unhighlightPiece(sourceCell)
+                removePiece(sourceCell)
+
+
+            } else if (cell == secondCell && !cellTwoPlayed && (secondCell.color == currentColor || cell.color == 0)) {
+                addPiece(cell)
+                cellTwoPlayed = true
+                unhighlightCell(firstCell)
+                unhighlightCell(secondCell)
+                unhighlightPiece(sourceCell)
+                removePiece(sourceCell)
+
+
+            }
+            //law e5tar cell tania 5ales ya3ni 3ayez y8ayyer el source cell
+            else if (cell != firstCell && cell != secondCell) {
+                getPossibleMoves(cell)
+                startingPointSelected = true
+            }
+
+            if (cellOnePlayed && cellTwoPlayed)
+                switchTurns()
+        }
+
+    }
+    private fun getPossibleMoves(selectedCell: Cell) {
+        // gets two possible moves given by dice output
+        // a3mel flag enn elcell tenfa3 ?? badal el condition elli fooo2
+        firstCell = cellsArray[selectedCell.cellNumber + diceOneVal - 1]
+        secondCell = cellsArray[selectedCell.cellNumber + diceTwoVal - 1]
+        if (!cellOnePlayed && (firstCell.color == currentColor || firstCell.color == 0) ) {
+             highlightCell(firstCell)
+        }
+        if (!cellTwoPlayed && (secondCell.color == currentColor || secondCell.color == 0)) {
+            highlightCell(secondCell)
+        }
+    }
+
+    private fun switchTurns() {
+        currentColor = if (currentColor == 1)
+            2
+        else
+            1
+        cellOnePlayed = false
+        cellTwoPlayed = false
+    }
+
+        private fun addPiece(cell: Cell){
+
+            if (cell.numberOfPieces >0) {
+                cell.numberOfPieces+=1
+                cell.cellText.text = (cell.numberOfPieces).toString()
+                startingPointSelected = false
+                cell.color = currentColor
+            }
+            else if (cell.numberOfPieces==0)
+            {
+                cell.cellText.text = "1"
+                val image = ImageView(getApplication())
+                // If statement will be added here so that piece image depends on player
+                if(currentColor ==1)
+                    image.setImageResource(R.drawable.piece1)
+                else if(currentColor==2)
+                    image.setImageResource(R.drawable.piece2)
+                if (cell.cellNumber <= 12) {
+                    image.scaleType = ImageView.ScaleType.FIT_START
+                    cell.cellID.addView(image, 0)
+                }
+                else {
+                    image.scaleType = ImageView.ScaleType.FIT_END
+                    cell.cellID.addView(image)
+                }
+                cell.numberOfPieces +=1
+                startingPointSelected = false
+                cell.color = currentColor
+            }
+
+        }
+
+
+        private fun removePiece(cell: Cell){
+            if (cell.numberOfPieces > 1) {
+                cell.cellText.text = (cell.cellText.text.toString().toInt() - 1).toString()
+                cell.numberOfPieces-=1
+            }
+            else if(cell.numberOfPieces == 1) {
+                cell.cellText.text = ""
+                if (cell.cellNumber <= 12) {
+                    cell.cellID.removeViewAt(0)
+                }
+                else {
+                    cell.cellID.removeViewAt(1)
+                }
+                cell.numberOfPieces -=1
+            }
+
+
+
 
     }
 }
