@@ -5,15 +5,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.ImageView
-import android.widget.Toast
-import androidx.constraintlayout.widget.ConstraintSet
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import com.example.android.a31tawlaproject.databinding.GameFragmentBinding
 
 class GameFragment : Fragment() {
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate view and obtain an instance of the binding class.
@@ -23,6 +22,12 @@ class GameFragment : Fragment() {
         // Specify the current activity as the lifecycle owner.
         val application = requireNotNull(this.activity).application
         val gameViewModel = GameViewModel(application, binding)
+        val rollButton : Button = binding.rollButton
+        val diceOne : ImageView = binding.diceImg1
+        val diceTwo : ImageView = binding.diceImg2
+        rollButton.setOnClickListener{
+            rollDice(diceOne,diceTwo)
+        }
         /*binding.cell24.setOnClickListener {
             //Toast.makeText(this, "IT WORKS !!!", Toast.LENGTH_SHORT).show()
             Log.i("GameFragment", "here111111111111111")

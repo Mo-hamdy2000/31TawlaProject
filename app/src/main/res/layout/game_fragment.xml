@@ -163,16 +163,12 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="15dp"
-                    android:background="@drawable/cell_gold_upper"
-                    android:onClick="@{()-> gameViewModel.addPiece(1)}"
-                    android:paddingTop="10dp">
-
+                    android:background="@drawable/cell102"
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[0])}">
                     <TextView
                         android:id="@+id/textView_cell_1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -184,16 +180,13 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_blue_upper"
-                    android:onClick="@{()-> gameViewModel.addPiece(2)}"
-                    android:paddingTop="10dp">
+                    android:background="@drawable/cell101"
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[1])}">
 
                     <TextView
                         android:id="@+id/textView_cell_2"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -205,16 +198,13 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_gold_upper"
-                    android:onClick="@{()-> gameViewModel.addPiece(3)}"
-                    android:paddingTop="10dp">
+                    android:background="@drawable/cell102"
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[2])}">
 
                     <TextView
                         android:id="@+id/textView_cell_3"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -226,16 +216,13 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_blue_upper"
-                    android:onClick="@{()-> gameViewModel.addPiece(4)}"
-                    android:paddingTop="10dp">
+                    android:background="@drawable/cell101"
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[3])}">
 
                     <TextView
                         android:id="@+id/textView_cell_4"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -247,16 +234,13 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_gold_upper"
-                    android:onClick="@{()-> gameViewModel.addPiece(5)}"
-                    android:paddingTop="10dp">
+                    android:background="@drawable/cell102"
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[4])}">
 
                     <TextView
                         android:id="@+id/textView_cell_5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -268,16 +252,13 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_blue_upper"
-                    android:onClick="@{()-> gameViewModel.addPiece(6)}"
-                    android:paddingTop="10dp">
+                    android:background="@drawable/cell101"
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[5])}">
 
                     <TextView
                         android:id="@+id/textView_cell_6"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -289,16 +270,13 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="25dp"
-                    android:background="@drawable/cell_gold_upper"
-                    android:onClick="@{()-> gameViewModel.addPiece(7)}"
-                    android:paddingTop="10dp">
+                    android:background="@drawable/cell102"
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[6])}">
 
                     <TextView
                         android:id="@+id/textView_cell_7"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -310,16 +288,13 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_blue_upper"
-                    android:onClick="@{()-> gameViewModel.addPiece(8)}"
-                    android:paddingTop="10dp">
+                    android:background="@drawable/cell101"
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[7])}">
 
                     <TextView
                         android:id="@+id/textView_cell_8"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -331,16 +306,13 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_gold_upper"
-                    android:onClick="@{()-> gameViewModel.addPiece(9)}"
-                    android:paddingTop="10dp">
+                    android:background="@drawable/cell102"
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[8])}">
 
                     <TextView
                         android:id="@+id/textView_cell_9"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -352,16 +324,13 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_blue_upper"
-                    android:onClick="@{()-> gameViewModel.addPiece(10)}"
-                    android:paddingTop="10dp">
+                    android:background="@drawable/cell101"
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[9])}">
 
                     <TextView
                         android:id="@+id/textView_cell_10"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -373,16 +342,13 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_gold_upper"
-                    android:onClick="@{()-> gameViewModel.addPiece(11)}"
-                    android:paddingTop="10dp">
+                    android:background="@drawable/cell102"
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[10])}">
 
                     <TextView
                         android:id="@+id/textView_cell_11"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -394,16 +360,12 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_blue_upper"
-                    android:onClick="@{()-> gameViewModel.addPiece(12)}"
-                    android:paddingTop="10dp">
-
+                    android:background="@drawable/cell101"
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[11])}">
                     <TextView
                         android:id="@+id/textView_cell_12"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
@@ -424,24 +386,19 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="15dp"
-                    android:background="@drawable/cell_blue_lower"
+                    android:background="@drawable/cell100"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(13)}"
-                    android:paddingBottom="10dp">
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[12])}">
 
                     <TextView
                         android:id="@+id/textView_cell_13"
-                        style="@style/Widget.AppCompat.TextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
                 <androidx.constraintlayout.widget.ConstraintLayout
@@ -449,18 +406,15 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_gold_lower"
+                    android:background="@drawable/cell103"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(14)}"
-                    android:paddingBottom="10dp">
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[13])}">
 
                     <TextView
                         android:id="@+id/textView_cell_14"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -472,18 +426,15 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_blue_lower"
+                    android:background="@drawable/cell100"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(15)}"
-                    android:paddingBottom="10dp">
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[14])}">
 
                     <TextView
                         android:id="@+id/textView_cell_15"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -495,18 +446,15 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_gold_lower"
+                    android:background="@drawable/cell103"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(16)}"
-                    android:paddingBottom="10dp">
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[15])}">
 
                     <TextView
                         android:id="@+id/textView_cell_16"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -518,18 +466,15 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_blue_lower"
+                    android:background="@drawable/cell100"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(17)}"
-                    android:paddingBottom="10dp">
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[16])}">
 
                     <TextView
                         android:id="@+id/textView_cell_17"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -541,18 +486,15 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_gold_lower"
+                    android:background="@drawable/cell103"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(18)}"
-                    android:paddingBottom="10dp">
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[17])}">
 
                     <TextView
                         android:id="@+id/textView_cell_18"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -564,18 +506,15 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="25dp"
-                    android:background="@drawable/cell_blue_lower"
+                    android:background="@drawable/cell100"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(19)}"
-                    android:paddingBottom="10dp">
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[18])}">
 
                     <TextView
                         android:id="@+id/textView_cell_19"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -587,18 +526,15 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_gold_lower"
+                    android:background="@drawable/cell103"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(20)}"
-                    android:paddingBottom="10dp">
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[19])}">
 
                     <TextView
                         android:id="@+id/textView_cell_20"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -610,18 +546,14 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_blue_lower"
+                    android:background="@drawable/cell100"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(21)}"
-                    android:paddingBottom="10dp">
-
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[20])}">
                     <TextView
                         android:id="@+id/textView_cell_21"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -633,18 +565,15 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_gold_lower"
+                    android:background="@drawable/cell103"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(22)}"
-                    android:paddingBottom="10dp">
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[21])}">
 
                     <TextView
                         android:id="@+id/textView_cell_22"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -656,18 +585,14 @@
                     android:layout_width="@dimen/cell_width"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_blue_lower"
+                    android:background="@drawable/cell100"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(23)}"
-                    android:paddingBottom="10dp">
-
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[22])}">
                     <TextView
                         android:id="@+id/textView_cell_23"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -679,23 +604,18 @@
                     android:layout_width="40dp"
                     android:layout_height="match_parent"
                     android:layout_marginStart="4dp"
-                    android:background="@drawable/cell_gold_lower"
+                    android:background="@drawable/cell103"
                     android:clickable="true"
                     android:focusable="true"
-                    android:onClick="@{()-> gameViewModel.addPiece(24)}"
-                    android:paddingBottom="10dp">
-
+                    android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[23])}">
                     <TextView
                         android:id="@+id/textView_cell_24"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="16dp"
-                        android:fontFamily="@font/chicle"
                         android:textColor="@color/white"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent" />
-
                 </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
