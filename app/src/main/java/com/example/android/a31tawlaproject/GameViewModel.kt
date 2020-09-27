@@ -10,33 +10,36 @@ import com.example.android.a31tawlaproject.databinding.GameFragmentBinding
 
 class GameViewModel(application: Application, private val binding: GameFragmentBinding) : AndroidViewModel(application) {
 
-        private lateinit var firstCell: Cell // -> first dice outcome
-        private lateinit var secondCell: Cell // -> second dice outcome
-        private var startingPointSelected = false // -> flag for selecting source cell
-        private lateinit var sourceCell : Cell
-        private var cellOnePlayed = false
-        private var cellTwoPlayed = false
-        private var currentColor = 1
-        private var scoreOne = 0
-        private var scoreTwo = 0
-         val cellsArray: Array<Cell> = Array(24) {
-            Cell(it + 1, 0, 0, getCell(it + 1), getCellText(it + 1))
-        }
+    //private lateinit var firstCell: Cell // -> first dice outcome
+    //private lateinit var secondCell: Cell // -> second dice outcome
+    private var startingPointSelected = false // -> flag for selecting source cell
+    private lateinit var sourceCell : Cell
+    //private var cellOnePlayed = false
+    //private var cellTwoPlayed = false
+    private var currentColor = 1
+    private var sign = 1
+    private var scoreOne = 0
+    private var scoreTwo = 0
+    val cellsArray: Array<Cell> = Array(24) {
+        Cell(it + 1, 0, 0, getCell(it + 1), getCellText(it + 1))
+    }
+    val movesList = mutableListOf<Int>()
+    var diceRolled = false
 
 
     init {
         currentColor = 2
-        addPiece(cellsArray[12])
+        addPiece(cellsArray[23])
         currentColor = 1
         addPiece(cellsArray[0])
 
-        cellsArray[0].cellText.text = 12.toString()
-        cellsArray[12].cellText.text = 12.toString()
-        cellsArray[0].numberOfPieces =12
-        cellsArray[12].numberOfPieces =12
+        cellsArray[0].cellText.text = 15.toString()
+        cellsArray[23].cellText.text = 15.toString()
+        cellsArray[0].numberOfPieces =15
+        cellsArray[23].numberOfPieces = 15
         cellsArray[0].color =1
-        cellsArray[12].color =2
-        rollDice(binding.diceImg1,binding.diceImg2)
+        cellsArray[23].color =2
+        //rollDice(binding.diceImg1,binding.diceImg2)
     }
 
     private fun getCell(cellNum: Int): ConstraintLayout {
@@ -100,14 +103,13 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
     }
 
     private fun highlightCell(cell: Cell) {
-
-        if (cell.cellNumber <= 12 && cell.cellNumber % 2 == 0) {
+        if (cell.cellNumber <= 12 && cell.cellNumber % 2 != 0) {
             cell.cellID.setBackgroundResource(R.drawable.cell_gold_upper_highlighted)
         }
-        else if (cell.cellNumber > 12 && cell.cellNumber % 2 == 0) {
+        else if (cell.cellNumber > 12 && cell.cellNumber % 2 != 0) {
             cell.cellID.setBackgroundResource(R.drawable.cell_gold_lower_highlighted)
         }
-        else if (cell.cellNumber <= 12 && cell.cellNumber % 2 != 0) {
+        else if (cell.cellNumber <= 12 && cell.cellNumber % 2 == 0) {
             cell.cellID.setBackgroundResource(R.drawable.cell_blue_upper_highlighted)
         }
         else {
@@ -116,13 +118,13 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
     }
 
     private fun unhighlightCell(cell: Cell) {
-        if (cell.cellNumber <= 12 && cell.cellNumber % 2 == 0) {
+        if (cell.cellNumber <= 12 && cell.cellNumber % 2 != 0) {
             cell.cellID.setBackgroundResource(R.drawable.cell_gold_upper)
         }
-        else if (cell.cellNumber > 12 && cell.cellNumber % 2 == 0) {
+        else if (cell.cellNumber > 12 && cell.cellNumber % 2 != 0) {
             cell.cellID.setBackgroundResource(R.drawable.cell_gold_lower)
         }
-        else if (cell.cellNumber <= 12 && cell.cellNumber % 2 != 0) {
+        else if (cell.cellNumber <= 12 && cell.cellNumber % 2 == 0) {
             cell.cellID.setBackgroundResource(R.drawable.cell_blue_upper)
         }
         else {
@@ -134,7 +136,6 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
 
 
     private fun highlightPiece(cell: Cell) {
-
         if (cell.cellID.childCount > 1) {
             lateinit var piece: ImageView
             if (cell.cellNumber <= 12) {
@@ -177,6 +178,9 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
 
     fun selectCell(cell: Cell) {
         println("Wslnaaaaaaaaaaaaaaa")
+        if (!diceRolled) {
+            return
+        }
         if (!startingPointSelected) {
             if (cell.numberOfPieces > 0 && cell.color == currentColor) {
                 // awwel ma ydous 3ala piece at2akked ennaha bta3to w fi pieces fel 5ana di
@@ -187,57 +191,58 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
                 sourceCell = cell
             }
         } else {
-            if (cell == firstCell && !cellOnePlayed && (firstCell.color == currentColor || cell.color == 0)) {
-                // lamma ydous 3ala cell tania ba3d elawwalaneyya at2akkedd ennaha men el highlighted
-                addPiece(cell)
-                cellOnePlayed = true
-                unhighlightCell(firstCell)
-                unhighlightCell(secondCell)
-                unhighlightPiece(sourceCell)
-                removePiece(sourceCell)
-
-
-            } else if (cell == secondCell && !cellTwoPlayed && (secondCell.color == currentColor || cell.color == 0)) {
-                addPiece(cell)
-                cellTwoPlayed = true
-                unhighlightCell(firstCell)
-                unhighlightCell(secondCell)
-                unhighlightPiece(sourceCell)
-                removePiece(sourceCell)
-
-
+            var isMoved = false
+            for (move in movesList) {
+                val destinationCell = cellsArray[sourceCell.cellNumber + sign * move - 1]
+                if (cell.cellNumber == destinationCell.cellNumber && (destinationCell.color == currentColor || destinationCell.color == 0)) {
+                    // lamma ydous 3ala cell tania ba3d elawwalaneyya at2akkedd ennaha men el highlighted
+                    move(cell)
+                    movesList.remove(move)
+                    isMoved = true
+                    break
+                }
             }
             //law e5tar cell tania 5ales ya3ni 3ayez y8ayyer el source cell
-            else if (cell != firstCell && cell != secondCell) {
+            if (!isMoved) {
                 getPossibleMoves(cell)
                 startingPointSelected = true
             }
-
-            if (cellOnePlayed && cellTwoPlayed)
+            if (movesList.size == 0)
                 switchTurns()
         }
 
     }
+
+    private fun move(cell: Cell) {
+        addPiece(cell)
+        for (move in movesList) {
+            unhighlightCell(cellsArray[sourceCell.cellNumber + sign * move - 1])
+        }
+        unhighlightPiece(sourceCell)
+        removePiece(sourceCell)
+    }
+
     private fun getPossibleMoves(selectedCell: Cell) {
         // gets two possible moves given by dice output
         // a3mel flag enn elcell tenfa3 ?? badal el condition elli fooo2
-        firstCell = cellsArray[selectedCell.cellNumber + diceOneVal - 1]
-        secondCell = cellsArray[selectedCell.cellNumber + diceTwoVal - 1]
-        if (!cellOnePlayed && (firstCell.color == currentColor || firstCell.color == 0) ) {
-             highlightCell(firstCell)
-        }
-        if (!cellTwoPlayed && (secondCell.color == currentColor || secondCell.color == 0)) {
-            highlightCell(secondCell)
+        for (move in movesList) {
+            val destinationCell = cellsArray[selectedCell.cellNumber + sign * move - 1]
+            if (destinationCell.color == currentColor || destinationCell.color == 0) {
+                highlightCell(destinationCell)
+            }
         }
     }
 
     private fun switchTurns() {
-        currentColor = if (currentColor == 1)
+        currentColor = if (currentColor == 1) {
+            sign = -1
             2
-        else
+        }
+        else {
+            sign = 1
             1
-        cellOnePlayed = false
-        cellTwoPlayed = false
+        }
+        diceRolled = false
     }
 
         private fun addPiece(cell: Cell){
@@ -253,9 +258,9 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
                 cell.cellText.text = "1"
                 val image = ImageView(getApplication())
                 // If statement will be added here so that piece image depends on player
-                if(currentColor ==1)
+                if(currentColor == 1)
                     image.setImageResource(R.drawable.piece1)
-                else if(currentColor==2)
+                else if(currentColor== 2)
                     image.setImageResource(R.drawable.piece2)
                 if (cell.cellNumber <= 12) {
                     image.scaleType = ImageView.ScaleType.FIT_START
@@ -288,9 +293,5 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
                 }
                 cell.numberOfPieces -=1
             }
-
-
-
-
-    }
+        }
 }

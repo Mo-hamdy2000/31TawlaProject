@@ -4,12 +4,21 @@ import android.widget.ImageView
 import java.util.*
 var diceOneVal = 0
 var diceTwoVal = 0
-fun rollDice(diceOne : ImageView,diceTwo : ImageView) {
+fun rollDice(diceOne : ImageView,diceTwo : ImageView, movesList: MutableList<Int>) {
     // animate(diceOne)
     //animate(diceTwo)
     diceOneVal = Random().nextInt(6)+1
+    movesList.add(diceOneVal)
     diceOne.setBackgroundResource(createRandomNumber(diceOneVal))
     diceTwoVal = Random().nextInt(6)+1
+    if (diceOneVal == diceTwoVal) {
+        for (i in 1..3) {
+            movesList.add(diceOneVal)
+        }
+    }
+    else {
+        movesList.add(diceTwoVal)
+    }
     diceTwo.setBackgroundResource(createRandomNumber(diceTwoVal))
 }
 fun createRandomNumber(diceVal: Int): Int {

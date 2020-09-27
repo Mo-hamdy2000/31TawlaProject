@@ -26,7 +26,10 @@ class GameFragment : Fragment() {
         val diceOne : ImageView = binding.diceImg1
         val diceTwo : ImageView = binding.diceImg2
         rollButton.setOnClickListener{
-            rollDice(diceOne,diceTwo)
+            if (!gameViewModel.diceRolled) {
+                rollDice(diceOne,diceTwo, gameViewModel.movesList)
+                gameViewModel.diceRolled = true
+            }
         }
         /*binding.cell24.setOnClickListener {
             //Toast.makeText(this, "IT WORKS !!!", Toast.LENGTH_SHORT).show()
