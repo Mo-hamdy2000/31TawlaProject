@@ -126,9 +126,23 @@
                     android:id="@+id/rollButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="32dp"
                     android:background="@drawable/roll_button"
                     android:text="Roll"
+                    android:textAllCaps="false"
+                    android:textColor="@color/darkPurple"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/skipButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <Button
+                    android:id="@+id/skipButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/roll_button"
+                    android:text="Skip"
                     android:textAllCaps="false"
                     android:textColor="@color/darkPurple"
                     android:textSize="24sp"
@@ -145,9 +159,9 @@
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="1dp"
-                android:background="@drawable/woodenbackground"
+                android:background="@drawable/background"
                 android:orientation="vertical"
-                android:padding="3dp"
+                android:padding="2dp"
                 android:weightSum="100"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -155,23 +169,28 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintWidth_percent=".8">
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="50"
-                    android:orientation="horizontal"
-                    android:paddingTop="7dp"
-                    android:weightSum="120">
+                    android:paddingStart="4dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="4dp">
+
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cell_1"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="5dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="@drawable/cell_gold_upper"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[0])}"
-                        android:paddingTop="10dp">
-
+                        android:paddingTop="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
                         <TextView
                             android:id="@+id/textView_cell_1"
                             android:layout_width="wrap_content"
@@ -186,13 +205,17 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cell_2"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="@drawable/cell_blue_upper"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[1])}"
-                        android:paddingTop="10dp">
-
+                        android:paddingTop="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_1"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
                         <TextView
                             android:id="@+id/textView_cell_2"
                             android:layout_width="wrap_content"
@@ -207,13 +230,17 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cell_3"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="@drawable/cell_gold_upper"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[2])}"
-                        android:paddingTop="10dp">
-
+                        android:paddingTop="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_2"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
                         <TextView
                             android:id="@+id/textView_cell_3"
                             android:layout_width="wrap_content"
@@ -228,19 +255,23 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cell_4"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="@drawable/cell_blue_upper"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[3])}"
-                        android:paddingTop="10dp">
-
+                        android:paddingTop="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_3"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
                         <TextView
                             android:id="@+id/textView_cell_4"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="16dp"
-
+                            android:fontFamily="@font/chicle"
                             android:textColor="@color/white"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
@@ -249,13 +280,17 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cell_5"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="@drawable/cell_gold_upper"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[4])}"
-                        android:paddingTop="10dp">
-
+                        android:paddingTop="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_4"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
                         <TextView
                             android:id="@+id/textView_cell_5"
                             android:layout_width="wrap_content"
@@ -270,13 +305,17 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cell_6"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="@drawable/cell_blue_upper"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[5])}"
-                        android:paddingTop="10dp">
-
+                        android:paddingTop="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_5"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
                         <TextView
                             android:id="@+id/textView_cell_6"
                             android:layout_width="wrap_content"
@@ -291,13 +330,18 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cell_7"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="25dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="4dp"
                         android:background="@drawable/cell_gold_upper"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[6])}"
-                        android:paddingTop="10dp">
-
+                        android:paddingTop="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_6"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
                         <TextView
                             android:id="@+id/textView_cell_7"
                             android:layout_width="wrap_content"
@@ -312,13 +356,17 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cell_8"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="@drawable/cell_blue_upper"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[7])}"
-                        android:paddingTop="10dp">
-
+                        android:paddingTop="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_7"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
                         <TextView
                             android:id="@+id/textView_cell_8"
                             android:layout_width="wrap_content"
@@ -333,13 +381,17 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cell_9"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="@drawable/cell_gold_upper"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[8])}"
-                        android:paddingTop="10dp">
-
+                        android:paddingTop="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_8"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
                         <TextView
                             android:id="@+id/textView_cell_9"
                             android:layout_width="wrap_content"
@@ -354,13 +406,17 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cell_10"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="@drawable/cell_blue_upper"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[9])}"
-                        android:paddingTop="10dp">
-
+                        android:paddingTop="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_9"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
                         <TextView
                             android:id="@+id/textView_cell_10"
                             android:layout_width="wrap_content"
@@ -375,13 +431,17 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cell_11"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="@drawable/cell_gold_upper"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[10])}"
-                        android:paddingTop="10dp">
-
+                        android:paddingTop="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_10"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333" >
                         <TextView
                             android:id="@+id/textView_cell_11"
                             android:layout_width="wrap_content"
@@ -396,12 +456,18 @@
 
                     <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cell_12"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="@drawable/cell_blue_upper"
+                        android:clickable="true"
+                        android:focusable="true"
                         android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[11])}"
-                        android:paddingTop="10dp">
+                        android:paddingTop="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_11"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
 
                         <TextView
                             android:id="@+id/textView_cell_12"
@@ -413,30 +479,36 @@
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent" />
+
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <LinearLayout
+                <androidx.constraintlayout.widget.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_weight="50"
-                    android:orientation="horizontal"
-                    android:paddingBottom="7dp">
+                    android:paddingStart="4dp"
+                    android:paddingTop="4dp"
+                    android:paddingEnd="4dp">
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cell_24"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="5dp"
-                        android:background="@drawable/cell_blue_lower"
+                        android:id="@+id/cell_13"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@drawable/cell_gold_lower"
                         android:clickable="true"
                         android:focusable="true"
-                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[23])}"
-                        android:paddingBottom="10dp">
+                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[12])}"
+                        android:paddingBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_14"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
 
                         <TextView
-                            android:id="@+id/textView_cell_24"
+                            android:id="@+id/textView_cell_13"
                             style="@style/Widget.AppCompat.TextView"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -450,222 +522,18 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cell_23"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
-                        android:background="@drawable/cell_gold_lower"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[22])}"
-                        android:paddingBottom="10dp">
-
-                        <TextView
-                            android:id="@+id/textView_cell_23"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:fontFamily="@font/chicle"
-                            android:textColor="@color/white"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cell_22"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
-                        android:background="@drawable/cell_blue_lower"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[21])}"
-                        android:paddingBottom="10dp">
-
-                        <TextView
-                            android:id="@+id/textView_cell_22"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:fontFamily="@font/chicle"
-                            android:textColor="@color/white"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cell_21"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
-                        android:background="@drawable/cell_gold_lower"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[20])}"
-                        android:paddingBottom="10dp">
-
-                        <TextView
-                            android:id="@+id/textView_cell_21"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:fontFamily="@font/chicle"
-                            android:textColor="@color/white"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cell_20"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
-                        android:background="@drawable/cell_blue_lower"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[19])}"
-                        android:paddingBottom="10dp">
-
-                        <TextView
-                            android:id="@+id/textView_cell_20"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:fontFamily="@font/chicle"
-                            android:textColor="@color/white"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cell_19"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
-                        android:background="@drawable/cell_gold_lower"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[18])}"
-                        android:paddingBottom="10dp">
-
-                        <TextView
-                            android:id="@+id/textView_cell_19"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:fontFamily="@font/chicle"
-                            android:textColor="@color/white"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cell_18"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="25dp"
-                        android:background="@drawable/cell_blue_lower"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[17])}"
-                        android:paddingBottom="10dp">
-
-                        <TextView
-                            android:id="@+id/textView_cell_18"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:fontFamily="@font/chicle"
-                            android:textColor="@color/white"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cell_17"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
-                        android:background="@drawable/cell_gold_lower"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[16])}"
-                        android:paddingBottom="10dp">
-
-                        <TextView
-                            android:id="@+id/textView_cell_17"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:fontFamily="@font/chicle"
-                            android:textColor="@color/white"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cell_16"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
-                        android:background="@drawable/cell_blue_lower"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[15])}"
-                        android:paddingBottom="10dp">
-
-                        <TextView
-                            android:id="@+id/textView_cell_16"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:fontFamily="@font/chicle"
-                            android:textColor="@color/white"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cell_15"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
-                        android:background="@drawable/cell_gold_lower"
-                        android:clickable="true"
-                        android:focusable="true"
-                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[14])}"
-                        android:paddingBottom="10dp">
-
-                        <TextView
-                            android:id="@+id/textView_cell_15"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="16dp"
-                            android:fontFamily="@font/chicle"
-                            android:textColor="@color/white"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
-                    </androidx.constraintlayout.widget.ConstraintLayout>
-
-                    <androidx.constraintlayout.widget.ConstraintLayout
                         android:id="@+id/cell_14"
-                        android:layout_width="@dimen/cell_width"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="@drawable/cell_blue_lower"
                         android:clickable="true"
                         android:focusable="true"
                         android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[13])}"
-                        android:paddingBottom="10dp">
+                        android:paddingBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_15"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
 
                         <TextView
                             android:id="@+id/textView_cell_14"
@@ -680,18 +548,256 @@
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
-                        android:id="@+id/cell_13"
-                        android:layout_width="40dp"
-                        android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
+                        android:id="@+id/cell_15"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
                         android:background="@drawable/cell_gold_lower"
                         android:clickable="true"
                         android:focusable="true"
-                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[12])}"
-                        android:paddingBottom="10dp">
+                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[14])}"
+                        android:paddingBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_16"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
 
                         <TextView
-                            android:id="@+id/textView_cell_13"
+                            android:id="@+id/textView_cell_15"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/chicle"
+                            android:textColor="@color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cell_16"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@drawable/cell_blue_lower"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[15])}"
+                        android:paddingBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_17"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
+
+                        <TextView
+                            android:id="@+id/textView_cell_16"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/chicle"
+                            android:textColor="@color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cell_17"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@drawable/cell_gold_lower"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[16])}"
+                        android:paddingBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_18"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
+
+                        <TextView
+                            android:id="@+id/textView_cell_17"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/chicle"
+                            android:textColor="@color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cell_18"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:layout_marginStart="4dp"
+                        android:background="@drawable/cell_blue_lower"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[17])}"
+                        android:paddingBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_19"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
+
+                        <TextView
+                            android:id="@+id/textView_cell_18"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/chicle"
+                            android:textColor="@color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cell_19"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@drawable/cell_gold_lower"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[18])}"
+                        android:paddingBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_20"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
+
+                        <TextView
+                            android:id="@+id/textView_cell_19"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/chicle"
+                            android:textColor="@color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cell_20"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@drawable/cell_blue_lower"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[19])}"
+                        android:paddingBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_21"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
+
+                        <TextView
+                            android:id="@+id/textView_cell_20"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/chicle"
+                            android:textColor="@color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cell_21"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@drawable/cell_gold_lower"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[20])}"
+                        android:paddingBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_22"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
+
+                        <TextView
+                            android:id="@+id/textView_cell_21"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/chicle"
+                            android:textColor="@color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cell_22"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@drawable/cell_blue_lower"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[21])}"
+                        android:paddingBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_23"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
+
+                        <TextView
+                            android:id="@+id/textView_cell_22"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/chicle"
+                            android:textColor="@color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cell_23"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@drawable/cell_gold_lower"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[22])}"
+                        android:paddingBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toEndOf="@id/cell_24"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
+
+                        <TextView
+                            android:id="@+id/textView_cell_23"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="16dp"
+                            android:fontFamily="@font/chicle"
+                            android:textColor="@color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+                    </androidx.constraintlayout.widget.ConstraintLayout>
+
+                    <androidx.constraintlayout.widget.ConstraintLayout
+                        android:id="@+id/cell_24"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:background="@drawable/cell_blue_lower"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:onClick="@{()-> gameViewModel.selectCell(gameViewModel.cellsArray[23])}"
+                        android:paddingBottom="10dp"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintWidth_percent=".08333">
+
+                        <TextView
+                            android:id="@+id/textView_cell_24"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
@@ -703,7 +809,7 @@
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
-                </LinearLayout>
+                </androidx.constraintlayout.widget.ConstraintLayout>
 
             </LinearLayout>
 

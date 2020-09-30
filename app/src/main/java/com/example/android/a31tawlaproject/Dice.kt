@@ -19,6 +19,7 @@ fun rollDice(diceOne : ImageView,diceTwo : ImageView, movesList: MutableList<Int
     else {
         movesList.add(diceTwoVal)
     }
+    movesList.sort()
     diceTwo.setBackgroundResource(createRandomNumber(diceTwoVal))
 }
 fun createRandomNumber(diceVal: Int): Int {
