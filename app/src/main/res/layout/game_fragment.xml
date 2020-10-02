@@ -94,7 +94,6 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:layout_marginEnd="8dp"
-                    android:layout_marginRight="8dp"
                     android:layout_marginBottom="32dp"
                     android:background="@drawable/dice1"
                     android:contentDescription="TODO"
@@ -126,15 +125,33 @@
                     android:id="@+id/rollButton"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="32dp"
                     android:background="@drawable/roll_button"
                     android:text="Roll"
                     android:textAllCaps="false"
                     android:textColor="@color/darkPurple"
                     android:textSize="24sp"
                     android:textStyle="bold"
+                    app:layout_constraintBottom_toTopOf="@+id/undoButton"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.487"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <Button
+                    android:id="@+id/undoButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.5"
+                    android:background="@drawable/roll_button"
+                    android:enabled="false"
+                    android:onClick="@{ ()-> gameViewModel.undo()}"
+                    android:text="Undo"
+                    android:textAllCaps="false"
+                    android:textColor="@color/darkPurple"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
                     app:layout_constraintBottom_toTopOf="@+id/skipButton"
                     app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.487"
                     app:layout_constraintStart_toStartOf="parent" />
 
                 <Button

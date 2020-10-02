@@ -7,6 +7,8 @@ import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.AndroidViewModel
 import com.example.android.a31tawlaproject.databinding.GameFragmentBinding
+import java.util.Stack
+import kotlin.math.abs
 
 class GameViewModel(application: Application, private val binding: GameFragmentBinding) : AndroidViewModel(application) {
 
@@ -29,6 +31,11 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
     var piecesAtHomePlayer2 = 0
     private var piecesCollectedPlayer1 = 0
     private var piecesCollectedPlayer2 = 0
+    val undoList = Stack<MovePlayed>()
+    private val playersCells: Array<MutableList<Int>> = Array(2) {
+        mutableListOf<Int>()
+    }
+    private var oneMoveOnly = false
 
 
     init {
@@ -43,6 +50,8 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
         cellsArray[23].numberOfPieces = 15
         cellsArray[0].color =1
         cellsArray[23].color =2
+        playersCells[0].add(1)
+        playersCells[1].add(24)
         //rollDice(binding.diceImg1,binding.diceImg2)
     }
 
@@ -175,7 +184,6 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
     }
 
     fun selectCell(cell: Cell) {
-        println("Wslnaaaaaaaaaaaaaaa")
         if (!diceRolled || (currentColor == 1 && piecesAtHomePlayer1 == 15) || (currentColor == 2 && piecesAtHomePlayer2 == 15)) {
             return
         }
@@ -188,14 +196,10 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
             }
             if (cell.numberOfPieces > 0 && cell.color == currentColor) {
                 // awwel ma ydous 3ala piece at2akked ennaha bta3to w fi pieces fel 5ana di
-                Toast.makeText(getApplication(), "YOU SELECTED ME", Toast.LENGTH_SHORT).show()
                 if (getPossibleMoves(cell)) {
                     startingPointSelected = true
                     highlightPiece(cell)
                     sourceCell = cell
-                }
-                else {
-                    Toast.makeText(getApplication(), "No possible moves here", Toast.LENGTH_SHORT).show()
                 }
             }
         } else {
@@ -229,39 +233,168 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
                 highlightPiece(cell)
                 sourceCell = cell
             }
+            if (oneMoveOnly) {
+                oneMoveOnly = false
+                movesList.clear()
+            }
             if (movesList.size == 0)
                 switchTurns()
         }
 
     }
 
+    private fun oppositeColor(): Int {
+        return currentColor +  sign
+    }
+
+    fun check () {
+        if (movesList.size == 2)
+            checkTwoMoves()
+        else if (movesList.size == 4)
+            checkFourMoves()
+    }
+
+    private fun checkTwoMoves() {
+        val firstMove = movesList[0]
+        val secondMove = movesList[1]
+        // Check if one piece can do the two moves
+        for (cellNum in playersCells[currentColor - 1]) {
+            if ((cellNum == 1 && currentColor == 1 && piecesAtHomePlayer1 == 0 && cellsArray[cellNum - 1].numberOfPieces == 14) ||
+                (cellNum == 24 && currentColor == 2 && piecesAtHomePlayer2 == 0 && cellsArray[cellNum - 1].numberOfPieces == 14)) {
+                continue
+            }
+            if ((cellNum + sign * firstMove + sign * secondMove) in 1.. 24 && cellsArray[cellNum + sign * firstMove + sign * secondMove - 1].color != oppositeColor() &&
+                (cellsArray[cellNum + sign * firstMove - 1].color != oppositeColor() || cellsArray[cellNum + sign * secondMove - 1].color != oppositeColor())) {
+                return
+            }
+        }
+        val firstMovePossibleCells = mutableListOf<Int>()
+        val secondMovePossibleCells = mutableListOf<Int>()
+        var homeFlag = false
+        for (cellNum in playersCells[currentColor - 1]) {
+            if ((cellNum + sign * firstMove) in 1..24 && cellsArray[cellNum + sign * firstMove - 1].color != oppositeColor()) {
+                firstMovePossibleCells.add(cellNum)
+                if (((cellNum + sign * firstMove) in 19..24 && currentColor == 1) || ((cellNum + sign * firstMove) in 1..6 && currentColor == 2))
+                    homeFlag = true
+            }
+
+            if ((cellNum + sign * secondMove) in 1..24 && cellsArray[cellNum + sign * secondMove - 1].color != oppositeColor()) {
+                secondMovePossibleCells.add(cellNum)
+                if (((cellNum + sign * secondMove) in 19..24 && currentColor == 1) || ((cellNum + sign * secondMove) in 1..6 && currentColor == 2))
+                    homeFlag = true
+            }
+        }
+
+        if (homeFlag && ((currentColor == 1 && piecesAtHomePlayer1 == 14) || (currentColor == 2 && piecesAtHomePlayer2 == 14))) {
+            return
+        }
+        println("##############")
+        println(firstMovePossibleCells.toString())
+        println(secondMovePossibleCells.toString())
+        // Bt2kd Eno my7sbsh el pieces elly fe el home lw lsa mraw7sh haga
+        if (((currentColor == 1 && piecesAtHomePlayer1 == 0 && cellsArray[0].numberOfPieces == 14) ||
+            (currentColor == 2 && piecesAtHomePlayer2 == 0 && cellsArray[23].numberOfPieces == 14)) && !homeFlag) {
+            firstMovePossibleCells.remove(1)
+            secondMovePossibleCells.remove(1)
+            firstMovePossibleCells.remove(24)
+            secondMovePossibleCells.remove(24)
+        }
+
+        if (firstMovePossibleCells.size == 0 || secondMovePossibleCells.size == 0) {
+            if (firstMovePossibleCells.size == 0 && secondMovePossibleCells.size == 0) {
+                switchTurns()
+            }
+            if (firstMovePossibleCells.size == 0) {
+                Toast.makeText(getApplication(), "YOU CAN'T MOVE " + firstMove, Toast.LENGTH_SHORT).show()
+                movesList.remove(firstMove)
+            }
+
+            if (secondMovePossibleCells.size == 0) {
+                Toast.makeText(getApplication(), "YOU CAN'T MOVE " + secondMove, Toast.LENGTH_SHORT).show()
+                movesList.remove(secondMove)
+            }
+        } else {
+            if (firstMovePossibleCells.size == 1 && secondMovePossibleCells.size == 1  && firstMovePossibleCells[0] == secondMovePossibleCells[0] && cellsArray[firstMovePossibleCells[0] - 1].numberOfPieces == 1) {
+                Toast.makeText(getApplication(), "YOU CAN ONLY PLAY ONE MOVE", Toast.LENGTH_SHORT).show()
+                oneMoveOnly = true
+            }
+        }
+    }
+
+    private fun checkFourMoves() {
+        var movesNum = 0
+        val move = movesList[0]
+        var homeComing = 0
+        var startMoves = 0
+        for (cellNum in playersCells[currentColor-1]) {
+            var temp = 0
+            for (i in 1..4) {
+                if ((cellNum + sign * move * i) in 1..24 && cellsArray[cellNum + sign * move * i - 1].color != oppositeColor()) {
+                    temp += cellsArray[cellNum - 1].numberOfPieces
+                    if ((cellNum + sign * move * i in 19..24 && currentColor == 1) ||(cellNum + sign * move * i in 1..6 && currentColor == 2)) {
+                        homeComing++
+                    }
+                } else {
+                    break
+                }
+            }
+            movesNum += temp
+            if (cellNum ==1 || cellNum == 24) {
+                startMoves = temp
+            }
+        }
+
+        if (((currentColor == 1 && piecesAtHomePlayer1 == 0 && cellsArray[0].numberOfPieces == 14) ||
+            (currentColor == 2 && piecesAtHomePlayer2 == 0 && cellsArray[23].numberOfPieces == 14)) && homeComing < 1) {
+            movesNum -= startMoves
+        }
+
+        if ((currentColor == 1 && piecesAtHomePlayer1 + homeComing == 15) || (currentColor == 2 && piecesAtHomePlayer2 + homeComing == 15)) {
+            return
+        }
+
+        if (movesNum < 4) {
+            Toast.makeText(getApplication(), "YOU CAN'T PLAY " + (4 - movesNum) + " MOVE", Toast.LENGTH_SHORT).show()
+            for (i in 1..(4-movesNum)) {
+                movesList.remove(move)
+            }
+        }
+        if (movesNum == 0) {
+            switchTurns()
+        }
+    }
+
     private fun move(cell: Cell) {
-        addPiece(cell)
         for (move in movesList) {
             if (sourceCell.cellNumber + sign * move in 1..24) {
                 unhighlightCell(cellsArray[sourceCell.cellNumber + sign * move - 1])
             }
         }
         unhighlightPiece(sourceCell)
+        addPiece(cell)
         removePiece(sourceCell)
-        if (currentColor == 1) {
-            if (sourceCell.cellNumber < 19 && cell.cellNumber >= 19) {
-                piecesAtHomePlayer1 += 1
-            }
+        if (!(cell.cellNumber in playersCells[currentColor-1])) {
+            playersCells[currentColor-1].add(cell.cellNumber)
         }
-        else {
-            if (sourceCell.cellNumber > 6 && cell.cellNumber <= 6) {
+        if (sourceCell.numberOfPieces == 0) {
+            playersCells[currentColor-1].remove(sourceCell.cellNumber)
+        }
+        undoList.add(MovePlayed(sourceCell.cellNumber, cell.cellNumber, false))
+        binding.undoButton.isEnabled = true
+        binding.undoButton.alpha = 1.0f
+        if (currentColor == 1 && sourceCell.cellNumber < 19 && cell.cellNumber >= 19) {
+            piecesAtHomePlayer1 += 1
+            undoList.peek().pieceMovedToHome = true
+        }
+        else if (currentColor == 2 && sourceCell.cellNumber > 6 && cell.cellNumber <= 6) {
                 piecesAtHomePlayer2 += 1
-            }
+                undoList.peek().pieceMovedToHome = true
         }
     }
 
     private fun getPossibleMoves(selectedCell: Cell): Boolean {
-        // gets two possible moves given by dice output
-        // a3mel flag enn elcell tenfa3 ?? badal el condition elli fooo2
         var isPossible = false
         for (move in movesList) {
-            println("#########################")
             if (selectedCell.cellNumber + sign * move in 1..24) {
                 val destinationCell = cellsArray[selectedCell.cellNumber + sign * move - 1]
                 if (destinationCell.color == currentColor || destinationCell.color == 0) {
@@ -274,6 +407,10 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
     }
 
     private fun switchTurns() {
+        undoList.clear()
+        movesList.clear()
+        binding.undoButton.isEnabled = false
+        binding.undoButton.alpha = 0.5f
         currentColor = if (currentColor == 1) {
             sign = -1
             println("player 2")
@@ -299,7 +436,6 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
         {
             cell.cellText.text = "1"
             val image = ImageView(getApplication())
-            // If statement will be added here so that piece image depends on player
             if(currentColor == 1)
                 image.setImageResource(R.drawable.piece1)
             else if(currentColor== 2)
@@ -337,32 +473,49 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
         }
     }
 
+    fun undo() {
+        val movePlayed = undoList.pop()
+        if (startingPointSelected) {
+            for (move in movesList) {
+                if (sourceCell.cellNumber + sign * move in 1..24) {
+                    unhighlightCell(cellsArray[sourceCell.cellNumber + sign * move - 1])
+                }
+            }
+            unhighlightPiece(sourceCell)
+        }
+        addPiece(cellsArray[movePlayed.sourceCellNo - 1])
+        removePiece(cellsArray[movePlayed.destCellNo - 1])
+        if (!(movePlayed.sourceCellNo in playersCells[currentColor-1])) {
+            playersCells[currentColor-1].add(movePlayed.sourceCellNo)
+        }
+        if (cellsArray[movePlayed.destCellNo - 1].numberOfPieces == 0) {
+            playersCells[currentColor-1].remove(movePlayed.destCellNo)
+        }
+        movesList.add(abs(movePlayed.destCellNo - movePlayed.sourceCellNo))
+        if (undoList.empty()) {
+            binding.undoButton.isEnabled = false
+        }
+    }
+
     fun collectPieces() {
         if (currentColor == 1) {
             for (move in movesList) {
-                println("#####################################")
-                println("The move is " + move)
                 if (cellsArray[24 - move].numberOfPieces > 0 && cellsArray[24 - move].color == currentColor) {
                     removePiece(cellsArray[24 - move])
-                    println("The cell " + (24 - move + 1) + " is collected")
                     piecesCollectedPlayer1++
                     continue
                 }
                 var isPlayed = false
                 for (i in (24 - move) downTo 19) {
-                    println("*********** cell " + i + "dest cell " + (i+move) + " pieces no " + cellsArray[i-1].numberOfPieces)
-                    println("color" + cellsArray[i-1].color + " curColor " + currentColor + " destColor" + cellsArray[i + move -1].color)
                     if (i >= 19 && i + move < 25 && cellsArray[i-1].numberOfPieces > 0 && cellsArray[i-1].color == currentColor && cellsArray[i + move -1].color != 2) {
                         addPiece(cellsArray[i + move - 1])
                         removePiece(cellsArray[i - 1])
-                        println("Piece moved from " + i + " to" + (i+move))
                         isPlayed = true
                         break
                     }
                 }
                 if (!isPlayed) {
                     for (i in (25 - move) .. 24) {
-                        println("cell " + i + "no of pieces " + cellsArray[i - 1].numberOfPieces)
                         if (i <= 24 && cellsArray[i - 1].numberOfPieces > 0 && cellsArray[i - 1].color == currentColor) {
                             removePiece(cellsArray[i - 1])
                             println("The cell " + i + " is collected")
@@ -374,8 +527,6 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
             }
         } else {
             for (move in movesList) {
-                println("#####################################")
-                println("The move is " + move)
                 if (cellsArray[move - 1].numberOfPieces > 0 && cellsArray[move - 1].color == currentColor) {
                     removePiece(cellsArray[move - 1])
                     println("The cell " + move + " is collected")
@@ -384,12 +535,9 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
                 }
                 var isPlayed = false
                 for (i in (move + 1) .. 6) {
-                    println("*********** cell " + i + " dest cell " + (i - move) + " pieces no " + cellsArray[i-1].numberOfPieces)
-                    println("color" + cellsArray[i-1].color + " curColor " + currentColor + " destColor" + cellsArray[i - move -1].color)
                     if (i - move > 0 && cellsArray[i-1].numberOfPieces > 0 && cellsArray[i-1].color == currentColor && cellsArray[i - move -1].color != 1) {
                         addPiece(cellsArray[i - move -1])
                         removePiece(cellsArray[i - 1])
-                        println("Piece moved from " + i + " to" + (i-move))
                         isPlayed = true
                         break
                     }
@@ -410,6 +558,7 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
         movesList.clear()
         switchTurns()
     }
+
     fun skipTurn() {
         for (move in movesList) {
             if (sourceCell.cellNumber + sign * move in 1..24) {

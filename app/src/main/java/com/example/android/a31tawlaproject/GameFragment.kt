@@ -34,6 +34,7 @@ class GameFragment : Fragment() {
                     (gameViewModel.currentColor == 2 &&  gameViewModel.piecesAtHomePlayer2 == 15)) {
                     gameViewModel.collectPieces()
                 }
+                gameViewModel.check()
             }
         }
 
