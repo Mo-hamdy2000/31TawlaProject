@@ -10,16 +10,14 @@ import com.example.android.a31tawlaproject.databinding.GameFragmentBinding
 import java.util.Stack
 import kotlin.math.abs
 
-class GameViewModel(application: Application, private val binding: GameFragmentBinding) : AndroidViewModel(application) {
+abstract class GameViewModel(application: Application, val binding: GameFragmentBinding) : AndroidViewModel(application) {
 
-    //private lateinit var firstCell: Cell // -> first dice outcome
-    //private lateinit var secondCell: Cell // -> second dice outcome
     private var startingPointSelected = false // -> flag for selecting source cell
-    private lateinit var sourceCell : Cell
-    //private var cellOnePlayed = false
-    //private var cellTwoPlayed = false
+    lateinit var sourceCell : Cell
     var currentColor = 1
-    private var sign = 1
+    var sign = 1
+    var computerTurn = false
+    private var isMoved = false
     private var scoreOne = 0
     private var scoreTwo = 0
     val cellsArray: Array<Cell> = Array(24) {
@@ -32,7 +30,7 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
     private var piecesCollectedPlayer1 = 0
     private var piecesCollectedPlayer2 = 0
     val undoList = Stack<MovePlayed>()
-    private val playersCells: Array<MutableList<Int>> = Array(2) {
+   val playersCells: Array<MutableList<Int>> = Array(2) {
         mutableListOf<Int>()
     }
     private var oneMoveOnly = false
@@ -163,7 +161,7 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
         }
     }
 
-    private fun unhighlightPiece(cell: Cell) {
+     private fun unhighlightPiece(cell: Cell) {
         if (cell.cellID.childCount > 1) {
             lateinit var piece: ImageView
             if (cell.cellNumber <= 12) {
@@ -184,7 +182,8 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
     }
 
     fun selectCell(cell: Cell) {
-        if (!diceRolled || (currentColor == 1 && piecesAtHomePlayer1 == 15) || (currentColor == 2 && piecesAtHomePlayer2 == 15)) {
+        println("Wslnaaaaaaaaaaaaaaa")
+        if (!diceRolled ||computerTurn|| (currentColor == 1 && piecesAtHomePlayer1 == 15) || (currentColor == 2 && piecesAtHomePlayer2 == 15)) {
             return
         }
         if (!startingPointSelected) {
@@ -203,7 +202,7 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
                 }
             }
         } else {
-            var isMoved = false
+            isMoved = false
             for (move in movesList) {
                 if (sourceCell.cellNumber + sign * move in 1..24) {
                     val destinationCell = cellsArray[sourceCell.cellNumber + sign * move - 1]
@@ -222,16 +221,20 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
             }
             //law e5tar cell tania 5ales ya3ni 3ayez y8ayyer el source cell
             if (!isMoved && cell.numberOfPieces > 0 && cell.color == currentColor) {
-                for (move in movesList) {
-                    if (sourceCell.cellNumber + sign * move in 1..24) {
-                        unhighlightCell(cellsArray[sourceCell.cellNumber + sign * move - 1])
-                    }
+                // s- 5adt rl condition di copy hena kaman
+                if ((piecesAtHomePlayer1 == 0 && cell.numberOfPieces == 14 && currentColor == 1) || (piecesAtHomePlayer2 == 0 && cell.numberOfPieces == 14 && currentColor == 2)) {
+                    return
                 }
-                unhighlightPiece(sourceCell)
-                getPossibleMoves(cell)
-                startingPointSelected = true
-                highlightPiece(cell)
-                sourceCell = cell
+                unhighlightMove()
+                //-s
+                if (getPossibleMoves(cell)) {
+                    startingPointSelected = true
+                    highlightPiece(cell)
+                    sourceCell = cell
+                }
+                else {
+                    Toast.makeText(getApplication(), "No possible moves here", Toast.LENGTH_SHORT).show()
+                }
             }
             if (oneMoveOnly) {
                 oneMoveOnly = false
@@ -253,6 +256,7 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
         else if (movesList.size == 4)
             checkFourMoves()
     }
+
 
     private fun checkTwoMoves() {
         val firstMove = movesList[0]
@@ -364,33 +368,8 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
         }
     }
 
-    private fun move(cell: Cell) {
-        for (move in movesList) {
-            if (sourceCell.cellNumber + sign * move in 1..24) {
-                unhighlightCell(cellsArray[sourceCell.cellNumber + sign * move - 1])
-            }
-        }
-        unhighlightPiece(sourceCell)
-        addPiece(cell)
-        removePiece(sourceCell)
-        if (!(cell.cellNumber in playersCells[currentColor-1])) {
-            playersCells[currentColor-1].add(cell.cellNumber)
-        }
-        if (sourceCell.numberOfPieces == 0) {
-            playersCells[currentColor-1].remove(sourceCell.cellNumber)
-        }
-        undoList.add(MovePlayed(sourceCell.cellNumber, cell.cellNumber, false))
-        binding.undoButton.isEnabled = true
-        binding.undoButton.alpha = 1.0f
-        if (currentColor == 1 && sourceCell.cellNumber < 19 && cell.cellNumber >= 19) {
-            piecesAtHomePlayer1 += 1
-            undoList.peek().pieceMovedToHome = true
-        }
-        else if (currentColor == 2 && sourceCell.cellNumber > 6 && cell.cellNumber <= 6) {
-                piecesAtHomePlayer2 += 1
-                undoList.peek().pieceMovedToHome = true
-        }
-    }
+    abstract fun move(cell: Cell)
+   
 
     private fun getPossibleMoves(selectedCell: Cell): Boolean {
         var isPossible = false
@@ -406,25 +385,12 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
         return isPossible
     }
 
-    private fun switchTurns() {
-        undoList.clear()
-        movesList.clear()
-        binding.undoButton.isEnabled = false
-        binding.undoButton.alpha = 0.5f
-        currentColor = if (currentColor == 1) {
-            sign = -1
-            println("player 2")
-            2
-        }
-        else {
-            sign = 1
-            println("player 1")
-            1
-        }
-        diceRolled = false
-    }
 
-    private fun addPiece(cell: Cell){
+   abstract fun switchTurns()
+   
+
+
+    fun addPiece(cell: Cell){
 
         if (cell.numberOfPieces >0) {
             cell.numberOfPieces+=1
@@ -455,7 +421,7 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
 
     }
 
-    private fun removePiece(cell: Cell){
+    fun removePiece(cell: Cell){
         if (cell.numberOfPieces > 1) {
             cell.cellText.text = (cell.cellText.text.toString().toInt() - 1).toString()
             cell.numberOfPieces-=1
@@ -559,7 +525,17 @@ class GameViewModel(application: Application, private val binding: GameFragmentB
         switchTurns()
     }
 
+    fun unhighlightMove(){
+        for (move in movesList) {
+            if (sourceCell.cellNumber + sign * move in 1..24) {
+                unhighlightCell(cellsArray[sourceCell.cellNumber + sign * move - 1])
+            }
+        }
+        unhighlightPiece(sourceCell)
+    }
+
     fun skipTurn() {
+        // leih di ?
         for (move in movesList) {
             if (sourceCell.cellNumber + sign * move in 1..24) {
                 unhighlightCell(cellsArray[sourceCell.cellNumber + sign * move - 1])

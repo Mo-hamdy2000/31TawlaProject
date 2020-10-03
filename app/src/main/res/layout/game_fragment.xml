@@ -3,9 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
     <data>
-        <variable name="gameViewModel" type="com.example.android.a31tawlaproject.GameViewModel"/>
-    </data>
-
+        <variable
+            name="gameViewModel"
+            type="com.example.android.a31tawlaproject.GameViewModel"/>
+   </data>
+<!--    <data>-->
+<!--        <variable name="gameViewModel" type="com.example.android.a31tawlaproject.SinglePlayerViewModel"/>-->
+<!--    </data>-->
     <RelativeLayout
         android:id="@+id/screen_layout"
         android:layout_width="match_parent"
