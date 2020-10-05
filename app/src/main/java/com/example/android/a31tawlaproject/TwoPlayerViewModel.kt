@@ -14,7 +14,7 @@ class TwoPlayerViewModel(application: Application, binding: GameFragmentBinding)
         if (!(cell.cellNumber in playersCells[currentColor-1])) {
             playersCells[currentColor-1].add(cell.cellNumber)
         }
-        if (sourceCell.numberOfPieces == 0) {
+        if (sourceCell.numberOfPieces.value == 0) {
             playersCells[currentColor-1].remove(sourceCell.cellNumber)
         }
         undoList.add(MovePlayed(sourceCell.cellNumber, cell.cellNumber, false))
@@ -22,11 +22,11 @@ class TwoPlayerViewModel(application: Application, binding: GameFragmentBinding)
         binding.undoButton.alpha = 1.0f
 
         if (currentColor == 1 && sourceCell.cellNumber < 19 && cell.cellNumber >= 19) {
-            piecesAtHomePlayer1 += 1
+            piecesAtHomePlayer[0]++
             undoList.peek().pieceMovedToHome = true
         }
         else if (currentColor == 2 && sourceCell.cellNumber > 6 && cell.cellNumber <= 6) {
-            piecesAtHomePlayer2 += 1
+            piecesAtHomePlayer[1] ++
             undoList.peek().pieceMovedToHome = true
         }
 

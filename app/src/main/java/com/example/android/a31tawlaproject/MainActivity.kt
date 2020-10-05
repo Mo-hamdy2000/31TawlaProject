@@ -19,14 +19,15 @@ class MainActivity : AppCompatActivity() {
         val binding : ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         val singlePlayerButton : Button = binding.singlePlayerButton
         val twoPlayerButton : Button = binding.twoPlayerButton
-        supportFragmentManager.beginTransaction().add(R.id.root, SinglePlayerFragment()).commit()
+        supportFragmentManager.beginTransaction().add(R.id.root, TwoPlayerFragment()).commit()
 
-//        singlePlayerButton.setOnClickListener {
-//            supportFragmentManager.beginTransaction().add(R.id.root, SinglePlayerFragment()).commit()
-//        }
-//        twoPlayerButton.setOnClickListener {
-//            supportFragmentManager.beginTransaction().add(R.id.root, TwoPlayerFragment()).commit()
-//        }
+        /*
+        singlePlayerButton.setOnClickListener {
+            supportFragmentManager.beginTransaction().add(R.id.root, SinglePlayerFragment()).commit()
+        }
+        twoPlayerButton.setOnClickListener {
+            supportFragmentManager.beginTransaction().add(R.id.root, TwoPlayerFragment()).commit()
+        }*/
 
     }
 
