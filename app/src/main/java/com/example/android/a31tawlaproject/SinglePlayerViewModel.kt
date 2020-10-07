@@ -8,7 +8,7 @@ class SinglePlayerViewModel (application: Application, binding: GameFragmentBind
         private val playerOneMoves = mutableListOf<Cell>()
         private val preferredCells = mutableListOf<Cell>()
         private val singleCells = mutableListOf<Cell>()
-         var i = 0
+         private var i = 0
     init {
         preferredCells.add(cellsArray[23])
     }
@@ -64,7 +64,7 @@ class SinglePlayerViewModel (application: Application, binding: GameFragmentBind
             if(currentColor==1)
             unhighlightMove()
             removePiece(sourceCell)
-            if (!(cell.cellNumber in playersCells[currentColor-1])) {
+            if (cell.cellNumber !in playersCells[currentColor-1]) {
                 playersCells[currentColor-1].add(cell.cellNumber)
             }
             if (sourceCell.numberOfPieces.value == 0) {

@@ -17,21 +17,24 @@ abstract class GameFragment : Fragment() {
 
     lateinit var binding: GameFragmentBinding
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-                              savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         // Inflate view and obtain an instance of the binding class.
         binding = DataBindingUtil.inflate(inflater, R.layout.game_fragment, container, false)
         return binding.root
     }
 
-    fun initializationWithViewModel (gameViewModel: GameViewModel, lifeCycleOwner: Fragment) {
+    fun initializationWithViewModel(gameViewModel: GameViewModel, lifeCycleOwner: Fragment) {
         val rollButton : Button = binding.rollButton
         val undoButton : Button = binding.undoButton
         val diceOne : ImageView = binding.diceImg1
         val diceTwo : ImageView = binding.diceImg2
         for (i in 1..24) {
             // When cell change observer will update all its data to view
-            gameViewModel.cellsArray[i - 1].numberOfPieces.observe(lifeCycleOwner, Observer {
+            //using class not instance :(
+           GameViewModel.cellsArray[i - 1].numberOfPieces.observe(lifeCycleOwner, Observer {
                 if (it > 0) {
                     // update text
                     getCellText(i).text = it.toString()
@@ -39,16 +42,15 @@ abstract class GameFragment : Fragment() {
                     if (getCell(i).childCount == 1) {
                         val piece = ImageView(this.context!!)
 
-                        if(gameViewModel.currentColor == 1)
+                        if (GameViewModel.cellsArray[i-1].color == 1)
                             piece.setImageResource(R.drawable.piece1)
-                        else if(gameViewModel.currentColor == 2)
+                        else if (GameViewModel.cellsArray[i-1].color  == 2)
                             piece.setImageResource(R.drawable.piece2)
 
                         if (i <= 12) {
                             piece.scaleType = ImageView.ScaleType.FIT_START
                             getCell(i).addView(piece, 0)
-                        }
-                        else {
+                        } else {
                             piece.scaleType = ImageView.ScaleType.FIT_END
                             getCell(i).addView(piece)
                         }
@@ -57,62 +59,53 @@ abstract class GameFragment : Fragment() {
                     getCellText(i).text = ""
                     if (getCell(i).childCount > 1 && i <= 12) {
                         getCell(i).removeViewAt(0)
-                    }
-                    else if  (getCell(i).childCount > 1 && i > 12) {
+                    } else if (getCell(i).childCount > 1 && i > 12) {
                         getCell(i).removeViewAt(1)
                     }
                 }
             })
 
-            gameViewModel.cellsArray[i - 1].isPieceHighlighted.observe(lifeCycleOwner, Observer {
-                    // update piece image
-                if (gameViewModel.cellsArray[i - 1].numberOfPieces.value!! > 0) {
+            GameViewModel.cellsArray[i - 1].isPieceHighlighted.observe(lifeCycleOwner, Observer {
+                // update piece image
+                if (GameViewModel.cellsArray[i - 1].numberOfPieces.value!! > 0) {
                     lateinit var piece: ImageView
                     if (getCell(i).childCount > 1 && i <= 12) {
                         println(i)
-                        piece = getCell(i).getChildAt(0) as ImageView }
-
-                    else if (getCell(i).childCount > 1 && i > 12)
+                        piece = getCell(i).getChildAt(0) as ImageView
+                    } else if (getCell(i).childCount > 1 && i > 12)
                         piece = getCell(i).getChildAt(1) as ImageView
 
-                    if(gameViewModel.currentColor == 1 && !it)
+                    if (GameViewModel.cellsArray[i-1].color == 1 && !it)
                         piece.setImageResource(R.drawable.piece1)
-                    else if(gameViewModel.currentColor == 2 && !it)
+                    else if (GameViewModel.cellsArray[i-1].color == 2 && !it)
                         piece.setImageResource(R.drawable.piece2)
-                    else if(gameViewModel.currentColor == 1 && it)
+                    else if (GameViewModel.cellsArray[i-1].color == 1 && it)
                         piece.setImageResource(R.drawable.piece1_highlighted)
                     else
                         piece.setImageResource(R.drawable.piece2_highlighted)
                 }
 
             })
-            gameViewModel.cellsArray[i - 1].isCellHighlighted.observe(lifeCycleOwner, Observer {
+            GameViewModel.cellsArray[i - 1].isCellHighlighted.observe(lifeCycleOwner, Observer {
                 if (it) {
                     println("Wslnaaaaaaaaaaaaaaa ll highlight mn hnaaaaaaaaaaaa")
                     if (i <= 12 && i % 2 != 0) {
                         getCell(i).setBackgroundResource(R.drawable.cell_gold_upper_highlighted)
-                    }
-                    else if (i > 12 && i % 2 != 0) {
+                    } else if (i > 12 && i % 2 != 0) {
                         getCell(i).setBackgroundResource(R.drawable.cell_gold_lower_highlighted)
-                    }
-                    else if (i <= 12 && i % 2 == 0) {
+                    } else if (i <= 12 && i % 2 == 0) {
                         getCell(i).setBackgroundResource(R.drawable.cell_blue_upper_highlighted)
-                    }
-                    else {
+                    } else {
                         getCell(i).setBackgroundResource(R.drawable.cell_blue_lower_highlighted)
                     }
-                }
-                else {
+                } else {
                     if (i <= 12 && i % 2 != 0) {
                         getCell(i).setBackgroundResource(R.drawable.cell_gold_upper)
-                    }
-                    else if (i > 12 && i % 2 != 0) {
+                    } else if (i > 12 && i % 2 != 0) {
                         getCell(i).setBackgroundResource(R.drawable.cell_gold_lower)
-                    }
-                    else if (i <= 12 && i % 2 == 0) {
+                    } else if (i <= 12 && i % 2 == 0) {
                         getCell(i).setBackgroundResource(R.drawable.cell_blue_upper)
-                    }
-                    else {
+                    } else {
                         getCell(i).setBackgroundResource(R.drawable.cell_blue_lower)
                     }
                 }
@@ -203,12 +196,13 @@ abstract class GameFragment : Fragment() {
         })
 
         rollButton.setOnClickListener {
-            if (!gameViewModel.diceRolled) {
-                rollDice(diceOne,diceTwo, gameViewModel.movesList)
-                gameViewModel.diceRolled = true
-                if (gameViewModel.piecesAtHomePlayer[gameViewModel.currentColor - 1] == 15) {
+            if (!GameViewModel.diceRolled) {
+                rollDice(diceOne, diceTwo, GameViewModel.movesList)
+                GameViewModel.diceRolled = true
+                if (GameViewModel.piecesAtHomePlayer[GameViewModel.currentColor - 1] == 15) {
                     gameViewModel.collectPieces()
                 }
+
                 gameViewModel.check()
             }
         }
@@ -275,4 +269,5 @@ abstract class GameFragment : Fragment() {
             else -> TextView(this.context!!)
         }
     }
+
 }

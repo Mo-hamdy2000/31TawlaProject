@@ -6,52 +6,131 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.example.android.a31tawlaproject.databinding.GameFragmentBinding
-import java.util.Stack
+import java.util.*
 import kotlin.math.abs
 
-abstract class GameViewModel(application: Application, val binding: GameFragmentBinding) : AndroidViewModel(application) {
+abstract class GameViewModel(application: Application, val binding: GameFragmentBinding) : AndroidViewModel(
+    application
+) {
 
-    private var startingPointSelected = false // -> flag for selecting source cell
-    lateinit var sourceCell : Cell
+    //static members
+companion object{
+
+    private var read = false
+   lateinit var cellsArray: Array<Cell>
+    val piecesAtHomePlayer: Array<Int> = Array(2) { 0 }
+    val piecesCollectedPlayer: Array<Int> = Array(2) { 0 }
+
+    private var scoreOne =0
+    private var scoreTwo=0
+
     var currentColor = 1
-    var sign = 1
-    var computerTurn = false
-    private var isMoved = false
-    private var scoreOne = 0
-    private var scoreTwo = 0
-    val cellsArray: Array<Cell> = Array(24) {
-        Cell(it + 1, MutableLiveData(0), 0, MutableLiveData(false), MutableLiveData(false))
-    }
 
     val movesList = mutableListOf<Int>()
     var diceRolled = false
-    val piecesAtHomePlayer: Array<Int> = Array(2) { 0 }
+        val undoList = Stack<MovePlayed>()
+        private var _isUndoEnabled = MutableLiveData<Boolean>(false)
 
-    val piecesCollectedPlayer: Array<Int> = Array(2) { 0 }
-    val undoList = Stack<MovePlayed>()
-    private var _isUndoEnabled = MutableLiveData<Boolean>(false)
+
+        fun writeArray(): String {
+        val sb = StringBuilder()
+        for (cell in cellsArray) {
+            sb.append(cell.numberOfPieces.value).append(" ").append(cell.color).append(" ")
+        }
+        sb.append(piecesAtHomePlayer[0]).append(" ").append(piecesAtHomePlayer[1]).append(" ")
+            .append(piecesCollectedPlayer[0]).append(" ").append(piecesCollectedPlayer[1])
+            .append(" ")
+            .append(scoreOne).append(" ").append(scoreTwo).append(" ")
+            .append(currentColor).append(" ")
+      /*      .append(diceRolled).append(" ")
+            .append(movesList.size).append(" ")
+        for (move in movesList)
+            sb.append(move).append(" ")
+        //undo
+            sb.append(_isUndoEnabled.value).append(" ")
+         while(undoList.isNotEmpty()){
+             val temp = undoList.pop()
+             sb.append(temp.sourceCellNo).append(" ")
+                 .append(temp.destCellNo).append(" ")
+                 .append(temp.pieceMovedToHome).append(" ")
+        }*/
+        return sb.toString()
+    }
+
+    fun readArray(string: String?) { //sets read to false if the file was empty " nothing is saved "
+
+    if(string==null) {
+        read = false
+        return
+    }
+        val st = StringTokenizer(string)
+        cellsArray = Array(24) {
+            Cell(
+                it + 1,
+                MutableLiveData(st.nextToken().toInt()),
+                st.nextToken().toInt(),
+                MutableLiveData(false),
+                MutableLiveData(false)
+            )
+        }
+
+        piecesAtHomePlayer[0] = st.nextToken().toInt()
+        piecesAtHomePlayer[1] = st.nextToken().toInt()
+
+        piecesCollectedPlayer[0] = st.nextToken().toInt()
+        piecesCollectedPlayer[1] = st.nextToken().toInt()
+
+        scoreOne = st.nextToken().toInt()
+        scoreTwo = st.nextToken().toInt()
+
+        currentColor = st.nextToken().toInt()
+
+      /*  diceRolled = st.nextToken()!!.toBoolean()
+        val movesSize = st.nextToken().toInt()
+        for (i in 0 until movesSize)
+            movesList.add(st.nextToken().toInt())
+        _isUndoEnabled.value = st.nextToken()!!.toBoolean()
+        while(st.hasMoreTokens()) {
+            val undo= MovePlayed(st.nextToken().toInt(),st.nextToken().toInt(), st.nextToken()!!.toBoolean())
+            undoList.push(undo)
+        }
+        */
+
+        read = true
+    }
+    }
+
+
+    private var startingPointSelected = false // -> flag for selecting source cell
+    lateinit var sourceCell : Cell
+    var sign = 1
+    var computerTurn = false
+    ///dice variables
+    private var isMoved = false
+    //undo variables
     val isUndoEnabled: LiveData<Boolean>
         get() = _isUndoEnabled
-
     val playersCells: Array<MutableList<Int>> = Array(2) {
         mutableListOf<Int>()
     }
+
     private var oneMoveOnly = false
-
-
     init {
-        currentColor = 2
-        addPiece(cellsArray[23])
-        currentColor = 1
-        addPiece(cellsArray[0])
+        if (!read) {
+            cellsArray=Array(24) {
+                Cell(it + 1, MutableLiveData(0), 0, MutableLiveData(false), MutableLiveData(false))
+            }
+            currentColor = 2
+            addPiece(cellsArray[23])
+            cellsArray[23].numberOfPieces.value = 15
 
-        cellsArray[0].numberOfPieces.value =15
-        cellsArray[23].numberOfPieces.value = 15
-        cellsArray[0].color = 1
-        cellsArray[23].color = 2
-        playersCells[0].add(1)
-        playersCells[1].add(24)
-        //rollDice(binding.diceImg1,binding.diceImg2)
+            currentColor = 1
+            addPiece(cellsArray[0])
+            cellsArray[0].numberOfPieces.value = 15
+
+            playersCells[0].add(1)
+            playersCells[1].add(24)
+        }
     }
 
     fun selectCell(cell: Cell) {
@@ -167,7 +246,7 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
         // Bt2kd Eno my7sbsh el pieces elly fe el home lw lsa mraw7sh haga
         //m-
         // note that expression ((( currentColor * (23/3) - sign * (23/3) ))) gets the start cell for each player just it compresses the code
-        if (piecesAtHomePlayer[currentColor - 1] == 0 && cellsArray[currentColor * (23/3) - sign * (23/3)].numberOfPieces.value == 14
+        if (piecesAtHomePlayer[currentColor - 1] == 0 && cellsArray[currentColor * (23 / 3) - sign * (23 / 3)].numberOfPieces.value == 14
             && !homeFlag) {
             firstMovePossibleCells.remove(1)
             secondMovePossibleCells.remove(1)
@@ -205,7 +284,7 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
         val move = movesList[0]
         var homeComing = 0
         var startMoves = 0
-        for (cellNum in playersCells[currentColor-1]) {
+        for (cellNum in playersCells[currentColor - 1]) {
             var temp = 0
             for (i in 1..4) {
                 if ((cellNum + sign * move * i) in 1..24 && cellsArray[cellNum + sign * move * i - 1].color != oppositeColor()) {
@@ -223,7 +302,7 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
             }
         }
 
-        if (piecesAtHomePlayer[currentColor - 1] == 0 && cellsArray[currentColor * (23/3) - sign * (23/3)].numberOfPieces.value == 14 && homeComing < 1) {
+        if (piecesAtHomePlayer[currentColor - 1] == 0 && cellsArray[currentColor * (23 / 3) - sign * (23 / 3)].numberOfPieces.value == 14 && homeComing < 1) {
             println(movesNum)
             movesNum -= startMoves
             println(movesNum)
@@ -234,7 +313,11 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
         }
 
         if (movesNum < 4) {
-            Toast.makeText(getApplication(), "YOU CAN'T PLAY " + (4 - movesNum) + " MOVE", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                getApplication(),
+                "YOU CAN'T PLAY " + (4 - movesNum) + " MOVE",
+                Toast.LENGTH_SHORT
+            ).show()
             for (i in 1..(4-movesNum)) {
                 movesList.remove(move)
             }
@@ -286,11 +369,11 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
         }
         addPiece(cellsArray[movePlayed.sourceCellNo - 1])
         removePiece(cellsArray[movePlayed.destCellNo - 1])
-        if (!(movePlayed.sourceCellNo in playersCells[currentColor-1])) {
-            playersCells[currentColor-1].add(movePlayed.sourceCellNo)
+        if (!(movePlayed.sourceCellNo in playersCells[currentColor - 1])) {
+            playersCells[currentColor - 1].add(movePlayed.sourceCellNo)
         }
         if (cellsArray[movePlayed.destCellNo - 1].numberOfPieces.value == 0) {
-            playersCells[currentColor-1].remove(movePlayed.destCellNo)
+            playersCells[currentColor - 1].remove(movePlayed.destCellNo)
         }
         movesList.add(abs(movePlayed.destCellNo - movePlayed.sourceCellNo))
         if (undoList.empty()) {
@@ -308,8 +391,8 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
                 }
                 var isPlayed = false
                 for (i in (24 - move) downTo 19) {
-                    if (i >= 19 && i + move < 25 && cellsArray[i-1].numberOfPieces.value!! > 0
-                        && cellsArray[i-1].color == currentColor && cellsArray[i + move -1].color != 2) {
+                    if (i >= 19 && i + move < 25 && cellsArray[i - 1].numberOfPieces.value!! > 0
+                        && cellsArray[i - 1].color == currentColor && cellsArray[i + move - 1].color != 2) {
                         addPiece(cellsArray[i + move - 1])
                         removePiece(cellsArray[i - 1])
                         isPlayed = true
@@ -337,9 +420,9 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
                 }
                 var isPlayed = false
                 for (i in (move + 1) .. 6) {
-                    if (i - move > 0 && cellsArray[i-1].numberOfPieces.value!! > 0 && cellsArray[i-1].color == currentColor
-                        && cellsArray[i - move -1].color != 1) {
-                        addPiece(cellsArray[i - move -1])
+                    if (i - move > 0 && cellsArray[i - 1].numberOfPieces.value!! > 0 && cellsArray[i - 1].color == currentColor
+                        && cellsArray[i - move - 1].color != 1) {
+                        addPiece(cellsArray[i - move - 1])
                         removePiece(cellsArray[i - 1])
                         isPlayed = true
                         break
@@ -370,4 +453,5 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
         }
         sourceCell.isPieceHighlighted.value = false
     }
-}
+
+    }
