@@ -13,100 +13,6 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
     application
 ) {
 
-    //static members
-companion object{
-
-    var read = false
-   lateinit var cellsArray: Array<Cell>
-    val piecesAtHomePlayer: Array<Int> = Array(2) { 0 }
-    val piecesCollectedPlayer: Array<Int> = Array(2) { 0 }
-    private var scoreOne =0
-    private var scoreTwo=0
-
-    var currentColor = 1
-    var gameMode = 1
-
-    val movesList = mutableListOf<Int>()
-    var diceRolled = false
-        val undoList = Stack<MovePlayed>()
-        private var _isUndoEnabled = MutableLiveData<Boolean>(false)
-
-
-        fun writeArray(): String {
-            //TOO MUCHHH
-            //CODE 3ERRAAAAAAAAAA
-        val sb = StringBuilder()
-            sb.append(gameMode).append(" ")
-        for (cell in cellsArray) {
-            sb.append(cell.numberOfPieces.value).append(" ").append(cell.color).append(" ")
-        }
-        sb.append(piecesAtHomePlayer[0]).append(" ").append(piecesAtHomePlayer[1]).append(" ")
-            .append(piecesCollectedPlayer[0]).append(" ").append(piecesCollectedPlayer[1])
-            .append(" ")
-            .append(scoreOne).append(" ").append(scoreTwo).append(" ")
-            .append(currentColor).append(" ")
-          .append(diceRolled).append(" ").append(diceOneVal).append(" ").append(diceTwoVal).append(" ")
-            .append(movesList.size).append(" ")
-        for (move in movesList)
-            sb.append(move).append(" ")
-        //undo
-            sb.append(_isUndoEnabled.value).append(" ")
-         while(undoList.isNotEmpty()){
-             val temp = undoList.pop()
-             sb.append(temp.sourceCellNo).append(" ")
-                 .append(temp.destCellNo).append(" ")
-                 .append(temp.pieceMovedToHome).append(" ")
-        }
-        return sb.toString()
-    }
-
-    fun readArray(string: String?) { //sets read to false if the file was empty " nothing is saved "
-
-    if(string==null) {
-        read = false
-        return
-    }
-        val st = StringTokenizer(string)
-        gameMode = st.nextToken().toInt()
-        cellsArray = Array(24) {
-            Cell(
-                it + 1,
-                MutableLiveData(st.nextToken().toInt()),
-                st.nextToken().toInt(),
-                MutableLiveData(false),
-                MutableLiveData(false)
-            )
-        }
-
-        piecesAtHomePlayer[0] = st.nextToken().toInt()
-        piecesAtHomePlayer[1] = st.nextToken().toInt()
-
-        piecesCollectedPlayer[0] = st.nextToken().toInt()
-        piecesCollectedPlayer[1] = st.nextToken().toInt()
-
-        scoreOne = st.nextToken().toInt()
-        scoreTwo = st.nextToken().toInt()
-
-        currentColor = st.nextToken().toInt()
-
-       diceRolled = st.nextToken()!!.toBoolean()
-        diceOneVal = st.nextToken().toInt()
-        diceTwoVal = st.nextToken().toInt()
-        val movesSize = st.nextToken().toInt()
-        for (i in 0 until movesSize)
-            movesList.add(st.nextToken().toInt())
-        _isUndoEnabled.value = st.nextToken()!!.toBoolean()
-        while(st.hasMoreTokens()) {
-            val undo= MovePlayed(st.nextToken().toInt(),st.nextToken().toInt(), st.nextToken()!!.toBoolean())
-            undoList.push(undo)
-        }
-
-        read = true
-    }
-
-
-    }
-
 
     private var startingPointSelected = false // -> flag for selecting source cell
     lateinit var sourceCell : Cell
@@ -121,11 +27,105 @@ companion object{
         mutableListOf<Int>()
     }
 
+    //static members
+    companion object{
+
+        var read = false
+        lateinit var cellsArray: Array<Cell>
+        val piecesAtHomePlayer: Array<Int> = Array(2) { 0 }
+        val piecesCollectedPlayer: Array<Int> = Array(2) { 0 }
+        private var scoreOne =0
+        private var scoreTwo=0
+
+        var currentColor = 1
+        var gameMode = 0
+
+        val movesList = mutableListOf<Int>()
+        var diceRolled = false
+        val undoList = Stack<MovePlayed>()
+        var _isUndoEnabled = MutableLiveData<Boolean>(false)
+
+        fun writeArray(): String {
+            //TOO MUCHHH
+            //CODE 3ERRAAAAAAAAAA
+            val sb = StringBuilder()
+            sb.append(gameMode).append(" ")
+            for (cell in cellsArray) {
+                sb.append(cell.numberOfPieces.value).append(" ").append(cell.color).append(" ")
+            }
+            sb.append(piecesAtHomePlayer[0]).append(" ").append(piecesAtHomePlayer[1]).append(" ")
+                .append(piecesCollectedPlayer[0]).append(" ").append(piecesCollectedPlayer[1])
+                .append(" ")
+                .append(scoreOne).append(" ").append(scoreTwo).append(" ")
+                .append(currentColor).append(" ")
+                .append(diceRolled).append(" ").append(diceOneVal).append(" ").append(diceTwoVal).append(" ")
+                .append(movesList.size).append(" ")
+            for (move in movesList)
+                sb.append(move).append(" ")
+            //undo
+            while(undoList.isNotEmpty()){
+                val temp = undoList.pop()
+                sb.append(temp.sourceCellNo).append(" ")
+                    .append(temp.destCellNo).append(" ")
+                    .append(temp.pieceMovedToHome).append(" ")
+            }
+            return sb.toString()
+        }
+
+        fun readArray(string: String?) { //sets read to false if the file was empty " nothing is saved "
+
+            if(string==null) {
+                read = false
+                return
+            }
+            val st = StringTokenizer(string)
+            gameMode = st.nextToken().toInt()
+            cellsArray = Array(24) {
+                Cell(
+                    it + 1,
+                    MutableLiveData(st.nextToken().toInt()),
+                    st.nextToken().toInt(),
+                    MutableLiveData(false),
+                    MutableLiveData(false)
+                )
+            }
+
+            piecesAtHomePlayer[0] = st.nextToken().toInt()
+            piecesAtHomePlayer[1] = st.nextToken().toInt()
+
+            piecesCollectedPlayer[0] = st.nextToken().toInt()
+            piecesCollectedPlayer[1] = st.nextToken().toInt()
+
+            scoreOne = st.nextToken().toInt()
+            scoreTwo = st.nextToken().toInt()
+
+            currentColor = st.nextToken().toInt()
+
+            diceRolled = st.nextToken()!!.toBoolean()
+            diceOneVal = st.nextToken().toInt()
+            diceTwoVal = st.nextToken().toInt()
+            val movesSize = st.nextToken().toInt()
+            movesList.clear()
+            for (i in 0 until movesSize)
+                movesList.add(st.nextToken().toInt())
+            while(st.hasMoreTokens()) {
+                val undo= MovePlayed(st.nextToken().toInt(),st.nextToken().toInt(), st.nextToken()!!.toBoolean())
+                undoList.push(undo)
+            }
+            if(undoList.isNotEmpty())
+                _isUndoEnabled.value = true
+
+            read = true
+        }
+
+
+    }
+
+
+
     private var oneMoveOnly = false
     init {
-        sign = if(currentColor==1)
-            1
-        else -1
+
         if (!read) {
             cellsArray=Array(24) {
                 Cell(it + 1, MutableLiveData(0), 0, MutableLiveData(false), MutableLiveData(false))
@@ -142,6 +142,17 @@ companion object{
 
             playersCells[0].add(1)
             playersCells[1].add(24)
+        }
+        else{
+            sign = if(currentColor==1)
+                1
+            else -1
+            for(cell in cellsArray){
+                if(cell.color==1)
+                    playersCells[0].add(cell.cellNumber)
+                else if(cell.color==2)
+                    playersCells[1].add(cell.cellNumber)
+            }
         }
     }
 
@@ -251,14 +262,16 @@ companion object{
                     homeFlag = true
             }
         }
-
+//maycollectesh
         if (homeFlag && (piecesAtHomePlayer[currentColor - 1] == 14)) {
             return
         }
         // Bt2kd Eno my7sbsh el pieces elly fe el home lw lsa mraw7sh haga
         //m-
         // note that expression ((( currentColor * (23/3) - sign * (23/3) ))) gets the start cell for each player just it compresses the code
-        if (piecesAtHomePlayer[currentColor - 1] == 0 && cellsArray[currentColor * (23 / 3) - sign * (23 / 3)].numberOfPieces.value == 14
+        //-s
+        //5alletha 3.0 bas 3ashan kan bye3mel integer division w beyragga3 21 fi 7alet player 2
+        if (piecesAtHomePlayer[currentColor - 1] == 0 && cellsArray[(currentColor * (23 / 3.0) - sign * (23 / 3.0)).toInt()].numberOfPieces.value == 14
             && !homeFlag) {
             firstMovePossibleCells.remove(1)
             secondMovePossibleCells.remove(1)
@@ -283,6 +296,7 @@ companion object{
                 movesList.remove(secondMove)
             }
         } else {
+            //law nafs elpossible move feletnein w mafeesh 8eir piece wa7daa
             if (firstMovePossibleCells.size == 1 && secondMovePossibleCells.size == 1
                 && firstMovePossibleCells[0] == secondMovePossibleCells[0] && cellsArray[firstMovePossibleCells[0] - 1].numberOfPieces.value == 1) {
                 Toast.makeText(getApplication(), "YOU CAN ONLY PLAY ONE MOVE", Toast.LENGTH_SHORT).show()
@@ -314,8 +328,8 @@ companion object{
             }
         }
 
-        if (piecesAtHomePlayer[currentColor - 1] == 0 && cellsArray[currentColor * (23 / 3) - sign * (23 / 3)].numberOfPieces.value == 14 && homeComing < 1) {
-            println(movesNum)
+        if (piecesAtHomePlayer[currentColor - 1] == 0 && cellsArray[(currentColor * (23 / 3.0) - sign * (23 / 3.0)).toInt()].numberOfPieces.value == 14 && homeComing < 1) {
+                println(movesNum)
             movesNum -= startMoves
             println(movesNum)
         }

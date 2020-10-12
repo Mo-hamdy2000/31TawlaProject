@@ -31,7 +31,7 @@ class Main : Fragment() {
             GameViewModel.readArray(load())
             if(GameViewModel.gameMode == 1)
                 findNavController(it).navigate(R.id.action_main_to_singlePlayerFragment)
-            else
+            else if(GameViewModel.gameMode == 2)
                 findNavController(it).navigate(R.id.action_main_to_twoPlayerFragment)
         }
 
