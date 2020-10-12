@@ -47,6 +47,7 @@ class SinglePlayerViewModel (application: Application, binding: GameFragmentBind
                         if (destinationCell.color != currentColor || destinationCell.color == 0) {
                             sourceCell = cell
                             move(destinationCell)
+                            Thread.sleep(1500)
                             iterator.remove()
                             i--
                             break
@@ -60,9 +61,9 @@ class SinglePlayerViewModel (application: Application, binding: GameFragmentBind
 
 
         override fun move(cell: Cell) {
-            addPiece(cell)
             if(currentColor==1)
-            unhighlightMove()
+                unhighlightMove()
+            addPiece(cell)
             removePiece(sourceCell)
             if (cell.cellNumber !in playersCells[currentColor-1]) {
                 playersCells[currentColor-1].add(cell.cellNumber)

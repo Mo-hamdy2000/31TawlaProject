@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navigation"
+    app:startDestination="@id/main">
+
+    <fragment
+        android:id="@+id/main"
+        android:name="com.example.android.a31tawlaproject.Main"
+        android:label="Main" >
+        <action
+            android:id="@+id/action_main_to_singlePlayerFragment"
+            app:destination="@id/singlePlayerFragment" />
+        <action
+            android:id="@+id/action_main_to_twoPlayerFragment"
+            app:destination="@id/twoPlayerFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/singlePlayerFragment"
+        android:name="com.example.android.a31tawlaproject.SinglePlayerFragment"
+        android:label="SinglePlayerFragment" />
+    <fragment
+        android:id="@+id/twoPlayerFragment"
+        android:name="com.example.android.a31tawlaproject.TwoPlayerFragment"
+        android:label="TwoPlayerFragment" />
+</navigation>

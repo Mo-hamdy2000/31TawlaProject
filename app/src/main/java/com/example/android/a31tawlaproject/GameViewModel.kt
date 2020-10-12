@@ -16,15 +16,15 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
     //static members
 companion object{
 
-    private var read = false
+    var read = false
    lateinit var cellsArray: Array<Cell>
     val piecesAtHomePlayer: Array<Int> = Array(2) { 0 }
     val piecesCollectedPlayer: Array<Int> = Array(2) { 0 }
-
     private var scoreOne =0
     private var scoreTwo=0
 
     var currentColor = 1
+    var gameMode = 1
 
     val movesList = mutableListOf<Int>()
     var diceRolled = false
@@ -33,7 +33,10 @@ companion object{
 
 
         fun writeArray(): String {
+            //TOO MUCHHH
+            //CODE 3ERRAAAAAAAAAA
         val sb = StringBuilder()
+            sb.append(gameMode).append(" ")
         for (cell in cellsArray) {
             sb.append(cell.numberOfPieces.value).append(" ").append(cell.color).append(" ")
         }
@@ -42,7 +45,7 @@ companion object{
             .append(" ")
             .append(scoreOne).append(" ").append(scoreTwo).append(" ")
             .append(currentColor).append(" ")
-      /*      .append(diceRolled).append(" ")
+          .append(diceRolled).append(" ").append(diceOneVal).append(" ").append(diceTwoVal).append(" ")
             .append(movesList.size).append(" ")
         for (move in movesList)
             sb.append(move).append(" ")
@@ -53,7 +56,7 @@ companion object{
              sb.append(temp.sourceCellNo).append(" ")
                  .append(temp.destCellNo).append(" ")
                  .append(temp.pieceMovedToHome).append(" ")
-        }*/
+        }
         return sb.toString()
     }
 
@@ -64,6 +67,7 @@ companion object{
         return
     }
         val st = StringTokenizer(string)
+        gameMode = st.nextToken().toInt()
         cellsArray = Array(24) {
             Cell(
                 it + 1,
@@ -85,7 +89,9 @@ companion object{
 
         currentColor = st.nextToken().toInt()
 
-      /*  diceRolled = st.nextToken()!!.toBoolean()
+       diceRolled = st.nextToken()!!.toBoolean()
+        diceOneVal = st.nextToken().toInt()
+        diceTwoVal = st.nextToken().toInt()
         val movesSize = st.nextToken().toInt()
         for (i in 0 until movesSize)
             movesList.add(st.nextToken().toInt())
@@ -94,10 +100,11 @@ companion object{
             val undo= MovePlayed(st.nextToken().toInt(),st.nextToken().toInt(), st.nextToken()!!.toBoolean())
             undoList.push(undo)
         }
-        */
 
         read = true
     }
+
+
     }
 
 
@@ -116,10 +123,15 @@ companion object{
 
     private var oneMoveOnly = false
     init {
+        sign = if(currentColor==1)
+            1
+        else -1
         if (!read) {
             cellsArray=Array(24) {
                 Cell(it + 1, MutableLiveData(0), 0, MutableLiveData(false), MutableLiveData(false))
             }
+            movesList.clear()
+            diceRolled = false
             currentColor = 2
             addPiece(cellsArray[23])
             cellsArray[23].numberOfPieces.value = 15
@@ -191,10 +203,10 @@ companion object{
                     Toast.makeText(getApplication(), "No possible moves here", Toast.LENGTH_SHORT).show()
                 }
             }
-            if (movesList.size == 0)
-                switchTurns()
-        }
 
+        }
+        if (movesList.size == 0)
+            switchTurns()
     }
 
     private fun oppositeColor(): Int {

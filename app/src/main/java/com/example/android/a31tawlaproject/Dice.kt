@@ -4,13 +4,13 @@ import android.widget.ImageView
 import java.util.*
 var diceOneVal = 0
 var diceTwoVal = 0
-fun rollDice(diceOne : ImageView,diceTwo : ImageView, movesList: MutableList<Int>) {
+fun rollDice(movesList: MutableList<Int>) : Array<Int> {
     // animate(diceOne)
     //animate(diceTwo)
-    diceOneVal = Random().nextInt(6)+1
+        diceOneVal = Random().nextInt(6) + 1
+        diceTwoVal = Random().nextInt(6) + 1
     movesList.add(diceOneVal)
-    diceOne.setBackgroundResource(createRandomNumber(diceOneVal))
-    diceTwoVal = Random().nextInt(6)+1
+
     if (diceOneVal == diceTwoVal) {
         for (i in 1..3) {
             movesList.add(diceOneVal)
@@ -20,18 +20,10 @@ fun rollDice(diceOne : ImageView,diceTwo : ImageView, movesList: MutableList<Int
         movesList.add(diceTwoVal)
     }
     movesList.sort()
-    diceTwo.setBackgroundResource(createRandomNumber(diceTwoVal))
+    return arrayOf(diceOneVal,diceTwoVal)
+    //na2alt elli betset elimage felgamefragment
 }
-fun createRandomNumber(diceVal: Int): Int {
-    return when(diceVal) {
-        1 -> R.drawable.dice1
-        2 -> R.drawable.dice2
-        3 -> R.drawable.dice3
-        4 -> R.drawable.dice4
-        5 -> R.drawable.dice5
-        else -> R.drawable.dice6
-    }
-}
+
 /*  private fun animate(dice:ImageView) {
       dice.setBackgroundResource(R.drawable.dice_animation);
       val frameAnimation: AnimationDrawable = dice.background as AnimationDrawable
