@@ -1,18 +1,19 @@
-package com.example.android.a31tawlaproject
+package com.example.android.a31tawlaproject.game
 
 import android.app.Application
 import android.widget.Toast
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.example.android.a31tawlaproject.databinding.GameFragmentBinding
+import com.example.android.a31tawlaproject.miscUtils.Cell
+import com.example.android.a31tawlaproject.miscUtils.MovePlayed
+import com.example.android.a31tawlaproject.miscUtils.*
 import java.util.*
 import kotlin.math.abs
 
-abstract class GameViewModel(application: Application, val binding: GameFragmentBinding) : AndroidViewModel(
+abstract class GameViewModel(application: Application) : AndroidViewModel(
     application
 ) {
-
 
     private var startingPointSelected = false // -> flag for selecting source cell
     lateinit var sourceCell : Cell
@@ -34,16 +35,19 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
         lateinit var cellsArray: Array<Cell>
         val piecesAtHomePlayer: Array<Int> = Array(2) { 0 }
         val piecesCollectedPlayer: Array<Int> = Array(2) { 0 }
-        private var scoreOne =0
-        private var scoreTwo=0
-
+        private var _scoreOne = MutableLiveData<Int> (0)
+        val scoreOne: LiveData<Int>
+            get() = _scoreOne
+        private var _scoreTwo = MutableLiveData<Int> (0)
+        val scoreTwo: LiveData<Int>
+            get() = _scoreTwo
         var currentColor = 1
         var gameMode = 0
-
         val movesList = mutableListOf<Int>()
         var diceRolled = false
         val undoList = Stack<MovePlayed>()
         var _isUndoEnabled = MutableLiveData<Boolean>(false)
+        var endGame = MutableLiveData<Boolean>(false)
 
         fun writeArray(): String {
             //TOO MUCHHH
@@ -96,8 +100,8 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
             piecesCollectedPlayer[0] = st.nextToken().toInt()
             piecesCollectedPlayer[1] = st.nextToken().toInt()
 
-            scoreOne = st.nextToken().toInt()
-            scoreTwo = st.nextToken().toInt()
+            _scoreOne.value = st.nextToken().toInt()
+            _scoreTwo.value = st.nextToken().toInt()
 
             currentColor = st.nextToken().toInt()
 
@@ -118,30 +122,33 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
             read = true
         }
 
+        fun getWinner(): String{
+            if (scoreOne.value!! > scoreTwo.value!!) {
+                return "Player 1"
+            }
+            else if (scoreOne.value!! < scoreTwo.value!!) {
+                return "Player 2"
+            }
+            return "Absolutely No Winner"
+        }
 
+        fun getScore(): Array<Int> {
+            if (scoreOne.value!! > scoreTwo.value!!) {
+                return arrayOf(scoreOne.value!!, scoreTwo.value!!)
+            }
+            return arrayOf(scoreTwo.value!!, scoreOne.value!!)
+        }
     }
 
-
-
     private var oneMoveOnly = false
+
     init {
 
         if (!read) {
             cellsArray=Array(24) {
                 Cell(it + 1, MutableLiveData(0), 0, MutableLiveData(false), MutableLiveData(false))
             }
-            movesList.clear()
-            diceRolled = false
-            currentColor = 2
-            addPiece(cellsArray[23])
-            cellsArray[23].numberOfPieces.value = 15
-
-            currentColor = 1
-            addPiece(cellsArray[0])
-            cellsArray[0].numberOfPieces.value = 15
-
-            playersCells[0].add(1)
-            playersCells[1].add(24)
+            resetGame()
         }
         else{
             sign = if(currentColor==1)
@@ -190,7 +197,7 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
                             oneMoveOnly = false
                             movesList.clear()
                         }
-                        if ((piecesAtHomePlayer[currentColor - 1] == 15) && !movesList.isEmpty()) {
+                        if ((piecesAtHomePlayer[currentColor - 1] == 15) && movesList.isNotEmpty()) {
                             collectPieces()
                             return
                         }
@@ -230,7 +237,6 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
         else if (movesList.size == 4)
             checkFourMoves()
     }
-
 
     private fun checkTwoMoves() {
         val firstMove = movesList[0]
@@ -329,7 +335,7 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
         }
 
         if (piecesAtHomePlayer[currentColor - 1] == 0 && cellsArray[(currentColor * (23 / 3.0) - sign * (23 / 3.0)).toInt()].numberOfPieces.value == 14 && homeComing < 1) {
-                println(movesNum)
+            println(movesNum)
             movesNum -= startMoves
             println(movesNum)
         }
@@ -354,7 +360,6 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
     }
 
     abstract fun move(cell: Cell)
-   
 
     private fun getPossibleMoves(selectedCell: Cell): Boolean {
         var isPossible = false
@@ -371,10 +376,11 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
         return isPossible
     }
 
-
-   abstract fun switchTurns()
-   
-
+    open fun switchTurns() {
+        undoList.clear()
+        movesList.clear()
+        _isUndoEnabled.value = false
+    }
 
     fun addPiece(cell: Cell){
         startingPointSelected = false
@@ -468,7 +474,13 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
             }
         }
         movesList.clear()
-        switchTurns()
+        println(piecesCollectedPlayer[currentColor - 1])
+        if (piecesCollectedPlayer[currentColor - 1] == 15) {
+            endRound()
+        }
+        else {
+            switchTurns()
+        }
     }
 
     fun unhighlightMove(){
@@ -480,4 +492,50 @@ abstract class GameViewModel(application: Application, val binding: GameFragment
         sourceCell.isPieceHighlighted.value = false
     }
 
+    fun resetGame() {
+        println("Hereeeeeeeeeeeeeeeee we end Again")
+        piecesAtHomePlayer[0] = 0
+        piecesAtHomePlayer[1] = 0
+        piecesCollectedPlayer[0] = 0
+        piecesCollectedPlayer[1] = 0
+        for (cell in cellsArray) {
+            cell.numberOfPieces.value = 0
+            cell.color = 0
+            cell.isCellHighlighted.value = false
+            cell.isPieceHighlighted.value = false
+        }
+        movesList.clear()
+        diceRolled = false
+        currentColor = 2
+        addPiece(cellsArray[23])
+        cellsArray[23].numberOfPieces.value = 15
+
+        currentColor = 1
+        addPiece(cellsArray[0])
+        cellsArray[0].numberOfPieces.value = 15
+
+        playersCells[0].add(1)
+        playersCells[1].add(24)
     }
+
+    private fun endRound() {
+        println("Hereeeeeeeeeeeeeeeee we end")
+        var winner: Int
+        if (currentColor == 1) {
+            _scoreOne.value = scoreOne.value!! + (15 - piecesCollectedPlayer[1])
+            winner = 1
+            if (scoreOne.value!! >= 31) {
+                endGame.value = true
+            }
+        }
+        else {
+            _scoreTwo.value = scoreTwo.value!! + (15 - piecesCollectedPlayer[0])
+            winner = 2
+            if (scoreTwo.value!! >= 31) {
+                endGame.value = true
+            }
+        }
+        resetGame()
+        currentColor = winner
+    }
+}

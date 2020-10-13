@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_navigation"
+    app:startDestination="@id/twoPlayerFragment">
+
+    <fragment
+        android:id="@+id/scoreFragment"
+        android:name="com.example.android.a31tawlaproject.score.ScoreFragment"
+        android:label="ScoreFragment"
+        tools:layout = "@layout/score_fragment">
+        <argument
+            android:name="winner"
+            app:argType="string"
+            android:defaultValue="" />
+        <argument
+            android:name="winner_score"
+            app:argType="integer"
+            android:defaultValue="0" />
+        <argument
+            android:name="opponent_score"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+    <fragment
+        android:id="@+id/twoPlayerFragment"
+        android:name="com.example.android.a31tawlaproject.game.TwoPlayerFragment"
+        android:label="TwoPlayerFragment"
+        tools:layout = "@layout/game_fragment">
+        <action
+            android:id="@+id/action_twoPlayerFragment_to_scoreFragment"
+            app:destination="@id/scoreFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/singlePlayerFragment"
+        android:name="com.example.android.a31tawlaproject.game.SinglePlayerFragment"
+        android:label="SinglePlayerFragment"
+        tools:layout = "@layout/game_fragment">
+        <action
+            android:id="@+id/action_singlePlayerFragment_to_scoreFragment"
+            app:destination="@id/scoreFragment" />
+    </fragment>
+</navigation>

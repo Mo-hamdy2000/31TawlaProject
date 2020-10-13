@@ -1,12 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" android:id="@+id/navigation"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/navigation"
     app:startDestination="@id/main">
 
     <fragment
         android:id="@+id/main"
-        android:name="com.example.android.a31tawlaproject.Main"
-        android:label="Main" >
+        android:name="com.example.android.a31tawlaproject.home.Home"
+        android:label="Main"
+        tools:layout = "@layout/main_fragment">
         <action
             android:id="@+id/action_main_to_singlePlayerFragment"
             app:destination="@id/singlePlayerFragment" />
@@ -16,10 +19,26 @@
     </fragment>
     <fragment
         android:id="@+id/singlePlayerFragment"
-        android:name="com.example.android.a31tawlaproject.SinglePlayerFragment"
-        android:label="SinglePlayerFragment" />
+        android:name="com.example.android.a31tawlaproject.game.SinglePlayerFragment"
+        android:label="SinglePlayerFragment"
+        tools:layout = "@layout/game_fragment">
+        <action
+            android:id="@+id/action_singlePlayerFragment_to_scoreFragment2"
+            app:destination="@id/scoreFragment" />
+    </fragment>
     <fragment
         android:id="@+id/twoPlayerFragment"
-        android:name="com.example.android.a31tawlaproject.TwoPlayerFragment"
-        android:label="TwoPlayerFragment" />
+        android:name="com.example.android.a31tawlaproject.game.TwoPlayerFragment"
+        android:label="TwoPlayerFragment"
+        tools:layout = "@layout/game_fragment">
+        <action
+            android:id="@+id/action_twoPlayerFragment_to_scoreFragment"
+            app:destination="@id/scoreFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/scoreFragment"
+        android:name="com.example.android.a31tawlaproject.score.ScoreFragment"
+        android:label="ScoreFragment"
+        tools:layout = "@layout/score_fragment">
+    </fragment>
 </navigation>

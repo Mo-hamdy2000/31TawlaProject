@@ -1,6 +1,5 @@
 package com.example.android.a31tawlaproject
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -8,17 +7,14 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentActivity
 import androidx.lifecycle.Observer
+import androidx.navigation.Navigation
 import com.example.android.a31tawlaproject.databinding.GameFragmentBinding
-import java.io.File
-import java.io.FileInputStream
-import java.io.FileNotFoundException
-import java.io.FileOutputStream
+import com.example.android.a31tawlaproject.game.GameViewModel
+import com.example.android.a31tawlaproject.miscUtils.*
 
 abstract class GameFragment : Fragment() {
 
@@ -29,7 +25,8 @@ abstract class GameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate view and obtain an instance of the binding class.
-        val oo = activity?.filesDir
+        //m- oo is not used
+        //val oo = activity?.filesDir
         binding = DataBindingUtil.inflate(inflater, R.layout.game_fragment, container, false)
         return binding.root
     }
@@ -45,37 +42,37 @@ abstract class GameFragment : Fragment() {
         for (i in 1..24) {
             // When cell change observer will update all its data to view
             //using class not instance :(
-           GameViewModel.cellsArray[i - 1].numberOfPieces.observe(lifeCycleOwner, Observer {
-               if (it > 0) {
-                   // update text
-                   getCellText(i).text = it.toString()
-                   // update piece image
-                   if (getCell(i).childCount == 1) {
-                       val piece =
-                           ImageView(this.requireContext())//kan 3amelli error 3ala context!! :O
+            GameViewModel.cellsArray[i - 1].numberOfPieces.observe(lifeCycleOwner, Observer {
+                if (it > 0) {
+                    // update text
+                    getCellText(i).text = it.toString()
+                    // update piece image
+                    if (getCell(i).childCount == 1) {
+                        val piece =
+                            ImageView(this.requireContext())//kan 3amelli error 3ala context!! :O
 
-                       if (GameViewModel.cellsArray[i - 1].color == 1)
-                           piece.setImageResource(R.drawable.piece1)
-                       else if (GameViewModel.cellsArray[i - 1].color == 2)
-                           piece.setImageResource(R.drawable.piece2)
+                        if (GameViewModel.cellsArray[i - 1].color == 1)
+                            piece.setImageResource(R.drawable.piece1)
+                        else if (GameViewModel.cellsArray[i - 1].color == 2)
+                            piece.setImageResource(R.drawable.piece2)
 
-                       if (i <= 12) {
-                           piece.scaleType = ImageView.ScaleType.FIT_START
-                           getCell(i).addView(piece, 0)
-                       } else {
-                           piece.scaleType = ImageView.ScaleType.FIT_END
-                           getCell(i).addView(piece)
-                       }
-                   }
-               } else {
-                   getCellText(i).text = ""
-                   if (getCell(i).childCount > 1 && i <= 12) {
-                       getCell(i).removeViewAt(0)
-                   } else if (getCell(i).childCount > 1 && i > 12) {
-                       getCell(i).removeViewAt(1)
-                   }
-               }
-           })
+                        if (i <= 12) {
+                            piece.scaleType = ImageView.ScaleType.FIT_START
+                            getCell(i).addView(piece, 0)
+                        } else {
+                            piece.scaleType = ImageView.ScaleType.FIT_END
+                            getCell(i).addView(piece)
+                        }
+                    }
+                } else {
+                    getCellText(i).text = ""
+                    if (getCell(i).childCount > 1 && i <= 12) {
+                        getCell(i).removeViewAt(0)
+                    } else if (getCell(i).childCount > 1 && i > 12) {
+                        getCell(i).removeViewAt(1)
+                    }
+                }
+            })
 
             GameViewModel.cellsArray[i - 1].isPieceHighlighted.observe(lifeCycleOwner, Observer {
                 // update piece image
@@ -135,7 +132,6 @@ abstract class GameFragment : Fragment() {
                         piece = getCell(it.cellNumber).getChildAt(1) as ImageView
                     else
                         piece = ImageView(this.context!!)
-
                     if(gameViewModel.currentColor == 1 && !it.isPieceHighlighted)
                         piece.setImageResource(R.drawable.piece1)
                     else if(gameViewModel.currentColor == 2 && !it.isPieceHighlighted)
@@ -144,7 +140,6 @@ abstract class GameFragment : Fragment() {
                         piece.setImageResource(R.drawable.piece1_highlighted)
                     else
                         piece.setImageResource(R.drawable.piece2_highlighted)
-
                     if (getCell(it.cellNumber).childCount == 1) {
                         if (it.cellNumber <= 12) {
                             piece.scaleType = ImageView.ScaleType.FIT_START
@@ -196,14 +191,28 @@ abstract class GameFragment : Fragment() {
             })*/
         }
 
+        GameViewModel.scoreOne.observe(viewLifecycleOwner, Observer {
+            binding.scoreOneText.text = it.toString()
+        })
+
+        GameViewModel.scoreTwo.observe(viewLifecycleOwner, Observer {
+            binding.scoreTwoText.text = it.toString()
+        })
+
         gameViewModel.isUndoEnabled.observe(viewLifecycleOwner, Observer {
             println("Observed khalas")
             if (it) {
                 undoButton.isEnabled = true
                 undoButton.alpha = 1.0f
             } else {
-                undoButton.isEnabled = true
+                undoButton.isEnabled = false
                 undoButton.alpha = 0.5f
+            }
+        })
+
+        GameViewModel.endGame.observe(viewLifecycleOwner, Observer {
+            if (it) {
+                Navigation.findNavController(requireView()).navigate(R.id.action_twoPlayerFragment_to_scoreFragment)
             }
         })
 
@@ -284,7 +293,8 @@ abstract class GameFragment : Fragment() {
             else -> TextView(this.requireContext())
         }
     }
-    private fun setDiceImg(diceVal: Array<Int>, dice: Array<ImageView>) {
+
+    protected fun setDiceImg(diceVal: Array<Int>, dice: Array<ImageView>) {
         for (i in 0..1) {
             val imgSrc = when (diceVal[i]) {
                 1 -> R.drawable.dice1

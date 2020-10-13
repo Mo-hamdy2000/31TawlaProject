@@ -1,19 +1,22 @@
-package com.example.android.a31tawlaproject
+package com.example.android.a31tawlaproject.game
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.example.android.a31tawlaproject.GameFragment
 
-class SinglePlayerFragment: GameFragment() {
+class TwoPlayerFragment : GameFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         val root = super.onCreateView(inflater, container, savedInstanceState)
         val application = requireNotNull(this.activity).application
-        val gameViewModel = SinglePlayerViewModel(application, binding)
+        val gameViewModel =
+            TwoPlayerViewModel(
+                application
+            )
         this.initializationWithViewModel(gameViewModel, this)
         return root
     }
-
 }

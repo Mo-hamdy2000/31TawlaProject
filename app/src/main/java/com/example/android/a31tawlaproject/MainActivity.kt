@@ -10,9 +10,9 @@ class MainActivity : AppCompatActivity() {
     companion object{
         lateinit var internalStoragePath :File
     }
-  override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-      internalStoragePath = File(filesDir, "LastGame.txt")
+        internalStoragePath = File(filesDir, "LastGame.txt")
 //      val bundle = Bundle()
 //       bundle.putString("path",this.filesDir.absolutePath)
 //        val singlePlayer = SinglePlayerFragment ()

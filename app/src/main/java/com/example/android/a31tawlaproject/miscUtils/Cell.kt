@@ -1,7 +1,5 @@
-package com.example.android.a31tawlaproject
+package com.example.android.a31tawlaproject.miscUtils
 
-import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.lifecycle.MutableLiveData
 
 data class Cell(

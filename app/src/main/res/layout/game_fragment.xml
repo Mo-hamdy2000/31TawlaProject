@@ -5,10 +5,10 @@
     <data>
         <variable
             name="gameViewModel"
-            type="com.example.android.a31tawlaproject.GameViewModel"/>
+            type="com.example.android.a31tawlaproject.game.GameViewModel"/>
    </data>
 <!--    <data>-->
-<!--        <variable name="gameViewModel" type="com.example.android.a31tawlaproject.SinglePlayerViewModel"/>-->
+<!--        <variable name="gameViewModel" type="com.example.android.a31tawlaproject.Game.SinglePlayerViewModel"/>-->
 <!--    </data>-->
     <RelativeLayout
         android:id="@+id/screen_layout"

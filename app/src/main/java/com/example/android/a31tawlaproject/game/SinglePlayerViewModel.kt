@@ -1,14 +1,20 @@
-package com.example.android.a31tawlaproject
+package com.example.android.a31tawlaproject.game
 
 import android.app.Application
-import com.example.android.a31tawlaproject.databinding.GameFragmentBinding
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import com.example.android.a31tawlaproject.miscUtils.Cell
+import com.example.android.a31tawlaproject.miscUtils.MovePlayed
 
-class SinglePlayerViewModel (application: Application, binding: GameFragmentBinding) : GameViewModel(application, binding) {
+class SinglePlayerViewModel (application: Application) : GameViewModel(application) {
 
-        private val playerOneMoves = mutableListOf<Cell>()
-        private val preferredCells = mutableListOf<Cell>()
-        private val singleCells = mutableListOf<Cell>()
-         private var i = 0
+    private val playerOneMoves = mutableListOf<Cell>()
+    private val preferredCells = mutableListOf<Cell>()
+    private val singleCells = mutableListOf<Cell>()
+    private val _roll = MutableLiveData<Boolean>(false)
+    val roll: LiveData<Boolean>
+        get() = _roll
+    private var i = 0
     init {
         preferredCells.add(cellsArray[23])
     }
@@ -71,9 +77,14 @@ class SinglePlayerViewModel (application: Application, binding: GameFragmentBind
             if (sourceCell.numberOfPieces.value == 0) {
                 playersCells[currentColor-1].remove(sourceCell.cellNumber)
             }
-            undoList.add(MovePlayed(sourceCell.cellNumber, cell.cellNumber, false))
-            binding.undoButton.isEnabled = true
-            binding.undoButton.alpha = 1.0f
+            undoList.add(
+                MovePlayed(
+                    sourceCell.cellNumber,
+                    cell.cellNumber,
+                    false
+                )
+            )
+            _isUndoEnabled.value = true
             if (currentColor == 1) {
                 //s-
                 playerOneMoves.add(cell)
@@ -110,18 +121,15 @@ class SinglePlayerViewModel (application: Application, binding: GameFragmentBind
 
 
     override fun switchTurns() {
-        diceRolled = false
-        undoList.clear()
-        movesList.clear()
-        binding.undoButton.isEnabled = false
-        binding.undoButton.alpha = 0.5f
+        super.switchTurns()
         if (currentColor == 1) {
             sign = -1
             println("player 2")
             computerTurn = true
             currentColor = 2
-            binding.rollButton.callOnClick()
+            _roll.value = true
             computerMove()
+            _roll.value = false
         }
         else {
             sign = 1

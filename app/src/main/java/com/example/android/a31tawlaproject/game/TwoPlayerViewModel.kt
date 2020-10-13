@@ -1,9 +1,10 @@
-package com.example.android.a31tawlaproject
+package com.example.android.a31tawlaproject.game
 
 import android.app.Application
-import com.example.android.a31tawlaproject.databinding.GameFragmentBinding
+import com.example.android.a31tawlaproject.miscUtils.Cell
+import com.example.android.a31tawlaproject.miscUtils.MovePlayed
 
-class TwoPlayerViewModel(application: Application, binding: GameFragmentBinding) : GameViewModel(application, binding) {
+class TwoPlayerViewModel(application: Application) : GameViewModel(application) {
 
     override fun move(cell: Cell) {
         //-s
@@ -17,9 +18,14 @@ class TwoPlayerViewModel(application: Application, binding: GameFragmentBinding)
         if (sourceCell.numberOfPieces.value == 0) {
             playersCells[currentColor-1].remove(sourceCell.cellNumber)
         }
-        undoList.add(MovePlayed(sourceCell.cellNumber, cell.cellNumber, false))
-        binding.undoButton.isEnabled = true
-        binding.undoButton.alpha = 1.0f
+        undoList.add(
+            MovePlayed(
+                sourceCell.cellNumber,
+                cell.cellNumber,
+                false
+            )
+        )
+        _isUndoEnabled.value = true
 
         if (currentColor == 1 && sourceCell.cellNumber < 19 && cell.cellNumber >= 19) {
             piecesAtHomePlayer[0]++
@@ -33,10 +39,7 @@ class TwoPlayerViewModel(application: Application, binding: GameFragmentBinding)
     }
 
     override fun switchTurns() {
-        undoList.clear()
-        movesList.clear()
-        binding.undoButton.isEnabled = false
-        binding.undoButton.alpha = 0.5f
+        super.switchTurns()
         currentColor = if (currentColor == 1) {
             sign = -1
             println("player 2")

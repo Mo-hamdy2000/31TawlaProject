@@ -1,4 +1,4 @@
-package com.example.android.a31tawlaproject
+package com.example.android.a31tawlaproject.miscUtils
 
 
 data class MovePlayed(

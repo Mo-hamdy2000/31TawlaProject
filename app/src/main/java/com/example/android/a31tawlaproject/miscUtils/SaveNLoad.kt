@@ -1,9 +1,12 @@
-package com.example.android.a31tawlaproject
+package com.example.android.a31tawlaproject.miscUtils
 
+import com.example.android.a31tawlaproject.MainActivity
+import com.example.android.a31tawlaproject.game.GameViewModel
 import java.io.FileInputStream
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
-val file = MainActivity.internalStoragePath
+val file =
+    MainActivity.internalStoragePath
 
 fun load():String?{
     val inputAsString :String
