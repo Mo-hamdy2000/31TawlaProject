@@ -1,5 +1,7 @@
-package com.example.android.a31tawlaproject
+package com.example.android.a31tawlaproject.game
 
+import android.graphics.drawable.AnimationDrawable
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,8 +14,8 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import com.example.android.a31tawlaproject.R
 import com.example.android.a31tawlaproject.databinding.GameFragmentBinding
-import com.example.android.a31tawlaproject.game.GameViewModel
 import com.example.android.a31tawlaproject.miscUtils.*
 
 abstract class GameFragment : Fragment() {
@@ -32,7 +34,7 @@ abstract class GameFragment : Fragment() {
     }
 
     fun initializationWithViewModel(gameViewModel: GameViewModel, lifeCycleOwner: Fragment) {
-        val rollButton : Button = binding.rollButton
+       // val rollButton : Button = binding.rollButton
         val undoButton : Button = binding.undoButton
         val diceOne : ImageView = binding.diceImg1
         val diceTwo : ImageView = binding.diceImg2
@@ -119,86 +121,15 @@ abstract class GameFragment : Fragment() {
                     }
                 }
             })
-            /*
-            gameViewModel.cellsArray[i].observe(lifeCycleOwner, Observer<Cell> {
-                if (it.numberOfPieces > 0) {
-                    // update text
-                    getCellText(it.cellNumber).text = it.numberOfPieces.toString()
-                    // update piece image
-                    lateinit var piece: ImageView
-                    if (getCell(it.cellNumber).childCount > 1 && it.cellNumber <= 12)
-                        piece = getCell(it.cellNumber).getChildAt(0) as ImageView
-                    else if (getCell(it.cellNumber).childCount > 1 && it.cellNumber > 12)
-                        piece = getCell(it.cellNumber).getChildAt(1) as ImageView
-                    else
-                        piece = ImageView(this.context!!)
-                    if(gameViewModel.currentColor == 1 && !it.isPieceHighlighted)
-                        piece.setImageResource(R.drawable.piece1)
-                    else if(gameViewModel.currentColor == 2 && !it.isPieceHighlighted)
-                        piece.setImageResource(R.drawable.piece2)
-                    else if(gameViewModel.currentColor == 1 && it.isPieceHighlighted)
-                        piece.setImageResource(R.drawable.piece1_highlighted)
-                    else
-                        piece.setImageResource(R.drawable.piece2_highlighted)
-                    if (getCell(it.cellNumber).childCount == 1) {
-                        if (it.cellNumber <= 12) {
-                            piece.scaleType = ImageView.ScaleType.FIT_START
-                            getCell(it.cellNumber).addView(piece, 0)
-                        }
-                        else {
-                            piece.scaleType = ImageView.ScaleType.FIT_END
-                            getCell(it.cellNumber).addView(piece)
-                        }
-                    }
-                } else {
-                    getCellText(it.cellNumber).text = ""
-                    if (getCell(it.cellNumber).childCount == 1 && it.cellNumber <= 12) {
-                        getCell(it.cellNumber).removeViewAt(0)
-                    }
-                    else if  (getCell(it.cellNumber).childCount == 1 && it.cellNumber > 12) {
-                        getCell(it.cellNumber).removeViewAt(0)
-                    }
-                }
-                // update cell background
-                if (!it.isCellHighlighted.value!!) {
-                    if (it.cellNumber <= 12 && it.cellNumber % 2 != 0) {
-                        getCell(it.cellNumber).setBackgroundResource(R.drawable.cell_gold_upper)
-                    }
-                    else if (it.cellNumber > 12 && it.cellNumber % 2 != 0) {
-                        getCell(it.cellNumber).setBackgroundResource(R.drawable.cell_gold_lower)
-                    }
-                    else if (it.cellNumber <= 12 && it.cellNumber % 2 == 0) {
-                        getCell(it.cellNumber).setBackgroundResource(R.drawable.cell_blue_upper)
-                    }
-                    else {
-                        getCell(it.cellNumber).setBackgroundResource(R.drawable.cell_blue_lower)
-                    }
-                } else {
-                    println("Wslnaaaaaaaaaaaaaaa ll highlight")
-                    if (it.cellNumber <= 12 && it.cellNumber % 2 != 0) {
-                        getCell(it.cellNumber).setBackgroundResource(R.drawable.cell_gold_upper_highlighted)
-                    }
-                    else if (it.cellNumber > 12 && it.cellNumber % 2 != 0) {
-                        getCell(it.cellNumber).setBackgroundResource(R.drawable.cell_gold_lower_highlighted)
-                    }
-                    else if (it.cellNumber <= 12 && it.cellNumber % 2 == 0) {
-                        getCell(it.cellNumber).setBackgroundResource(R.drawable.cell_blue_upper_highlighted)
-                    }
-                    else {
-                        getCell(it.cellNumber).setBackgroundResource(R.drawable.cell_blue_lower_highlighted)
-                    }
-                }
-            })*/
         }
 
         GameViewModel.scoreOne.observe(viewLifecycleOwner, Observer {
-            binding.scoreOneText.text = it.toString()
+            binding.scoreText.text = it.toString() + " - " + GameViewModel.scoreTwo.value.toString()
         })
 
         GameViewModel.scoreTwo.observe(viewLifecycleOwner, Observer {
-            binding.scoreTwoText.text = it.toString()
+            binding.scoreText.text = GameViewModel.scoreOne.value.toString() + " - "+ it.toString()
         })
-
         gameViewModel.isUndoEnabled.observe(viewLifecycleOwner, Observer {
             println("Observed khalas")
             if (it) {
@@ -215,20 +146,13 @@ abstract class GameFragment : Fragment() {
                 Navigation.findNavController(requireView()).navigate(R.id.action_twoPlayerFragment_to_scoreFragment)
             }
         })
-
-        rollButton.setOnClickListener {
-            if (!GameViewModel.diceRolled) {
-
-                GameViewModel.diceRolled = true
-                setDiceImg(rollDice(GameViewModel.movesList), arrayOf(diceOne, diceTwo))
-
-                if (GameViewModel.piecesAtHomePlayer[GameViewModel.currentColor - 1] == 15) {
-                    gameViewModel.collectPieces()
-                }
-
-                gameViewModel.check()
-            }
-        }
+    GameViewModel.currentColor.observe(viewLifecycleOwner, Observer {
+        binding.turnText.text = if(GameViewModel.currentColor.value == 1)
+            "Yellow's Turn"
+        else
+            "Blue's Turn"
+    setDiceImg(rollDice(GameViewModel.movesList), arrayOf(diceOne, diceTwo))
+    })
         binding.lifecycleOwner = lifeCycleOwner
         binding.gameViewModel = gameViewModel
     }
@@ -294,7 +218,8 @@ abstract class GameFragment : Fragment() {
         }
     }
 
-    protected fun setDiceImg(diceVal: Array<Int>, dice: Array<ImageView>) {
+
+    private fun setDiceImg(diceVal: Array<Int>, dice: Array<ImageView>) {
         for (i in 0..1) {
             val imgSrc = when (diceVal[i]) {
                 1 -> R.drawable.dice1
@@ -304,9 +229,15 @@ abstract class GameFragment : Fragment() {
                 5 -> R.drawable.dice5
                 else -> R.drawable.dice6
             }
-            dice[i].setBackgroundResource(imgSrc)
+            dice[i].setBackgroundResource(R.drawable.dice_animation)
+            val frameAnimation: AnimationDrawable = dice[i].background as AnimationDrawable
+            frameAnimation.start()
+            dice[i].postDelayed({ dice[i].setBackgroundResource(imgSrc) }, 12*100)
+            GameViewModel.diceRolled = true
+
         }
     }
+
     override fun onDestroyView() {
         super.onDestroyView()
         save()

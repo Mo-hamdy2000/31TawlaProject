@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="lightPink">#E8DADA</color>
-    <color name="darkPurple">#785267</color>
-    <color name="golden">#F7D384</color>
+<!--    <color name="lightPink">#E8DADA</color>-->
+<!--    <color name="darkPurple">#785267</color>-->
+    <color name="golden">#AE7810</color>
+    02142A
     <color name="white">#FFFFFF</color>
+    <color name="navy_blue">#02142A</color>
 </resources>

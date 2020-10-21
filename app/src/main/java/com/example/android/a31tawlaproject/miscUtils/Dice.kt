@@ -25,9 +25,3 @@ fun rollDice(movesList: MutableList<Int>) : Array<Int> {
     //na2alt elli betset elimage felgamefragment
 }
 
-/*  private fun animate(dice:ImageView) {
-      dice.setBackgroundResource(R.drawable.dice_animation);
-      val frameAnimation: AnimationDrawable = dice.background as AnimationDrawable
-      frameAnimation.start()
-  }
-*/
