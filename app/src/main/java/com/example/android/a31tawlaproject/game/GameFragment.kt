@@ -1,6 +1,9 @@
-package com.example.android.a31tawlaproject
+package com.example.android.a31tawlaproject.game
 
+import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
+import android.telephony.gsm.GsmCellLocation
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,19 +16,26 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import com.example.android.a31tawlaproject.R
 import com.example.android.a31tawlaproject.databinding.GameFragmentBinding
 import com.example.android.a31tawlaproject.game.GameViewModel
 import com.example.android.a31tawlaproject.miscUtils.*
 import java.lang.Integer.min
 import java.util.*
 import kotlin.concurrent.schedule
+import com.example.android.a31tawlaproject.miscUtils.diceOneVal
+import com.example.android.a31tawlaproject.miscUtils.diceTwoVal
+import com.example.android.a31tawlaproject.miscUtils.rollDice
+import com.example.android.a31tawlaproject.miscUtils.save
 
 abstract class GameFragment : Fragment() {
 
-    lateinit var binding: GameFragmentBinding
-
+    private lateinit var binding: GameFragmentBinding
+    private lateinit var diceImages : Array<ImageView>
+    private var diceValues = arrayOf(diceOneVal, diceTwoVal)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -38,17 +48,17 @@ abstract class GameFragment : Fragment() {
     }
 
     fun initializationWithViewModel(gameViewModel: GameViewModel, lifeCycleOwner: Fragment) {
-        val rollButton : Button = binding.rollButton
+       // val rollButton : Button = binding.rollButton
         val undoButton : Button = binding.undoButton
-        val diceOne : ImageView = binding.diceImg1
-        val diceTwo : ImageView = binding.diceImg2
+        diceImages = arrayOf(binding.diceImg1, binding.diceImg2)
         if(GameViewModel.read){
-            setDiceImg(arrayOf(diceOneVal, diceTwoVal), arrayOf(diceOne, diceTwo))
+            setDiceImg(true)
         }
         for (i in 1..24) {
             // When cell change observer will update all its data to view
             //using class not instance :(
             GameViewModel.cellsArray[i - 1].numberOfPieces.observe(lifeCycleOwner, Observer {
+                Log.i("AAAAA","OBSERVED")
                 if (it > 0) {
                     // update text
                     getCellText(i).text = it.toString()
@@ -126,13 +136,12 @@ abstract class GameFragment : Fragment() {
         }
 
         GameViewModel.scoreOne.observe(viewLifecycleOwner, Observer {
-            binding.scoreOneText.text = it.toString()
+            binding.scoreText.text = it.toString() + " - " + GameViewModel.scoreTwo.value.toString()
         })
 
         GameViewModel.scoreTwo.observe(viewLifecycleOwner, Observer {
-            binding.scoreTwoText.text = it.toString()
+            binding.scoreText.text = GameViewModel.scoreOne.value.toString() + " - "+ it.toString()
         })
-
         gameViewModel.isUndoEnabled.observe(viewLifecycleOwner, Observer {
             if (it) {
                 undoButton.isEnabled = true
@@ -142,7 +151,18 @@ abstract class GameFragment : Fragment() {
                 undoButton.alpha = 0.5f
             }
         })
-
+GameViewModel.isMoved.observe(viewLifecycleOwner, Observer {
+    if(it){
+        if(!GameViewModel.movesList.contains(diceOneVal) || (diceOneVal == diceTwoVal && GameViewModel.movesList.size==2))
+            removeDiceImg(diceOneVal,diceImages[0])
+        else if(diceOneVal!= diceTwoVal)
+            removeDiceImg(diceTwoVal,diceImages[1])
+    }
+    else{
+        if(GameViewModel.diceRolled)
+            setDiceImg(true)
+    }
+})
         GameViewModel.endGame.observe(viewLifecycleOwner, Observer {
             if (it) {
                 Navigation.findNavController(requireView()).navigate(R.id.action_twoPlayerFragment_to_scoreFragment)
@@ -186,9 +206,19 @@ abstract class GameFragment : Fragment() {
 
                 gameViewModel.check()
             }
+    GameViewModel.currentColor.observe(viewLifecycleOwner, Observer {
+        binding.turnText.text = if(GameViewModel.currentColor.value == 1)
+            "Yellow's Turn"
+        else
+            "Blue's Turn"
+        if(!GameViewModel.read) {
+            diceValues = rollDice(GameViewModel.movesList)
+            setDiceImg(false)
         }
+    })
         binding.lifecycleOwner = lifeCycleOwner
         binding.gameViewModel = gameViewModel
+      //  GameViewModel.read = false
     }
 
 
@@ -252,9 +282,10 @@ abstract class GameFragment : Fragment() {
         }
     }
 
-    protected fun setDiceImg(diceVal: Array<Int>, dice: Array<ImageView>) {
+
+    private fun setDiceImg(reset : Boolean) {
         for (i in 0..1) {
-            val imgSrc = when (diceVal[i]) {
+            val imgSrc = when (diceValues[i]) {
                 1 -> R.drawable.dice1
                 2 -> R.drawable.dice2
                 3 -> R.drawable.dice3
@@ -262,7 +293,30 @@ abstract class GameFragment : Fragment() {
                 5 -> R.drawable.dice5
                 else -> R.drawable.dice6
             }
-            dice[i].setBackgroundResource(imgSrc)
+            if(reset)
+                diceImages[i].setBackgroundResource(imgSrc)
+            else {
+                diceImages[i].setBackgroundResource(R.drawable.dice_animation)
+                val frameAnimation: AnimationDrawable =
+                    diceImages[i].background as AnimationDrawable
+                frameAnimation.start()
+                diceImages[i].postDelayed({ diceImages[i].setBackgroundResource(imgSrc) }, 12 * 100)
+                GameViewModel.diceRolled = true
+            }
+
+        }
+    }
+    private fun removeDiceImg(diceVal: Int, dice: ImageView) {
+        for (i in 0..1) {
+            val imgSrc = when (diceVal) {
+                1 -> R.drawable.dice1_faded
+                2 -> R.drawable.dice2_faded
+                3 -> R.drawable.dice3_faded
+                4 -> R.drawable.dice4_faded
+                5 -> R.drawable.dice5_faded
+                else -> R.drawable.dice6_faded
+            }
+            dice.setBackgroundResource(imgSrc)
         }
     }
     override fun onDestroyView() {

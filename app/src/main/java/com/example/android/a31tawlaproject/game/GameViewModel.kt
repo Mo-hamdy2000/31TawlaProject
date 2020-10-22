@@ -16,11 +16,12 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
 ) {
 
     private var startingPointSelected = false // -> flag for selecting source cell
-    lateinit var sourceCell : Cell
-    var sign = 1
+    lateinit var sourceCell: Cell
+    private var sign = 1
     var computerTurn = false
+
     ///dice variables
-    private var isMoved = false
+
     //undo variables
     val isUndoEnabled: LiveData<Boolean>
         get() = _isUndoEnabled
@@ -29,11 +30,12 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
     }
 
     //static members
-    companion object{
+    companion object {
 
         var read = false
+        var isMoved = MutableLiveData<Boolean> (false)
         lateinit var cellsArray: Array<Cell>
-        val piecesAtHomePlayer: Array<Int> = Array(2) { 0 }
+        val piecesAtHomePlayer: Array<Int>  = Array(2){0}
         val piecesCollectedPlayer: Array<Int> = Array(2) { 0 }
         private var _scoreOne = MutableLiveData<Int> (0)
         val scoreOne: LiveData<Int>
@@ -41,7 +43,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         private var _scoreTwo = MutableLiveData<Int> (0)
         val scoreTwo: LiveData<Int>
             get() = _scoreTwo
-        var currentColor = 1
+        var currentColor = MutableLiveData (1)
         var gameMode = 0
         val movesList = mutableListOf<Int>()
         var diceRolled = false
@@ -62,13 +64,14 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
                 .append(piecesCollectedPlayer[0]).append(" ").append(piecesCollectedPlayer[1])
                 .append(" ")
                 .append(scoreOne.value).append(" ").append(scoreTwo.value).append(" ")
-                .append(currentColor).append(" ")
-                .append(diceRolled).append(" ").append(diceOneVal).append(" ").append(diceTwoVal).append(" ")
+                .append(currentColor.value).append(" ")
+                .append(diceRolled).append(" ").append(diceOneVal).append(" ").append(diceTwoVal)
+                .append(" ")
                 .append(movesList.size).append(" ")
             for (move in movesList)
                 sb.append(move).append(" ")
             //undo
-            while(undoList.isNotEmpty()){
+            while (undoList.isNotEmpty()) {
                 val temp = undoList.pop()
                 sb.append(temp.sourceCellNo).append(" ")
                     .append(temp.destCellNo).append(" ")
@@ -77,9 +80,10 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
             return sb.toString()
         }
 
+
         fun readArray(string: String?) { //sets read to false if the file was empty " nothing is saved "
 
-            if(string==null) {
+            if (string == null) {
                 read = false
                 return
             }
@@ -104,20 +108,26 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
             _scoreOne.value = st.nextToken().toInt()
             _scoreTwo.value = st.nextToken().toInt()
 
-            currentColor = st.nextToken().toInt()
+            currentColor.value = st.nextToken().toInt()
 
             diceRolled = st.nextToken()!!.toBoolean()
             diceOneVal = st.nextToken().toInt()
             diceTwoVal = st.nextToken().toInt()
             val movesSize = st.nextToken().toInt()
+            if((diceOneVal== diceTwoVal && movesSize <=2 )|| movesSize < 2)
+                isMoved.value = true
             movesList.clear()
             for (i in 0 until movesSize)
                 movesList.add(st.nextToken().toInt())
-            while(st.hasMoreTokens()) {
-                val undo= MovePlayed(st.nextToken().toInt(),st.nextToken().toInt(), st.nextToken()!!.toBoolean())
+            while (st.hasMoreTokens()) {
+                val undo = MovePlayed(
+                    st.nextToken().toInt(),
+                    st.nextToken().toInt(),
+                    st.nextToken()!!.toBoolean()
+                )
                 undoList.push(undo)
             }
-            if(undoList.isNotEmpty())
+            if (undoList.isNotEmpty())
                 _isUndoEnabled.value = true
 
             read = true
@@ -141,24 +151,25 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         }
     }
 
+
     private var oneMoveOnly = false
 
     init {
 
         if (!read) {
-            cellsArray=Array(24) {
+            cellsArray = Array(24) {
                 Cell(it + 1, MutableLiveData(0), 0, MutableLiveData(false), MutableLiveData(false))
             }
             resetGame()
         }
         else{
-            sign = if(currentColor==1)
+            sign = if (currentColor.value == 1)
                 1
             else -1
-            for(cell in cellsArray){
-                if(cell.color==1)
+            for (cell in cellsArray) {
+                if (cell.color == 1)
                     playersCells[0].add(cell.cellNumber)
-                else if(cell.color==2)
+                else if (cell.color == 2)
                     playersCells[1].add(cell.cellNumber)
             }
         }
@@ -166,17 +177,17 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
 
     fun selectCell(cell: Cell) {
         println("Wslnaaaaaaaaaaaaaaa")
-        if (!diceRolled ||computerTurn|| (piecesAtHomePlayer[currentColor - 1] == 15)) {
+        if (!diceRolled || computerTurn || (piecesAtHomePlayer[currentColor.value!! - 1] == 15)) {
             return
         }
         if (!startingPointSelected) {
             // Zwdt condition 3ashan awl stage fe el l3ba
             // El la3b lazem yl3b b piece w7da w ywslha el n7ia el tania
             // Fa hwa msh hy2dr y7rk piece mn el home elly feha 14 piece l8ayt ma ykhls el first move dy
-            if (piecesAtHomePlayer[currentColor - 1] == 0 && cell.numberOfPieces.value == 14) {
+            if (piecesAtHomePlayer[currentColor.value!! - 1] == 0 && cell.numberOfPieces.value == 14) {
                 return
             }
-            if (cell.numberOfPieces.value!! > 0 && cell.color == currentColor) {
+            if (cell.numberOfPieces.value!! > 0 && cell.color == currentColor.value) {
                 // awwel ma ydous 3ala piece at2akked ennaha bta3to w fi pieces fel 5ana di
                 if (getPossibleMoves(cell)) {
                     startingPointSelected = true
@@ -184,8 +195,8 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
                     sourceCell = cell
                 }
             }
-        } else {
-            isMoved = false
+        } else { //if source cell is selected
+            isMoved.value = false
             for (move in movesList) {
                 if (sourceCell.cellNumber + sign * move in 1..24) {
                     val destinationCell = cellsArray[sourceCell.cellNumber + sign * move - 1]
@@ -193,12 +204,12 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
                         // lamma ydous 3ala cell tania ba3d elawwalaneyya at2akkedd ennaha men el highlighted
                         move(cell)
                         movesList.remove(move)
-                        isMoved = true
+                        isMoved.value = true
                         if (oneMoveOnly) {
                             oneMoveOnly = false
-                            movesList.clear()
+                            movesList.clear() //eh lazmetha :O
                         }
-                        if ((piecesAtHomePlayer[currentColor - 1] == 15) && movesList.isNotEmpty()) {
+                        if ((piecesAtHomePlayer[currentColor.value!! - 1] == 15) && movesList.isNotEmpty()) {
                             collectPieces()
                             return
                         }
@@ -207,9 +218,9 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
                 }
             }
             //law e5tar cell tania 5ales ya3ni 3ayez y8ayyer el source cell
-            if (!isMoved && cell.numberOfPieces.value!! > 0 && cell.color == currentColor) {
+            if (isMoved.value == false && cell.numberOfPieces.value!! > 0 && cell.color == currentColor.value) {
                 // s- 5adt rl condition di copy hena kaman
-                if (piecesAtHomePlayer[currentColor - 1] == 0 && cell.numberOfPieces.value == 14)
+                if (piecesAtHomePlayer[currentColor.value!! - 1] == 0 && cell.numberOfPieces.value == 14)
                     return
                 unhighlightMove()
                 //-s
@@ -217,8 +228,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
                     startingPointSelected = true
                     cell.isPieceHighlighted.value = true
                     sourceCell = cell
-                }
-                else {
+                } else {
                     Toast.makeText(getApplication(), "No possible moves here", Toast.LENGTH_SHORT).show()
                 }
             }
@@ -228,11 +238,11 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
             switchTurns()
     }
 
-    private fun oppositeColor(): Int {
-        return currentColor +  sign
+    fun oppositeColor(): Int {
+        return currentColor.value!! + sign
     }
 
-    fun check () {
+    fun check() {
         if (movesList.size == 2)
             checkTwoMoves()
         else if (movesList.size == 4)
@@ -240,70 +250,75 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
     }
 
     private fun checkTwoMoves() {
-        val firstMove = movesList[0]
-        val secondMove = movesList[1]
-        // Check if one piece can do the two moves
-        for (cellNum in playersCells[currentColor - 1]) {
-            if ((cellNum == 1 && piecesAtHomePlayer[currentColor - 1] == 0 && cellsArray[cellNum - 1].numberOfPieces.value == 14) ||
-                (cellNum == 24 && piecesAtHomePlayer[currentColor - 1] == 0 && cellsArray[cellNum - 1].numberOfPieces.value == 14)) {
-                continue
-            }
-            if ((cellNum + sign * firstMove + sign * secondMove) in 1.. 24 && cellsArray[cellNum + sign * firstMove + sign * secondMove - 1].color != oppositeColor() &&
-                (cellsArray[cellNum + sign * firstMove - 1].color != oppositeColor() || cellsArray[cellNum + sign * secondMove - 1].color != oppositeColor())) {
-                return
-            }
-        }
-        val firstMovePossibleCells = mutableListOf<Int>()
-        val secondMovePossibleCells = mutableListOf<Int>()
-        var homeFlag = false
-        for (cellNum in playersCells[currentColor - 1]) {
-            if ((cellNum + sign * firstMove) in 1..24 && cellsArray[cellNum + sign * firstMove - 1].color != oppositeColor()) {
-                firstMovePossibleCells.add(cellNum)
-                if (((cellNum + sign * firstMove) in 19..24 && currentColor == 1) || ((cellNum + sign * firstMove) in 1..6 && currentColor == 2))
-                    homeFlag = true
-            }
 
-            if ((cellNum + sign * secondMove) in 1..24 && cellsArray[cellNum + sign * secondMove - 1].color != oppositeColor()) {
-                secondMovePossibleCells.add(cellNum)
-                if (((cellNum + sign * secondMove) in 19..24 && currentColor == 1) || ((cellNum + sign * secondMove) in 1..6 && currentColor == 2))
-                    homeFlag = true
+       val firstMove = movesList[0]
+       val secondMove = movesList[1]
+        // Check if one piece can do the two moves
+        for (cellNum in playersCells[currentColor.value!! - 1]) {
+            if ((cellNum == 1 && piecesAtHomePlayer[currentColor.value!! - 1] == 0 && cellsArray[cellNum - 1].numberOfPieces.value == 14) ||
+                (cellNum == 24 && piecesAtHomePlayer[currentColor.value!! - 1] == 0 && cellsArray[cellNum - 1].numberOfPieces.value == 14))
+                continue
+
+            if ((cellNum + sign * firstMove + sign * secondMove) in 1..24 && cellsArray[cellNum + sign * firstMove + sign * secondMove - 1].color != oppositeColor() &&
+                (cellsArray[cellNum + sign * firstMove - 1].color != oppositeColor() || cellsArray[cellNum + sign * secondMove - 1].color != oppositeColor()))
+                return
+        }
+        //-s
+        //8ayyart di l array ma3lesh 3ashan a3raf elindex elli hayda5alni elhome
+
+       val possibleCells: Array<MutableList<Int>> = Array(2) { mutableListOf<Int>() }
+        var homeFirstTime = false
+        for (cellNum in playersCells[currentColor.value!! - 1]) {
+            for (i in 0..1) {
+                if ((cellNum + sign * movesList[i]) in 1..24 && cellsArray[cellNum + sign * movesList[i] - 1].color != oppositeColor()) {
+                    possibleCells[i].add(cellNum)
+                    if (((cellNum + sign * movesList[i]) in 19..24 && currentColor.value == 1) || ((cellNum + sign * movesList[i]) in 1..6 && currentColor.value == 2)) {
+                        if (piecesAtHomePlayer[currentColor.value!! - 1] == 14)
+                            return
+                        val firstCellNumber =
+                            (currentColor.value!! * (23 / 3.0) - sign * (23 / 3.0)).toInt()
+                        if (cellsArray[firstCellNumber].numberOfPieces.value == 14 && cellsArray[firstCellNumber + movesList[i xor 1]].color == 0)
+                            homeFirstTime = true
+                    }
+                }
             }
         }
-//maycollectesh
-        if (homeFlag && (piecesAtHomePlayer[currentColor - 1] == 14)) {
-            return
+        if (piecesAtHomePlayer[currentColor.value!! - 1] == 0 && !homeFirstTime
+        ) {
+            possibleCells[1].remove(1)
+            possibleCells[0].remove(1)
+            possibleCells[1].remove(24)
+            possibleCells[0].remove(24)
         }
+
+
+
         // Bt2kd Eno my7sbsh el pieces elly fe el home lw lsa mraw7sh haga
         //m-
         // note that expression ((( currentColor * (23/3) - sign * (23/3) ))) gets the start cell for each player just it compresses the code
         //-s
         //5alletha 3.0 bas 3ashan kan bye3mel integer division w beyragga3 21 fi 7alet player 2
-        if (piecesAtHomePlayer[currentColor - 1] == 0 && cellsArray[(currentColor * (23 / 3.0) - sign * (23 / 3.0)).toInt()].numberOfPieces.value == 14
-            && !homeFlag) {
-            firstMovePossibleCells.remove(1)
-            secondMovePossibleCells.remove(1)
-            firstMovePossibleCells.remove(24)
-            secondMovePossibleCells.remove(24)
-        }
 
         if (firstMovePossibleCells.size == 0 || secondMovePossibleCells.size == 0) {
             if (firstMovePossibleCells.size == 0 && secondMovePossibleCells.size == 0) {
                 switchTurns()
             }
-            if (firstMovePossibleCells.size == 0) {
+            if (possibleCells[0].size == 0) {
                 Toast.makeText(getApplication(), "YOU CAN'T MOVE " + firstMove, Toast.LENGTH_SHORT).show()
                 movesList.remove(firstMove)
             }
 
-            if (secondMovePossibleCells.size == 0) {
+            if (possibleCells[1].size == 0) {
                 Toast.makeText(getApplication(), "YOU CAN'T MOVE " + secondMove, Toast.LENGTH_SHORT).show()
                 movesList.remove(secondMove)
             }
         } else {
             //law nafs elpossible move feletnein w mafeesh 8eir piece wa7daa
-            if (firstMovePossibleCells.size == 1 && secondMovePossibleCells.size == 1
-                && firstMovePossibleCells[0] == secondMovePossibleCells[0] && cellsArray[firstMovePossibleCells[0] - 1].numberOfPieces.value == 1) {
-                Toast.makeText(getApplication(), "YOU CAN ONLY PLAY ONE MOVE", Toast.LENGTH_SHORT).show()
+            if (possibleCells[0].size == 1 && possibleCells[1].size == 1
+                && possibleCells[0][0] == possibleCells[1][0] && cellsArray[possibleCells[0][0] - 1].numberOfPieces.value == 1
+            ) {
+                Toast.makeText(getApplication(), "YOU CAN ONLY PLAY ONE MOVE", Toast.LENGTH_SHORT)
+                    .show()
                 oneMoveOnly = true
             }
         }
@@ -314,12 +329,12 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         val move = movesList[0]
         var homeComing = 0
         var startMoves = 0
-        for (cellNum in playersCells[currentColor - 1]) {
+        for (cellNum in playersCells[currentColor.value!! - 1]) {
             var temp = 0
             for (i in 1..4) {
                 if ((cellNum + sign * move * i) in 1..24 && cellsArray[cellNum + sign * move * i - 1].color != oppositeColor()) {
                     temp += cellsArray[cellNum - 1].numberOfPieces.value!!
-                    if ((cellNum + sign * move * i in 19..24 && currentColor == 1) ||(cellNum + sign * move * i in 1..6 && currentColor == 2)) {
+                    if ((cellNum + sign * move * i in 19..24 && currentColor.value == 1) || (cellNum + sign * move * i in 1..6 && currentColor.value == 2)) {
                         homeComing++
                     }
                 } else {
@@ -327,18 +342,18 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
                 }
             }
             movesNum += temp
-            if (cellNum ==1 || cellNum == 24) {
+            if (cellNum == 1 || cellNum == 24) {
                 startMoves = temp
             }
         }
 
-        if (piecesAtHomePlayer[currentColor - 1] == 0 && cellsArray[(currentColor * (23 / 3.0) - sign * (23 / 3.0)).toInt()].numberOfPieces.value == 14 && homeComing < 1) {
+        if (piecesAtHomePlayer[currentColor.value!! - 1] == 0 && cellsArray[(currentColor.value!! * (23 / 3.0) - sign * (23 / 3.0)).toInt()].numberOfPieces.value == 14 && homeComing < 1) {
             println(movesNum)
             movesNum -= startMoves
             println(movesNum)
         }
 
-        if (piecesAtHomePlayer[currentColor - 1] + homeComing == 15) {
+        if (piecesAtHomePlayer[currentColor.value!! - 1] + homeComing == 15) {
             return
         }
 
@@ -348,7 +363,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
                 "YOU CAN'T PLAY " + (4 - movesNum) + " MOVE",
                 Toast.LENGTH_SHORT
             ).show()
-            for (i in 1..(4-movesNum)) {
+            for (i in 1..(4 - movesNum)) {
                 movesList.remove(move)
             }
         }
@@ -357,7 +372,33 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         }
     }
 
-    abstract fun move(cell: Cell)
+    fun move(cell: Cell) {
+        //-s
+        unhighlightMove()
+        //-s
+        addPiece(cell)
+        removePiece(sourceCell)
+
+        if (!(cell.cellNumber in playersCells[currentColor.value!!-1])) {
+            playersCells[currentColor.value!!-1].add(cell.cellNumber)
+        }
+        if (sourceCell.numberOfPieces.value == 0) {
+            playersCells[currentColor.value!! - 1].remove(sourceCell.cellNumber)
+        }
+        undoList.add(MovePlayed(sourceCell.cellNumber, cell.cellNumber, false))
+        _isUndoEnabled.value = true
+
+        if (currentColor.value == 1 && sourceCell.cellNumber < 19 && cell.cellNumber >= 19) {
+            piecesAtHomePlayer[0]++
+            undoList.peek().pieceMovedToHome = true
+        }
+        else if (currentColor.value == 2 && sourceCell.cellNumber > 6 && cell.cellNumber <= 6) {
+            piecesAtHomePlayer[1] ++
+            undoList.peek().pieceMovedToHome = true
+        }
+
+    }
+
 
     private fun getPossibleMoves(selectedCell: Cell): Boolean {
         var isPossible = false
@@ -378,11 +419,19 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         undoList.clear()
         movesList.clear()
         _isUndoEnabled.value = false
+        diceRolled = false
+        currentColor.value = oppositeColor()
+        sign *=-1
+
+        if (piecesAtHomePlayer[currentColor.value!! - 1] == 15) {
+            collectPieces()
+        }
     }
 
-    fun addPiece(cell: Cell){
+
+    private fun addPiece(cell: Cell) {
         startingPointSelected = false
-        cell.color = currentColor
+        cell.color = currentColor.value!!
         cell.numberOfPieces.value = cell.numberOfPieces.value!! + 1
         movedToCell.value = cell.cellNumber
     }
@@ -401,11 +450,11 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         }
         addPiece(cellsArray[movePlayed.sourceCellNo - 1])
         removePiece(cellsArray[movePlayed.destCellNo - 1])
-        if (!(movePlayed.sourceCellNo in playersCells[currentColor - 1])) {
-            playersCells[currentColor - 1].add(movePlayed.sourceCellNo)
+        if (!(movePlayed.sourceCellNo in playersCells[currentColor.value!! -1])) {
+            playersCells[currentColor.value!! - 1].add(movePlayed.sourceCellNo)
         }
         if (cellsArray[movePlayed.destCellNo - 1].numberOfPieces.value == 0) {
-            playersCells[currentColor - 1].remove(movePlayed.destCellNo)
+            playersCells[currentColor.value!! - 1].remove(movePlayed.destCellNo)
         }
         if (movePlayed.pieceMovedToHome) {
             piecesAtHomePlayer[currentColor-1] --
@@ -414,12 +463,13 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         if (undoList.empty()) {
             _isUndoEnabled.value = false
         }
+        isMoved.value = false
     }
 
     fun collectPieces() {
-        if (currentColor == 1) {
+        if (currentColor.value == 1) {
             for (move in movesList) {
-                if (cellsArray[24 - move].numberOfPieces.value!! > 0 && cellsArray[24 - move].color == currentColor) {
+                if (cellsArray[24 - move].numberOfPieces.value!! > 0 && cellsArray[24 - move].color == currentColor.value) {
                     removePiece(cellsArray[24 - move])
                     piecesCollectedPlayer[0]++
                     continue
@@ -427,7 +477,8 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
                 var isPlayed = false
                 for (i in (24 - move) downTo 19) {
                     if (i >= 19 && i + move < 25 && cellsArray[i - 1].numberOfPieces.value!! > 0
-                        && cellsArray[i - 1].color == currentColor && cellsArray[i + move - 1].color != 2) {
+                        && cellsArray[i - 1].color == currentColor.value && cellsArray[i + move - 1].color != 2
+                    ) {
                         addPiece(cellsArray[i + move - 1])
                         removePiece(cellsArray[i - 1])
                         isPlayed = true
@@ -435,11 +486,11 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
                     }
                 }
                 if (!isPlayed) {
-                    for (i in (25 - move) .. 24) {
-                        if (i <= 24 && cellsArray[i - 1].numberOfPieces.value!! > 0 && cellsArray[i - 1].color == currentColor) {
+                    for (i in (25 - move)..24) {
+                        if (i <= 24 && cellsArray[i - 1].numberOfPieces.value!! > 0 && cellsArray[i - 1].color == currentColor.value) {
                             removePiece(cellsArray[i - 1])
                             println("The cell " + i + " is collected")
-                            piecesCollectedPlayer[0] ++
+                            piecesCollectedPlayer[0]++
                             break
                         }
                     }
@@ -447,16 +498,17 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
             }
         } else {
             for (move in movesList) {
-                if (cellsArray[move - 1].numberOfPieces.value!! > 0 && cellsArray[move - 1].color == currentColor) {
+                if (cellsArray[move - 1].numberOfPieces.value!! > 0 && cellsArray[move - 1].color == currentColor.value) {
                     removePiece(cellsArray[move - 1])
                     println("The cell " + move + " is collected")
                     piecesCollectedPlayer[1]++
                     continue
                 }
                 var isPlayed = false
-                for (i in (move + 1) .. 6) {
-                    if (i - move > 0 && cellsArray[i - 1].numberOfPieces.value!! > 0 && cellsArray[i - 1].color == currentColor
-                        && cellsArray[i - move - 1].color != 1) {
+                for (i in (move + 1)..6) {
+                    if (i - move > 0 && cellsArray[i - 1].numberOfPieces.value!! > 0 && cellsArray[i - 1].color == currentColor.value
+                        && cellsArray[i - move - 1].color != 1
+                    ) {
                         addPiece(cellsArray[i - move - 1])
                         removePiece(cellsArray[i - 1])
                         isPlayed = true
@@ -466,7 +518,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
                 if (!isPlayed) {
                     for (i in (move - 1) downTo 1) {
                         println("cell " + i + "no of pieces " + cellsArray[i - 1].numberOfPieces.value)
-                        if (i > 0 && cellsArray[i - 1].numberOfPieces.value!! > 0 && cellsArray[i - 1].color == currentColor) {
+                        if (i > 0 && cellsArray[i - 1].numberOfPieces.value!! > 0 && cellsArray[i - 1].color == currentColor.value) {
                             removePiece(cellsArray[i - 1])
                             println("The cell " + i + " is collected")
                             piecesCollectedPlayer[1]++
@@ -477,8 +529,8 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
             }
         }
         movesList.clear()
-        println(piecesCollectedPlayer[currentColor - 1])
-        if (piecesCollectedPlayer[currentColor - 1] == 15) {
+        println(piecesCollectedPlayer[currentColor.value!! - 1])
+        if (piecesCollectedPlayer[currentColor.value!! - 1] == 15) {
             endRound()
         }
         else {
@@ -486,7 +538,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         }
     }
 
-    fun unhighlightMove(){
+    fun unhighlightMove() {
         for (move in movesList) {
             if (sourceCell.cellNumber + sign * move in 1..24) {
                 cellsArray[sourceCell.cellNumber + sign * move - 1].isCellHighlighted.value = false
@@ -508,11 +560,11 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         }
         movesList.clear()
         diceRolled = false
-        currentColor = 2
+        currentColor.value = 2
         addPiece(cellsArray[23])
         cellsArray[23].numberOfPieces.value = 15
 
-        currentColor = 1
+        currentColor.value = 1
         addPiece(cellsArray[0])
         cellsArray[0].numberOfPieces.value = 15
 
@@ -520,9 +572,12 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         playersCells[1].add(24)
     }
 
+
+
     private fun endRound() {
-        var winner: Int
-        if (currentColor == 1) {
+        println("Hereeeeeeeeeeeeeeeee we end")
+        val winner: Int
+        if (currentColor.value == 1) {
             _scoreOne.value = scoreOne.value!! + (15 - piecesCollectedPlayer[1])
             winner = 1
             if (scoreOne.value!! >= 31) {
@@ -537,6 +592,6 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
             }
         }
         resetGame()
-        currentColor = winner
+        currentColor.value = winner
     }
 }

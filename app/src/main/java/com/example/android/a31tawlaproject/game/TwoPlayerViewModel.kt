@@ -40,17 +40,7 @@ class TwoPlayerViewModel(application: Application) : GameViewModel(application) 
 
     override fun switchTurns() {
         super.switchTurns()
-        currentColor = if (currentColor == 1) {
-            sign = -1
-            println("player 2")
-            2
-        }
-        else {
-            sign = 1
-            println("player 1")
-            1
-        }
-        diceRolled = false
+        check()
     }
 
 }
