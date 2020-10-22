@@ -69,8 +69,8 @@ class SinglePlayerViewModel (application: Application) : GameViewModel(applicati
         override fun move(cell: Cell) {
             if(currentColor==1)
                 unhighlightMove()
-            addPiece(cell)
             removePiece(sourceCell)
+            addPiece(cell)
             if (cell.cellNumber !in playersCells[currentColor-1]) {
                 playersCells[currentColor-1].add(cell.cellNumber)
             }

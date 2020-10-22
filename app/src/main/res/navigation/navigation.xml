@@ -3,18 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/navigation"
-    app:startDestination="@id/main">
+    app:startDestination="@id/home">
 
     <fragment
-        android:id="@+id/main"
-        android:name="com.example.android.a31tawlaproject.home.Home"
-        android:label="Main"
-        tools:layout = "@layout/main_fragment">
+        android:id="@+id/home"
+        android:name="com.example.android.a31tawlaproject.home.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/home_fragment">
         <action
-            android:id="@+id/action_main_to_singlePlayerFragment"
+            android:id="@+id/action_home_to_singlePlayerFragment"
             app:destination="@id/singlePlayerFragment" />
         <action
-            android:id="@+id/action_main_to_twoPlayerFragment"
+            android:id="@+id/action_home_to_twoPlayerFragment"
             app:destination="@id/twoPlayerFragment" />
     </fragment>
     <fragment
@@ -23,7 +23,7 @@
         android:label="SinglePlayerFragment"
         tools:layout = "@layout/game_fragment">
         <action
-            android:id="@+id/action_singlePlayerFragment_to_scoreFragment2"
+            android:id="@+id/action_singlePlayerFragment_to_scoreFragment"
             app:destination="@id/scoreFragment" />
     </fragment>
     <fragment
@@ -40,5 +40,15 @@
         android:name="com.example.android.a31tawlaproject.score.ScoreFragment"
         android:label="ScoreFragment"
         tools:layout = "@layout/score_fragment">
+        <action
+            android:id="@+id/action_scoreFragment_to_home"
+            app:destination="@id/home"
+            app:popUpTo="@id/home" />
+        <action
+            android:id="@+id/action_scoreFragment_to_twoPlayerFragment"
+            app:destination="@id/twoPlayerFragment" />
+        <action
+            android:id="@+id/action_scoreFragment_to_singlePlayerFragment"
+            app:destination="@id/singlePlayerFragment" />
     </fragment>
 </navigation>

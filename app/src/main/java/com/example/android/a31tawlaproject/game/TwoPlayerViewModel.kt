@@ -10,8 +10,8 @@ class TwoPlayerViewModel(application: Application) : GameViewModel(application) 
         //-s
         unhighlightMove()
         //-s
-        addPiece(cell)
         removePiece(sourceCell)
+        addPiece(cell)
         if (!(cell.cellNumber in playersCells[currentColor-1])) {
             playersCells[currentColor-1].add(cell.cellNumber)
         }

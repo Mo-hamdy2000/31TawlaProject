@@ -48,7 +48,8 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         val undoList = Stack<MovePlayed>()
         var _isUndoEnabled = MutableLiveData<Boolean>(false)
         var endGame = MutableLiveData<Boolean>(false)
-
+        var movedFromCell = MutableLiveData<Int>(0)
+        var movedToCell = MutableLiveData<Int>(0)
         fun writeArray(): String {
             //TOO MUCHHH
             //CODE 3ERRAAAAAAAAAA
@@ -60,7 +61,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
             sb.append(piecesAtHomePlayer[0]).append(" ").append(piecesAtHomePlayer[1]).append(" ")
                 .append(piecesCollectedPlayer[0]).append(" ").append(piecesCollectedPlayer[1])
                 .append(" ")
-                .append(scoreOne).append(" ").append(scoreTwo).append(" ")
+                .append(scoreOne.value).append(" ").append(scoreTwo.value).append(" ")
                 .append(currentColor).append(" ")
                 .append(diceRolled).append(" ").append(diceOneVal).append(" ").append(diceTwoVal).append(" ")
                 .append(movesList.size).append(" ")
@@ -285,9 +286,6 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
             secondMovePossibleCells.remove(24)
         }
 
-        println(firstMovePossibleCells)
-        println(secondMovePossibleCells)
-
         if (firstMovePossibleCells.size == 0 || secondMovePossibleCells.size == 0) {
             if (firstMovePossibleCells.size == 0 && secondMovePossibleCells.size == 0) {
                 switchTurns()
@@ -386,9 +384,11 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         startingPointSelected = false
         cell.color = currentColor
         cell.numberOfPieces.value = cell.numberOfPieces.value!! + 1
+        movedToCell.value = cell.cellNumber
     }
 
     fun removePiece(cell: Cell){
+        movedFromCell.value = cell.cellNumber
         cell.numberOfPieces.value = cell.numberOfPieces.value!! - 1
         if (cell.numberOfPieces.value == 0)
             cell.color = 0
@@ -406,6 +406,9 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         }
         if (cellsArray[movePlayed.destCellNo - 1].numberOfPieces.value == 0) {
             playersCells[currentColor - 1].remove(movePlayed.destCellNo)
+        }
+        if (movePlayed.pieceMovedToHome) {
+            piecesAtHomePlayer[currentColor-1] --
         }
         movesList.add(abs(movePlayed.destCellNo - movePlayed.sourceCellNo))
         if (undoList.empty()) {
@@ -493,7 +496,6 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
     }
 
     fun resetGame() {
-        println("Hereeeeeeeeeeeeeeeee we end Again")
         piecesAtHomePlayer[0] = 0
         piecesAtHomePlayer[1] = 0
         piecesCollectedPlayer[0] = 0
@@ -519,7 +521,6 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
     }
 
     private fun endRound() {
-        println("Hereeeeeeeeeeeeeeeee we end")
         var winner: Int
         if (currentColor == 1) {
             _scoreOne.value = scoreOne.value!! + (15 - piecesCollectedPlayer[1])

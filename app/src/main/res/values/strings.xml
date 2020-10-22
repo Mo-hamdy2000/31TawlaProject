@@ -17,4 +17,15 @@
     <string name="player_1_score">Player 1 score</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="_31_egyption_tawla">31 Egyption Tawla</string>
+    <string name="resume_button">resume button</string>
+    <string name="one_player_button">one player button</string>
+    <string name="two_players_button">two players button</string>
+    <string name="sound_icon">sound icon</string>
+    <string name="winner">Winner</string>
+    <string name="score">Score</string>
+    <string name="play_again_button">play again button</string>
+    <string name="back_button">back button</string>
+    <string name="upper_message">upper message</string>
+    <string name="lower_message">lower message</string>
 </resources>

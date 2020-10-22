@@ -6,9 +6,9 @@ import androidx.appcompat.app.AppCompatActivity
 import java.io.File
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var mediaPlayer: MediaPlayer
     companion object{
         lateinit var internalStoragePath :File
+        lateinit var mediaPlayer: MediaPlayer
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

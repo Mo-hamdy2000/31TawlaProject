@@ -7,15 +7,13 @@
             name="gameViewModel"
             type="com.example.android.a31tawlaproject.game.GameViewModel"/>
    </data>
-<!--    <data>-->
-<!--        <variable name="gameViewModel" type="com.example.android.a31tawlaproject.Game.SinglePlayerViewModel"/>-->
-<!--    </data>-->
     <RelativeLayout
         android:id="@+id/screen_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/main_layout"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentBottom="true"
@@ -198,6 +196,7 @@
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintWidth_percent=".08333">
+
                         <TextView
                             android:id="@+id/textView_cell_1"
                             android:layout_width="wrap_content"
@@ -223,6 +222,7 @@
                         app:layout_constraintStart_toEndOf="@id/cell_1"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintWidth_percent=".08333">
+
                         <TextView
                             android:id="@+id/textView_cell_2"
                             android:layout_width="wrap_content"
@@ -248,6 +248,7 @@
                         app:layout_constraintStart_toEndOf="@id/cell_2"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintWidth_percent=".08333">
+
                         <TextView
                             android:id="@+id/textView_cell_3"
                             android:layout_width="wrap_content"
@@ -273,6 +274,7 @@
                         app:layout_constraintStart_toEndOf="@id/cell_3"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintWidth_percent=".08333">
+
                         <TextView
                             android:id="@+id/textView_cell_4"
                             android:layout_width="wrap_content"
@@ -298,6 +300,7 @@
                         app:layout_constraintStart_toEndOf="@id/cell_4"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintWidth_percent=".08333">
+
                         <TextView
                             android:id="@+id/textView_cell_5"
                             android:layout_width="wrap_content"
@@ -323,6 +326,7 @@
                         app:layout_constraintStart_toEndOf="@id/cell_5"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintWidth_percent=".08333">
+
                         <TextView
                             android:id="@+id/textView_cell_6"
                             android:layout_width="wrap_content"
@@ -349,6 +353,7 @@
                         app:layout_constraintStart_toEndOf="@id/cell_6"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintWidth_percent=".08333">
+
                         <TextView
                             android:id="@+id/textView_cell_7"
                             android:layout_width="wrap_content"
@@ -374,6 +379,7 @@
                         app:layout_constraintStart_toEndOf="@id/cell_7"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintWidth_percent=".08333">
+
                         <TextView
                             android:id="@+id/textView_cell_8"
                             android:layout_width="wrap_content"
@@ -399,6 +405,7 @@
                         app:layout_constraintStart_toEndOf="@id/cell_8"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintWidth_percent=".08333">
+
                         <TextView
                             android:id="@+id/textView_cell_9"
                             android:layout_width="wrap_content"
@@ -424,6 +431,7 @@
                         app:layout_constraintStart_toEndOf="@id/cell_9"
                         app:layout_constraintTop_toTopOf="parent"
                         app:layout_constraintWidth_percent=".08333">
+
                         <TextView
                             android:id="@+id/textView_cell_10"
                             android:layout_width="wrap_content"
@@ -448,7 +456,8 @@
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toEndOf="@id/cell_10"
                         app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintWidth_percent=".08333" >
+                        app:layout_constraintWidth_percent=".08333">
+
                         <TextView
                             android:id="@+id/textView_cell_11"
                             android:layout_width="wrap_content"
@@ -820,6 +829,33 @@
 
             </LinearLayout>
 
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/messages_screen"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible">
+
+            <ImageView
+                android:id="@+id/upper_mssg_imageView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toTopOf="@id/lower_mssg_imageView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:contentDescription="@string/upper_message" />
+
+            <ImageView
+                android:id="@+id/lower_mssg_imageView"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/upper_mssg_imageView"
+                android:contentDescription="@string/lower_message" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </RelativeLayout>
 </layout>
