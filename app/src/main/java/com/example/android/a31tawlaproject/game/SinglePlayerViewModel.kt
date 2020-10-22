@@ -14,7 +14,6 @@ class SinglePlayerViewModel(application: Application) : GameViewModel(applicatio
     private val preferredDestinationCells: Array<MutableList<Int>> =
         Array(2) { mutableListOf<Int>() }
     private val singleDestinationCells: Array<MutableList<Int>> = Array(2) { mutableListOf<Int>() }
-    private var movesPlayed = 0
 init {
     preferredCells[0].add(24)
 }
@@ -25,6 +24,7 @@ init {
         else {
             computerTurn = true
             uiScope.launch {
+                _isUndoEnabled.value = false
                 getComputerMoves()
                     delay(2000)
                     for (i in 0..1) {
@@ -35,7 +35,6 @@ init {
                     }
 
                     computerTurn = false
-                    movesPlayed = 0
                    switchTurns()
 
             }
@@ -52,7 +51,7 @@ init {
             switchTurns()
             return
         }
-
+    //lamma awwel piece ted5ol elhome
         if(piecesAtHomePlayer[1]==1 && cellsArray[23].numberOfPieces.value==14 && cellsArray[23- movesList[biggerList]].color!=oppositeColor() ){
             preferredCells[biggerList].add(24)
             preferredCells[biggerList].add(24- movesList[biggerList])
@@ -95,10 +94,9 @@ init {
                 singleDestinationCells[biggerList].remove(sourceCellIndex )
             }
         }
-        delay(2000)
+        delay(1500)
 
         move(cellsArray[destinationCellIndex - 1])
-        movesPlayed++
 
         //SINGLE CELLS FILTER
         //law elcell di mawgouda fel possible moves bta3et elmove eltania w mafeesh
@@ -143,7 +141,6 @@ init {
 
 
     private suspend fun getComputerMoves() {
-        var homeFirstTime = 0
         if (piecesAtHomePlayer[1] == 15)
             return
 //        Toast.makeText(
@@ -152,12 +149,7 @@ init {
 //            Toast.LENGTH_SHORT
 //        ).show()
         for (cellNum in playersCells[1]) {
-            for (i in 0 until movesList.size) {
-                val j: Int =when(i) {
-                    2 -> 0
-                    3 -> 1
-                    else -> i
-                }
+            for (i in 0 ..1) {
                 val sourceCell = cellsArray[cellNum - 1]
                 //here
                 val destinationCellIndex = cellNum - movesList[i]
@@ -165,15 +157,16 @@ init {
                     if(cellNum == 24 && piecesAtHomePlayer[1]==0)
                         continue
                     if (sourceCell.numberOfPieces.value!! > 1 && cellsArray[destinationCellIndex - 1].color == 0) {
-                        preferredCells[j].add(cellNum)
-                        preferredDestinationCells[j].add(cellNum - movesList[i])
+                        preferredCells[i].add(cellNum)
+                        preferredDestinationCells[i].add(cellNum - movesList[i])
                     } else {
-                        singleCells[j].add(cellNum)
-                        singleDestinationCells[j].add(cellNum - movesList[i])
+                        singleCells[i].add(cellNum)
+                        singleDestinationCells[i].add(cellNum - movesList[i])
                     }
-                    if ((piecesAtHomePlayer[1] == 0 && (cellNum - movesList[i]) in 1..6))
-                        homeFirstTime++
                 }
+                //kefaya a7seb move wa7da heyya elli ashta8al 3aleiha
+                if(movesList.size == 4)
+                    break
             }
         }
 
@@ -243,24 +236,30 @@ init {
             }
         if (movesList.size == 4) {
             for (i in 0..3) {
-                playMove(0, 0)
+                playMove(0, 0) // baddilo nafs ellist kol marra
             }
             return
         }
 
-        if (size1 == 0) {
-            playMove(1, 0)
-            playMove(0, 1)
-        } else if (size2 == 0) {
-            playMove(0, 1)
-            playMove(1, 0)
-        }  else {
-            val smallerList = if (size1 < size2)
-                0
-            else
-                1
-            playMove(smallerList, smallerList xor 1)
-            playMove(smallerList xor 1, smallerList)
+        when { //law elsize beta3 7add fihom b zero al3ab eltani elawwel momken yefta7li el move eltania
+            // ( law elcell di hatrou7 elhome ya3ni aw hal3ab bnafs elpiece men makanha elgdeid )
+            size1 == 0 -> {
+                playMove(1, 0)
+                playMove(0, 1)
+            }
+            size2 == 0 -> {
+                playMove(0, 1)
+                playMove(1, 0)
+            }
+            else -> {
+                //8eir keda al3ab men elli elsize beta3ha a2all 3ashan law move metkarrara feletnein ma2felsh elmove eltania
+                val smallerList = if (size1 < size2)
+                    0
+                else
+                    1
+                playMove(smallerList, smallerList xor 1)
+                playMove(smallerList xor 1, smallerList)
+            }
         }
 //    if(firstMovePossibleCells.size == 1 && secondMovePossibleCells.contains(firstMovePossibleCells[0]) )
 //        secondMovePossibleCells.remove(firstMovePossibleCells[0])
