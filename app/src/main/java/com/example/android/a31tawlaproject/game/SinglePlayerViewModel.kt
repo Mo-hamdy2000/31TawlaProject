@@ -106,42 +106,6 @@ init {
         singleDestinationCells[biggerList].remove(destinationCellIndex)
     }
 
-        override fun move(cell: Cell) {
-            if(currentColor==1)
-                unhighlightMove()
-            removePiece(sourceCell)
-            addPiece(cell)
-            if (cell.cellNumber !in playersCells[currentColor-1]) {
-                playersCells[currentColor-1].add(cell.cellNumber)
-            }
-            if (sourceCell.numberOfPieces.value == 0) {
-                playersCells[currentColor-1].remove(sourceCell.cellNumber)
-            }
-            undoList.add(
-                MovePlayed(
-                    sourceCell.cellNumber,
-                    cell.cellNumber,
-                    false
-                )
-            )
-            _isUndoEnabled.value = true
-            if (currentColor == 1) {
-                //s-
-                playerOneMoves.add(cell)
-                //-s
-                if (sourceCell.cellNumber < 19 && cell.cellNumber >= 19) {
-                    piecesAtHomePlayer[0] += 1
-                    undoList.peek().pieceMovedToHome = true
-                }
-            }
-            else {
-                //s-
-                if(sourceCell.numberOfPieces.value == 1){
-                    preferredCells.remove(sourceCell)
-                    singleCells.add(sourceCell)
-                }
-                else if(sourceCell.numberOfPieces.value ==0)
-                    singleCells.remove(sourceCell)
     //law elle3ba elli etla3abet di fata7etlo cell yel3ab menha elmove eltania
     if (destinationCellIndex - movesList[biggerList] in 1..24 && cellsArray[destinationCellIndex - movesList[biggerList] - 1].color == 0) { //no of pieces must be 1
         singleCells[biggerList].add(destinationCellIndex)
@@ -179,11 +143,6 @@ init {
     private suspend fun getComputerMoves() {
         if (piecesAtHomePlayer[1] == 15)
             return
-//        Toast.makeText(
-//            getApplication(),
-//            "Player Cells" + playersCells[1].toString(),
-//            Toast.LENGTH_SHORT
-//        ).show()
         for (cellNum in playersCells[1]) {
             for (i in 0 ..1) {
                 val sourceCell = cellsArray[cellNum - 1]

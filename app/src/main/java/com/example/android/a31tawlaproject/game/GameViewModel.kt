@@ -35,7 +35,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         var read = false
         var isMoved = MutableLiveData<Boolean> (false)
         lateinit var cellsArray: Array<Cell>
-        val piecesAtHomePlayer: Array<Int>  = Array(2){0}
+        val piecesAtHomePlayer: Array<Int>  = Array(2){ 0 }
         val piecesCollectedPlayer: Array<Int> = Array(2) { 0 }
         private var _scoreOne = MutableLiveData<Int> (0)
         val scoreOne: LiveData<Int>
@@ -52,6 +52,9 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         var endGame = MutableLiveData<Boolean>(false)
         var movedFromCell = MutableLiveData<Int>(0)
         var movedToCell = MutableLiveData<Int>(0)
+        var collectionStarted = Array<MutableLiveData<Boolean>>(2) {
+            MutableLiveData(false)
+        }
         fun writeArray(): String {
             //TOO MUCHHH
             //CODE 3ERRAAAAAAAAAA
@@ -277,7 +280,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
                             return
                         val firstCellNumber =
                             (currentColor.value!! * (23 / 3.0) - sign * (23 / 3.0)).toInt()
-                        if (cellsArray[firstCellNumber].numberOfPieces.value == 14 && cellsArray[firstCellNumber + movesList[i xor 1]].color == 0)
+                        if (cellsArray[firstCellNumber].numberOfPieces.value == 14 && cellsArray[firstCellNumber + sign * movesList[i xor 1]].color == 0)
                             homeFirstTime = true
                     }
                 }
@@ -290,17 +293,14 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
             possibleCells[1].remove(24)
             possibleCells[0].remove(24)
         }
-
-
-
         // Bt2kd Eno my7sbsh el pieces elly fe el home lw lsa mraw7sh haga
         //m-
         // note that expression ((( currentColor * (23/3) - sign * (23/3) ))) gets the start cell for each player just it compresses the code
         //-s
         //5alletha 3.0 bas 3ashan kan bye3mel integer division w beyragga3 21 fi 7alet player 2
 
-        if (firstMovePossibleCells.size == 0 || secondMovePossibleCells.size == 0) {
-            if (firstMovePossibleCells.size == 0 && secondMovePossibleCells.size == 0) {
+        if (possibleCells[0].size == 0 || possibleCells[1].size == 0) {
+            if (possibleCells[0].size == 0 && possibleCells[1].size == 0) {
                 switchTurns()
             }
             if (possibleCells[0].size == 0) {
@@ -334,8 +334,10 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
             for (i in 1..4) {
                 if ((cellNum + sign * move * i) in 1..24 && cellsArray[cellNum + sign * move * i - 1].color != oppositeColor()) {
                     temp += cellsArray[cellNum - 1].numberOfPieces.value!!
-                    if ((cellNum + sign * move * i in 19..24 && currentColor.value == 1) || (cellNum + sign * move * i in 1..6 && currentColor.value == 2)) {
-                        homeComing++
+                    if (((cellNum + sign * move * i in 19..24 && currentColor.value == 1) || (cellNum + sign * move * i in 1..6 && currentColor.value == 2))
+                        && !(cellNum == (currentColor.value!! * (23 / 3.0) - sign * (23 / 3.0)).toInt()
+                        && cellsArray[(currentColor.value!! * (23 / 3.0) - sign * (23 / 3.0)).toInt()].numberOfPieces.value == 14)) {
+                        homeComing += cellsArray[cellNum - 1].numberOfPieces.value!!
                     }
                 } else {
                     break
@@ -390,10 +392,16 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
 
         if (currentColor.value == 1 && sourceCell.cellNumber < 19 && cell.cellNumber >= 19) {
             piecesAtHomePlayer[0]++
+            if (piecesAtHomePlayer[0] == 15 && !collectionStarted[currentColor.value!! - 1].value!!) {
+                collectionStarted[currentColor.value!! - 1].value = true
+            }
             undoList.peek().pieceMovedToHome = true
         }
         else if (currentColor.value == 2 && sourceCell.cellNumber > 6 && cell.cellNumber <= 6) {
             piecesAtHomePlayer[1] ++
+            if (piecesAtHomePlayer[1] == 15 && !collectionStarted[currentColor.value!! - 1].value!!) {
+                collectionStarted[currentColor.value!! - 1].value = true
+            }
             undoList.peek().pieceMovedToHome = true
         }
 
@@ -457,7 +465,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
             playersCells[currentColor.value!! - 1].remove(movePlayed.destCellNo)
         }
         if (movePlayed.pieceMovedToHome) {
-            piecesAtHomePlayer[currentColor-1] --
+            piecesAtHomePlayer[currentColor.value!!-1] --
         }
         movesList.add(abs(movePlayed.destCellNo - movePlayed.sourceCellNo))
         if (undoList.empty()) {

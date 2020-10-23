@@ -2,7 +2,6 @@ package com.example.android.a31tawlaproject.game
 
 import android.graphics.drawable.AnimationDrawable
 import android.os.Bundle
-import android.telephony.gsm.GsmCellLocation
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -16,26 +15,30 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.example.android.a31tawlaproject.R
 import com.example.android.a31tawlaproject.databinding.GameFragmentBinding
-import com.example.android.a31tawlaproject.game.GameViewModel
-import com.example.android.a31tawlaproject.miscUtils.*
-import java.lang.Integer.min
 import java.util.*
 import kotlin.concurrent.schedule
 import com.example.android.a31tawlaproject.miscUtils.diceOneVal
 import com.example.android.a31tawlaproject.miscUtils.diceTwoVal
 import com.example.android.a31tawlaproject.miscUtils.rollDice
 import com.example.android.a31tawlaproject.miscUtils.save
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlin.math.max
+import kotlin.math.min
 
 abstract class GameFragment : Fragment() {
 
+    private val uiScope = CoroutineScope(Dispatchers.Main)
     private lateinit var binding: GameFragmentBinding
     private lateinit var diceImages : Array<ImageView>
     private var diceValues = arrayOf(diceOneVal, diceTwoVal)
+    private var waiting = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -151,18 +154,18 @@ abstract class GameFragment : Fragment() {
                 undoButton.alpha = 0.5f
             }
         })
-GameViewModel.isMoved.observe(viewLifecycleOwner, Observer {
-    if(it){
-        if(!GameViewModel.movesList.contains(diceOneVal) || (diceOneVal == diceTwoVal && GameViewModel.movesList.size==2))
-            removeDiceImg(diceOneVal,diceImages[0])
-        else if(diceOneVal!= diceTwoVal)
-            removeDiceImg(diceTwoVal,diceImages[1])
-    }
-    else{
-        if(GameViewModel.diceRolled)
-            setDiceImg(true)
-    }
-})
+        GameViewModel.isMoved.observe(viewLifecycleOwner, Observer {
+            if(it){
+                if(!GameViewModel.movesList.contains(diceOneVal) || (diceOneVal == diceTwoVal && GameViewModel.movesList.size==2))
+                    removeDiceImg(diceOneVal,diceImages[0])
+                else if(diceOneVal!= diceTwoVal)
+                    removeDiceImg(diceTwoVal,diceImages[1])
+            }
+            else{
+                if(GameViewModel.diceRolled)
+                    setDiceImg(true)
+            }
+        })
         GameViewModel.endGame.observe(viewLifecycleOwner, Observer {
             if (it) {
                 Navigation.findNavController(requireView()).navigate(R.id.action_twoPlayerFragment_to_scoreFragment)
@@ -193,35 +196,34 @@ GameViewModel.isMoved.observe(viewLifecycleOwner, Observer {
             }
         })
 
-        rollButton.setOnClickListener {
-            println("Aywa wsl")
-            if (!GameViewModel.diceRolled) {
-
-                GameViewModel.diceRolled = true
-                setDiceImg(rollDice(GameViewModel.movesList), arrayOf(diceOne, diceTwo))
-                animateRollMessage(GameViewModel.movesList[0], GameViewModel.movesList[1])
-                if (GameViewModel.piecesAtHomePlayer[GameViewModel.currentColor - 1] == 15) {
-                    gameViewModel.collectPieces()
+        GameViewModel.currentColor.observe(viewLifecycleOwner, Observer {
+            binding.turnText.text = if(GameViewModel.currentColor.value == 1)
+                "Yellow's Turn"
+            else
+                "Blue's Turn"
+            animateSwitchMessage(it)
+            if(!GameViewModel.read) {
+                diceValues = rollDice(GameViewModel.movesList)
+                setDiceImg(false)
+                uiScope.launch {
+                    animateRollMessage(min(diceValues[0], diceValues[1]), max(diceValues[0], diceValues[1]))
                 }
-
-                gameViewModel.check()
             }
-    GameViewModel.currentColor.observe(viewLifecycleOwner, Observer {
-        binding.turnText.text = if(GameViewModel.currentColor.value == 1)
-            "Yellow's Turn"
-        else
-            "Blue's Turn"
-        if(!GameViewModel.read) {
-            diceValues = rollDice(GameViewModel.movesList)
-            setDiceImg(false)
+        })
+
+        for (i in 0..1) {
+            GameViewModel.collectionStarted[i].observe(lifeCycleOwner, Observer {
+                if (it) {
+                    uiScope.launch {
+                        animateCollectionMessage(GameViewModel.movesList.size)
+                    }
+                    Thread.sleep(2000)
+                }
+            })
         }
-    })
         binding.lifecycleOwner = lifeCycleOwner
         binding.gameViewModel = gameViewModel
-      //  GameViewModel.read = false
     }
-
-
     private fun getCell(cellNum: Int): ConstraintLayout {
         return when (cellNum) {
             1 -> binding.cell1
@@ -251,7 +253,6 @@ GameViewModel.isMoved.observe(viewLifecycleOwner, Observer {
             else -> ConstraintLayout(this.requireContext())
         }
     }
-
     private fun getCellText(cellNum: Int): TextView {
         return when (cellNum) {
             1 -> binding.textViewCell1
@@ -281,8 +282,6 @@ GameViewModel.isMoved.observe(viewLifecycleOwner, Observer {
             else -> TextView(this.requireContext())
         }
     }
-
-
     private fun setDiceImg(reset : Boolean) {
         for (i in 0..1) {
             val imgSrc = when (diceValues[i]) {
@@ -300,7 +299,7 @@ GameViewModel.isMoved.observe(viewLifecycleOwner, Observer {
                 val frameAnimation: AnimationDrawable =
                     diceImages[i].background as AnimationDrawable
                 frameAnimation.start()
-                diceImages[i].postDelayed({ diceImages[i].setBackgroundResource(imgSrc) }, 12 * 100)
+                diceImages[i].postDelayed({ diceImages[i].setBackgroundResource(imgSrc) }, 30 * 100)
                 GameViewModel.diceRolled = true
             }
 
@@ -324,81 +323,96 @@ GameViewModel.isMoved.observe(viewLifecycleOwner, Observer {
         save()
         GameViewModel.read = false // 3ashan lamma mabye2felsh el app w yerga3 wara ygeeb single player tani law kan 3amel resume ablaha btefdal read true
     }
-
-    fun animateRollMessage(minNum: Int, maxNum: Int) {
-        val upper_mssg = binding.upperMssgImageView
-        val lower_mssg = binding.lowerMssgImageView
-        val mssg_screen = binding.messagesScreen
-        upper_mssg.setImageResource(android.R.color.transparent)
+    suspend fun animateRollMessage(minNum: Int, maxNum: Int) {
+        delay(1500)
+        val upperMssg = binding.upperMssgImageView
+        val lowerMssg = binding.lowerMssgImageView
+        val mssgScreen = binding.messagesScreen
+        upperMssg.setImageResource(android.R.color.transparent)
         when (maxNum) {
             6 -> when (minNum) {
-                1 -> lower_mssg.setImageResource(R.drawable.shish_yck)
-                2 -> lower_mssg.setImageResource(R.drawable.shish_du)
-                3 -> lower_mssg.setImageResource(R.drawable.shish_seh)
-                4 -> lower_mssg.setImageResource(R.drawable.shish_gohar)
-                5 -> lower_mssg.setImageResource(R.drawable.shish_bish)
+                1 -> lowerMssg.setImageResource(R.drawable.shish_yck)
+                2 -> lowerMssg.setImageResource(R.drawable.shish_du)
+                3 -> lowerMssg.setImageResource(R.drawable.shish_seh)
+                4 -> lowerMssg.setImageResource(R.drawable.shish_gohar)
+                5 -> lowerMssg.setImageResource(R.drawable.shish_bish)
                 6 -> {
-                    lower_mssg.setImageResource(R.drawable.douch_lower)
-                    upper_mssg.setImageResource(R.drawable.douch_upper)
+                    lowerMssg.setImageResource(R.drawable.douch_lower)
+                    upperMssg.setImageResource(R.drawable.douch_upper)
                 }
             }
             5 -> when (minNum) {
-                1 -> lower_mssg.setImageResource(R.drawable.bang_yck)
-                2 -> lower_mssg.setImageResource(R.drawable.bang_du)
-                3 -> lower_mssg.setImageResource(R.drawable.bang_seh)
-                4 -> lower_mssg.setImageResource(R.drawable.bang_gohar)
+                1 -> lowerMssg.setImageResource(R.drawable.bang_yck)
+                2 -> lowerMssg.setImageResource(R.drawable.bang_du)
+                3 -> lowerMssg.setImageResource(R.drawable.bang_seh)
+                4 -> lowerMssg.setImageResource(R.drawable.bang_gohar)
                 5 -> {
-                    lower_mssg.setImageResource(R.drawable.dabsh_lower)
-                    upper_mssg.setImageResource(R.drawable.dabsh_upper)
+                    lowerMssg.setImageResource(R.drawable.dabsh_lower)
+                    upperMssg.setImageResource(R.drawable.dabsh_upper)
                 }
             }
             4 -> when (minNum) {
-                1 -> lower_mssg.setImageResource(R.drawable.gohar_yck)
-                2 -> lower_mssg.setImageResource(R.drawable.gohar_du)
-                3 -> lower_mssg.setImageResource(R.drawable.gohar_seh)
+                1 -> lowerMssg.setImageResource(R.drawable.gohar_yck)
+                2 -> lowerMssg.setImageResource(R.drawable.gohar_du)
+                3 -> lowerMssg.setImageResource(R.drawable.gohar_seh)
                 4 -> {
-                    lower_mssg.setImageResource(R.drawable.dabsh)
-                    upper_mssg.setImageResource(R.drawable.durgy_upper)
+                    lowerMssg.setImageResource(R.drawable.durgy_lower)
+                    upperMssg.setImageResource(R.drawable.durgy_upper)
                 }
             }
             3 -> when (minNum) {
-                1 -> lower_mssg.setImageResource(R.drawable.seh_yck)
-                2 -> lower_mssg.setImageResource(R.drawable.seh_du)
+                1 -> lowerMssg.setImageResource(R.drawable.seh_yck)
+                2 -> lowerMssg.setImageResource(R.drawable.seh_du)
                 3 -> {
-                    lower_mssg.setImageResource(R.drawable.dosa_lower)
-                    upper_mssg.setImageResource(R.drawable.dosa_upper)
+                    lowerMssg.setImageResource(R.drawable.dosa_lower)
+                    upperMssg.setImageResource(R.drawable.dosa_upper)
                 }
             }
             2 -> when (minNum) {
-                1 -> lower_mssg.setImageResource(R.drawable.du_yck)
+                1 -> lowerMssg.setImageResource(R.drawable.du_yck)
                 2 -> {
-                    lower_mssg.setImageResource(R.drawable.dosa_lower)
-                    upper_mssg.setImageResource(R.drawable.dobara_upper)
+                    lowerMssg.setImageResource(R.drawable.dobara_lower)
+                    upperMssg.setImageResource(R.drawable.dobara_upper)
                 }
             }
             1 -> {
-                lower_mssg.setImageResource(R.drawable.dosa_lower)
-                upper_mssg.setImageResource(R.drawable.hibyck_upper)
+                lowerMssg.setImageResource(R.drawable.hibyck_lower)
+                upperMssg.setImageResource(R.drawable.hibyck_upper)
             }
         }
-        mssg_screen.visibility = View.VISIBLE
-        val top_anim = AnimationUtils.loadAnimation(this.requireContext() ,R.anim.top_animation)
-        top_anim.setAnimationListener(object : Animation.AnimationListener {
-            override fun onAnimationRepeat(p0: Animation?) {
-            }
-            override fun onAnimationStart(p0: Animation?) {
-            }
-            override fun onAnimationEnd(p0: Animation?) {
-                Timer().schedule(1000) {
-                    binding.mainLayout.alpha = 1.0f
-                    mssg_screen.visibility = View.INVISIBLE
-                }
-            }
-        })
+        mssgScreen.visibility = View.VISIBLE
         binding.mainLayout.alpha = 0.7f
-        upper_mssg.animation = top_anim
-        lower_mssg.animation = AnimationUtils.loadAnimation(this.requireContext() ,R.anim.bottom_animation)
-
+        upperMssg.animation = AnimationUtils.loadAnimation(this.requireContext() ,R.anim.top_animation)
+        lowerMssg.animation = AnimationUtils.loadAnimation(this.requireContext() ,R.anim.bottom_animation)
+        delay(2000)
+        binding.mainLayout.alpha = 1.0f
+        mssgScreen.visibility = View.INVISIBLE
     }
-
+    fun animateSwitchMessage(currentColor: Int) {
+        val upperMssg = binding.upperMssgImageView
+        val lowerMssg = binding.lowerMssgImageView
+        val mssgScreen = binding.messagesScreen
+        lowerMssg.setImageResource(android.R.color.transparent)
+        if (currentColor == 1)
+            upperMssg.setImageResource(R.drawable.switch_gold)
+        else
+            upperMssg.setImageResource(R.drawable.switch_blue)
+        mssgScreen.visibility = View.VISIBLE
+        binding.mainLayout.alpha = 0.7f
+        upperMssg.animation = AnimationUtils.loadAnimation(this.requireContext() ,R.anim.zoom_in_animation)
+        this.waiting = 0
+    }
+    suspend fun animateCollectionMessage(movesListSize: Int) {
+        val upperMssg = binding.upperMssgImageView
+        val lowerMssg = binding.lowerMssgImageView
+        val mssgScreen = binding.messagesScreen
+        lowerMssg.setImageResource(R.drawable.collection_lower)
+        upperMssg.setImageResource(R.drawable.collection_upper)
+        mssgScreen.visibility = View.VISIBLE
+        binding.mainLayout.alpha = 0.7f
+        upperMssg.animation = AnimationUtils.loadAnimation(this.requireContext() ,R.anim.zoom_in_animation)
+        delay(2000)
+        binding.mainLayout.alpha = 1.0f
+        mssgScreen.visibility = View.INVISIBLE
+    }
 }
