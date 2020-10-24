@@ -16,6 +16,9 @@
         <action
             android:id="@+id/action_home_to_twoPlayerFragment"
             app:destination="@id/twoPlayerFragment" />
+        <action
+            android:id="@+id/action_home_to_aboutFragment"
+            app:destination="@id/aboutFragment" />
     </fragment>
     <fragment
         android:id="@+id/singlePlayerFragment"
@@ -51,4 +54,9 @@
             android:id="@+id/action_scoreFragment_to_singlePlayerFragment"
             app:destination="@id/singlePlayerFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/aboutFragment"
+        android:name="com.example.android.a31tawlaproject.about.AboutFragment"
+        android:label="AboutFragment"
+        tools:layout = "@layout/about_fragment"/>
 </navigation>

@@ -17,7 +17,7 @@ class SinglePlayerViewModel(application: Application) : GameViewModel(applicatio
 init {
     preferredCells[0].add(24)
 }
-    override fun switchTurns() {
+    override suspend fun switchTurns() {
         super.switchTurns()
         if (currentColor.value == 1)
             check()

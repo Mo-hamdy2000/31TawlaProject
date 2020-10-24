@@ -8,6 +8,10 @@ import androidx.lifecycle.MutableLiveData
 import com.example.android.a31tawlaproject.miscUtils.Cell
 import com.example.android.a31tawlaproject.miscUtils.MovePlayed
 import com.example.android.a31tawlaproject.miscUtils.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.math.abs
 
@@ -15,6 +19,8 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
     application
 ) {
 
+    private val uiScope = CoroutineScope(Dispatchers.Main)
+    private var waitTime = 0
     private var startingPointSelected = false // -> flag for selecting source cell
     lateinit var sourceCell: Cell
     private var sign = 1
@@ -237,8 +243,11 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
             }
 
         }
-        if (movesList.size == 0)
-            switchTurns()
+        if (movesList.size == 0) {
+            uiScope.launch {
+                switchTurns()
+            }
+        }
     }
 
     fun oppositeColor(): Int {
@@ -301,7 +310,10 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
 
         if (possibleCells[0].size == 0 || possibleCells[1].size == 0) {
             if (possibleCells[0].size == 0 && possibleCells[1].size == 0) {
-                switchTurns()
+                uiScope.launch {
+                    waitTime = 4500
+                    switchTurns()
+                }
             }
             if (possibleCells[0].size == 0) {
                 Toast.makeText(getApplication(), "YOU CAN'T MOVE " + firstMove, Toast.LENGTH_SHORT).show()
@@ -370,7 +382,11 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
             }
         }
         if (movesNum == 0) {
-            switchTurns()
+            uiScope.launch {
+                waitTime = 4500
+                switchTurns()
+            }
+
         }
     }
 
@@ -394,6 +410,8 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
             piecesAtHomePlayer[0]++
             if (piecesAtHomePlayer[0] == 15 && !collectionStarted[currentColor.value!! - 1].value!!) {
                 collectionStarted[currentColor.value!! - 1].value = true
+                waitTime = 3000
+                println("Added Time 3000")
             }
             undoList.peek().pieceMovedToHome = true
         }
@@ -423,7 +441,9 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         return isPossible
     }
 
-    open fun switchTurns() {
+    open suspend fun switchTurns() {
+        print("Added time encoutered " + waitTime.toString())
+        delay(waitTime.toLong())
         undoList.clear()
         movesList.clear()
         _isUndoEnabled.value = false
@@ -434,8 +454,8 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         if (piecesAtHomePlayer[currentColor.value!! - 1] == 15) {
             collectPieces()
         }
+        waitTime = 0
     }
-
 
     private fun addPiece(cell: Cell) {
         startingPointSelected = false
@@ -542,7 +562,10 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
             endRound()
         }
         else {
-            switchTurns()
+            uiScope.launch {
+                waitTime = 4500
+                switchTurns()
+            }
         }
     }
 
@@ -580,10 +603,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         playersCells[1].add(24)
     }
 
-
-
     private fun endRound() {
-        println("Hereeeeeeeeeeeeeeeee we end")
         val winner: Int
         if (currentColor.value == 1) {
             _scoreOne.value = scoreOne.value!! + (15 - piecesCollectedPlayer[1])

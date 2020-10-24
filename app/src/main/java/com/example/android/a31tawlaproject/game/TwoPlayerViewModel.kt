@@ -6,7 +6,7 @@ import com.example.android.a31tawlaproject.miscUtils.MovePlayed
 
 class TwoPlayerViewModel(application: Application) : GameViewModel(application) {
     
-    override fun switchTurns() {
+    override suspend fun switchTurns() {
         super.switchTurns()
         check()
     }

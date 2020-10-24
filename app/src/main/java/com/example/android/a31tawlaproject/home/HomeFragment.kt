@@ -28,6 +28,7 @@ class HomeFragment : Fragment() {
         val twoPlayerButton : ImageView = binding.twoPlayersImageView
         val resume : ImageView = binding.resumeImageView
         val sound : ImageView = binding.soundImageView
+        val about : ImageView = binding.aboutImageView
         singlePlayerButton.setOnClickListener {
             GameViewModel.gameMode = 1
             findNavController(it).navigate(R.id.action_home_to_singlePlayerFragment)
@@ -50,6 +51,11 @@ class HomeFragment : Fragment() {
             else
                 MainActivity.mediaPlayer.start()
         }
+
+        about.setOnClickListener {
+            findNavController(it).navigate(R.id.action_home_to_aboutFragment)
+        }
+
 
         return binding.root
     }

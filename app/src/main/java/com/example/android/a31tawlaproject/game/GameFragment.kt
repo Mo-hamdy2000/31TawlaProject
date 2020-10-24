@@ -38,7 +38,6 @@ abstract class GameFragment : Fragment() {
     private lateinit var binding: GameFragmentBinding
     private lateinit var diceImages : Array<ImageView>
     private var diceValues = arrayOf(diceOneVal, diceTwoVal)
-    private var waiting = 0
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -215,9 +214,8 @@ abstract class GameFragment : Fragment() {
             GameViewModel.collectionStarted[i].observe(lifeCycleOwner, Observer {
                 if (it) {
                     uiScope.launch {
-                        animateCollectionMessage(GameViewModel.movesList.size)
+                        animateCollectionMessage()
                     }
-                    Thread.sleep(2000)
                 }
             })
         }
@@ -325,6 +323,7 @@ abstract class GameFragment : Fragment() {
     }
     suspend fun animateRollMessage(minNum: Int, maxNum: Int) {
         delay(1500)
+        var waitTime = 2000
         val upperMssg = binding.upperMssgImageView
         val lowerMssg = binding.lowerMssgImageView
         val mssgScreen = binding.messagesScreen
@@ -339,6 +338,7 @@ abstract class GameFragment : Fragment() {
                 6 -> {
                     lowerMssg.setImageResource(R.drawable.douch_lower)
                     upperMssg.setImageResource(R.drawable.douch_upper)
+                    waitTime = 3500
                 }
             }
             5 -> when (minNum) {
@@ -349,6 +349,7 @@ abstract class GameFragment : Fragment() {
                 5 -> {
                     lowerMssg.setImageResource(R.drawable.dabsh_lower)
                     upperMssg.setImageResource(R.drawable.dabsh_upper)
+                    waitTime = 3500
                 }
             }
             4 -> when (minNum) {
@@ -358,6 +359,7 @@ abstract class GameFragment : Fragment() {
                 4 -> {
                     lowerMssg.setImageResource(R.drawable.durgy_lower)
                     upperMssg.setImageResource(R.drawable.durgy_upper)
+                    waitTime = 3500
                 }
             }
             3 -> when (minNum) {
@@ -366,6 +368,7 @@ abstract class GameFragment : Fragment() {
                 3 -> {
                     lowerMssg.setImageResource(R.drawable.dosa_lower)
                     upperMssg.setImageResource(R.drawable.dosa_upper)
+                    waitTime = 3500
                 }
             }
             2 -> when (minNum) {
@@ -373,18 +376,20 @@ abstract class GameFragment : Fragment() {
                 2 -> {
                     lowerMssg.setImageResource(R.drawable.dobara_lower)
                     upperMssg.setImageResource(R.drawable.dobara_upper)
+                    waitTime = 3500
                 }
             }
             1 -> {
                 lowerMssg.setImageResource(R.drawable.hibyck_lower)
                 upperMssg.setImageResource(R.drawable.hibyck_upper)
+                waitTime = 3500
             }
         }
         mssgScreen.visibility = View.VISIBLE
         binding.mainLayout.alpha = 0.7f
         upperMssg.animation = AnimationUtils.loadAnimation(this.requireContext() ,R.anim.top_animation)
         lowerMssg.animation = AnimationUtils.loadAnimation(this.requireContext() ,R.anim.bottom_animation)
-        delay(2000)
+        delay(waitTime.toLong())
         binding.mainLayout.alpha = 1.0f
         mssgScreen.visibility = View.INVISIBLE
     }
@@ -400,9 +405,8 @@ abstract class GameFragment : Fragment() {
         mssgScreen.visibility = View.VISIBLE
         binding.mainLayout.alpha = 0.7f
         upperMssg.animation = AnimationUtils.loadAnimation(this.requireContext() ,R.anim.zoom_in_animation)
-        this.waiting = 0
     }
-    suspend fun animateCollectionMessage(movesListSize: Int) {
+    suspend fun animateCollectionMessage() {
         val upperMssg = binding.upperMssgImageView
         val lowerMssg = binding.lowerMssgImageView
         val mssgScreen = binding.messagesScreen
@@ -410,7 +414,7 @@ abstract class GameFragment : Fragment() {
         upperMssg.setImageResource(R.drawable.collection_upper)
         mssgScreen.visibility = View.VISIBLE
         binding.mainLayout.alpha = 0.7f
-        upperMssg.animation = AnimationUtils.loadAnimation(this.requireContext() ,R.anim.zoom_in_animation)
+        upperMssg.animation = AnimationUtils.loadAnimation(this.requireContext() ,R.anim.top_animation)
         delay(2000)
         binding.mainLayout.alpha = 1.0f
         mssgScreen.visibility = View.INVISIBLE
