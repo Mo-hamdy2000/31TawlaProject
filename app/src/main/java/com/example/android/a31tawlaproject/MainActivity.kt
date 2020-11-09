@@ -8,20 +8,17 @@ import java.io.File
 class MainActivity : AppCompatActivity() {
     companion object{
         lateinit var internalStoragePath :File
-        lateinit var mediaPlayer: MediaPlayer
+        lateinit var gameMusic: MediaPlayer
+        lateinit var homeMusic : MediaPlayer
     }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         internalStoragePath = File(filesDir, "LastGame.txt")
-//      val bundle = Bundle()
-//       bundle.putString("path",this.filesDir.absolutePath)
-//        val singlePlayer = SinglePlayerFragment ()
-//         val twoPlayer = TwoPlayerFragment ()
-//      singlePlayer.arguments = bundle
-//      twoPlayer.arguments = bundle
-        mediaPlayer = MediaPlayer.create(this.applicationContext, R.raw.amahmed)
-        mediaPlayer.start()
-        mediaPlayer.isLooping = true
+        gameMusic = MediaPlayer.create(this.applicationContext, R.raw.amahmed)
+        gameMusic.isLooping = true
+        homeMusic = MediaPlayer.create(this.applicationContext, R.raw.home_fragment_music)
+        homeMusic.start()
+
         setContentView(R.layout.activity_main)
         //val gameViewModel = GameViewModel(application, binding)
 
@@ -30,10 +27,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        mediaPlayer.pause()
+        homeMusic.pause()
     }
     override fun onResume() {
         super.onResume()
-        mediaPlayer.start()
+        homeMusic.start()
     }
 }

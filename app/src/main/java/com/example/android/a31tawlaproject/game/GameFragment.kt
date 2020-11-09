@@ -1,12 +1,12 @@
 package com.example.android.a31tawlaproject.game
 
 import android.graphics.drawable.AnimationDrawable
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.widget.Button
 import android.widget.ImageView
@@ -19,10 +19,9 @@ import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
 import com.example.android.a31tawlaproject.R
 import com.example.android.a31tawlaproject.databinding.GameFragmentBinding
-import java.util.*
-import kotlin.concurrent.schedule
-import com.example.android.a31tawlaproject.miscUtils.diceOneVal
-import com.example.android.a31tawlaproject.miscUtils.diceTwoVal
+import com.example.android.a31tawlaproject.game.GameViewModel.Companion.movedFromCell
+import com.example.android.a31tawlaproject.game.GameViewModel.Companion.movedToCell
+import com.example.android.a31tawlaproject.miscUtils.diceValues
 import com.example.android.a31tawlaproject.miscUtils.rollDice
 import com.example.android.a31tawlaproject.miscUtils.save
 import kotlinx.coroutines.CoroutineScope
@@ -37,7 +36,9 @@ abstract class GameFragment : Fragment() {
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private lateinit var binding: GameFragmentBinding
     private lateinit var diceImages : Array<ImageView>
-    private var diceValues = arrayOf(diceOneVal, diceTwoVal)
+   private lateinit var diceSoundEffect : MediaPlayer
+    private lateinit var moveFromSound : MediaPlayer
+    private lateinit var moveToSound : MediaPlayer
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -46,6 +47,9 @@ abstract class GameFragment : Fragment() {
         //m- oo is not used
         //val oo = activity?.filesDir
         binding = DataBindingUtil.inflate(inflater, R.layout.game_fragment, container, false)
+        diceSoundEffect = MediaPlayer.create(activity?.applicationContext, R.raw.dice_effect)
+        moveToSound = MediaPlayer.create(activity?.applicationContext, R.raw.move_to)
+        moveFromSound = MediaPlayer.create(activity?.applicationContext, R.raw.move_from)
         return binding.root
     }
 
@@ -60,7 +64,6 @@ abstract class GameFragment : Fragment() {
             // When cell change observer will update all its data to view
             //using class not instance :(
             GameViewModel.cellsArray[i - 1].numberOfPieces.observe(lifeCycleOwner, Observer {
-                Log.i("AAAAA","OBSERVED")
                 if (it > 0) {
                     // update text
                     getCellText(i).text = it.toString()
@@ -107,7 +110,7 @@ abstract class GameFragment : Fragment() {
                         piece.setImageResource(R.drawable.piece2)
                     else if (GameViewModel.cellsArray[i - 1].color == 1 && it)
                         piece.setImageResource(R.drawable.piece1_highlighted)
-                    else
+                    else if (GameViewModel.cellsArray[i - 1].color == 2 && it) //else
                         piece.setImageResource(R.drawable.piece2_highlighted)
                 }
 
@@ -138,11 +141,11 @@ abstract class GameFragment : Fragment() {
         }
 
         GameViewModel.scoreOne.observe(viewLifecycleOwner, Observer {
-            binding.scoreText.text = it.toString() + " - " + GameViewModel.scoreTwo.value.toString()
+            binding.scoreText.text = getString(R.string.scoreFormat,it,GameViewModel.scoreTwo.value)
         })
 
         GameViewModel.scoreTwo.observe(viewLifecycleOwner, Observer {
-            binding.scoreText.text = GameViewModel.scoreOne.value.toString() + " - "+ it.toString()
+            binding.scoreText.text = getString(R.string.scoreFormat,GameViewModel.scoreOne.value,it)
         })
         gameViewModel.isUndoEnabled.observe(viewLifecycleOwner, Observer {
             if (it) {
@@ -153,45 +156,55 @@ abstract class GameFragment : Fragment() {
                 undoButton.alpha = 0.5f
             }
         })
-        GameViewModel.isMoved.observe(viewLifecycleOwner, Observer {
-            if(it){
-                if(!GameViewModel.movesList.contains(diceOneVal) || (diceOneVal == diceTwoVal && GameViewModel.movesList.size==2))
-                    removeDiceImg(diceOneVal,diceImages[0])
-                else if(diceOneVal!= diceTwoVal)
-                    removeDiceImg(diceTwoVal,diceImages[1])
-            }
-            else{
-                if(GameViewModel.diceRolled)
-                    setDiceImg(true)
-            }
-        })
+
+GameViewModel.isMoved.observe( viewLifecycleOwner, Observer {
+    if(it){
+        if(!GameViewModel.movesList.contains(diceValues[0]) || (diceValues[0] == diceValues[1] && GameViewModel.movesList.size<=2))
+            removeDiceImg(diceValues[0],diceImages[0])
+        else if(diceValues[0]!= diceValues[1])
+            removeDiceImg(diceValues[1],diceImages[1])
+    }
+    else{
+        if(GameViewModel.diceRolled)
+            setDiceImg(true)
+    }
+})
         GameViewModel.endGame.observe(viewLifecycleOwner, Observer {
             if (it) {
                 Navigation.findNavController(requireView()).navigate(R.id.action_twoPlayerFragment_to_scoreFragment)
             }
         })
 
-        GameViewModel.movedFromCell.observe(viewLifecycleOwner, Observer {
-            if (it > 0 && it <= 24) {
-                if (GameViewModel.movedFromCell.value!! <= 12) {
-                    val piece = getCell(GameViewModel.movedFromCell.value!!).get(0)
-                    piece.animation = AnimationUtils.loadAnimation(this.requireContext(), R.anim.bottom_fade_out_animation)
+        movedFromCell.observe(viewLifecycleOwner, Observer {
+            if (it in 1..24) {
+                if (movedFromCell.value!! <= 12) {
+                    val piece = getCell(movedFromCell.value!!)[0]
+                    piece.animation = AnimationUtils.loadAnimation(
+                        this.requireContext(),
+                        R.anim.bottom_fade_out_animation
+                    )
                 } else {
-                    val piece = getCell(GameViewModel.movedFromCell.value!!).get(1)
-                    piece.animation = AnimationUtils.loadAnimation(this.requireContext(), R.anim.top_fade_out_animation)
+                    Log.i("ERROR", "moved from ${movedFromCell.value!!} to ${movedToCell.value!!} number of pieces = ${GameViewModel.cellsArray[movedFromCell.value!!-1].numberOfPieces.value.toString()}" )
+                    val piece = getCell(movedFromCell.value!!)[1]
+                    piece.animation = AnimationUtils.loadAnimation(
+                        this.requireContext(),
+                        R.anim.top_fade_out_animation
+                    )
                 }
+                moveFromSound.start()
             }
         })
 
-        GameViewModel.movedToCell.observe(viewLifecycleOwner, Observer {
-            if (it > 0 && it <= 24) {
-                if (GameViewModel.movedToCell.value!! <= 12) {
-                    val piece = getCell(GameViewModel.movedToCell.value!!).get(0)
+        movedToCell.observe(viewLifecycleOwner, Observer {
+            if (it in 1..24) {
+                if (movedToCell.value!! <= 12) {
+                    val piece = getCell(movedToCell.value!!)[0]
                     piece.animation = AnimationUtils.loadAnimation(this.requireContext(), R.anim.top_fade_in_animation)
                 } else {
-                    val piece = getCell(GameViewModel.movedToCell.value!!).get(1)
+                    val piece = getCell(movedToCell.value!!)[1]
                     piece.animation = AnimationUtils.loadAnimation(this.requireContext(), R.anim.bottom_fade_in_animation)
                 }
+                moveToSound.start()
             }
         })
 
@@ -200,14 +213,17 @@ abstract class GameFragment : Fragment() {
                 "Yellow's Turn"
             else
                 "Blue's Turn"
-            animateSwitchMessage(it)
-            if(!GameViewModel.read) {
-                diceValues = rollDice(GameViewModel.movesList)
-                setDiceImg(false)
+            //shelt dool men elcoroutine
+            rollDice(GameViewModel.movesList)
+            setDiceImg(false)
+
+            //  if(!GameViewModel.read) {
                 uiScope.launch {
+                    animateSwitchMessage(it)
+                   delay(300)
                     animateRollMessage(min(diceValues[0], diceValues[1]), max(diceValues[0], diceValues[1]))
                 }
-            }
+         //   }
         })
 
         for (i in 0..1) {
@@ -293,11 +309,15 @@ abstract class GameFragment : Fragment() {
             if(reset)
                 diceImages[i].setBackgroundResource(imgSrc)
             else {
+
+                diceSoundEffect.start()
+                diceSoundEffect.isLooping = false
                 diceImages[i].setBackgroundResource(R.drawable.dice_animation)
                 val frameAnimation: AnimationDrawable =
                     diceImages[i].background as AnimationDrawable
                 frameAnimation.start()
-                diceImages[i].postDelayed({ diceImages[i].setBackgroundResource(imgSrc) }, 30 * 100)
+                //check
+                diceImages[i].postDelayed({ diceImages[i].setBackgroundResource(imgSrc) }, 14 * 100)
                 GameViewModel.diceRolled = true
             }
 
@@ -321,8 +341,9 @@ abstract class GameFragment : Fragment() {
         save()
         GameViewModel.read = false // 3ashan lamma mabye2felsh el app w yerga3 wara ygeeb single player tani law kan 3amel resume ablaha btefdal read true
     }
-    suspend fun animateRollMessage(minNum: Int, maxNum: Int) {
-        delay(1500)
+    private suspend fun animateRollMessage(minNum: Int, maxNum: Int) {
+        delay(1000)
+        //uphere
         var waitTime = 2000
         val upperMssg = binding.upperMssgImageView
         val lowerMssg = binding.lowerMssgImageView
@@ -393,7 +414,7 @@ abstract class GameFragment : Fragment() {
         binding.mainLayout.alpha = 1.0f
         mssgScreen.visibility = View.INVISIBLE
     }
-    fun animateSwitchMessage(currentColor: Int) {
+    private fun animateSwitchMessage(currentColor: Int) {
         val upperMssg = binding.upperMssgImageView
         val lowerMssg = binding.lowerMssgImageView
         val mssgScreen = binding.messagesScreen
@@ -406,7 +427,7 @@ abstract class GameFragment : Fragment() {
         binding.mainLayout.alpha = 0.7f
         upperMssg.animation = AnimationUtils.loadAnimation(this.requireContext() ,R.anim.zoom_in_animation)
     }
-    suspend fun animateCollectionMessage() {
+    private suspend fun animateCollectionMessage() {
         val upperMssg = binding.upperMssgImageView
         val lowerMssg = binding.lowerMssgImageView
         val mssgScreen = binding.messagesScreen

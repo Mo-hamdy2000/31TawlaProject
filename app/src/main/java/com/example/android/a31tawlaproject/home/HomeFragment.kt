@@ -1,23 +1,23 @@
 package com.example.android.a31tawlaproject.home
 
-import android.media.MediaPlayer
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.ImageView
 import androidx.databinding.DataBindingUtil
 import androidx.navigation.Navigation.findNavController
 import com.example.android.a31tawlaproject.MainActivity
 import com.example.android.a31tawlaproject.R
 import com.example.android.a31tawlaproject.databinding.HomeFragmentBinding
-import com.example.android.a31tawlaproject.databinding.MainFragmentBinding
 import com.example.android.a31tawlaproject.game.GameViewModel
 import com.example.android.a31tawlaproject.miscUtils.load
 
 class HomeFragment : Fragment() {
+    companion object{
+        var isMuted = false
+    }
     private lateinit var binding : HomeFragmentBinding
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
@@ -46,10 +46,16 @@ class HomeFragment : Fragment() {
         }
 
         sound.setOnClickListener {
-            if (MainActivity.mediaPlayer.isPlaying)
-                MainActivity.mediaPlayer.pause()
-            else
-                MainActivity.mediaPlayer.start()
+            if (MainActivity.gameMusic.isPlaying) {
+                sound.setImageResource(R.drawable.sound_off)
+                MainActivity.gameMusic.pause()
+                MainActivity.homeMusic.pause()
+                isMuted = true
+            }
+            else {
+                sound.setImageResource(R.drawable.sound_bars)
+                MainActivity.gameMusic.start()
+            }
         }
 
         about.setOnClickListener {
@@ -58,6 +64,13 @@ class HomeFragment : Fragment() {
 
 
         return binding.root
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if(!isMuted)
+        MainActivity.homeMusic.pause()
+        MainActivity.gameMusic.start()
     }
 
 
