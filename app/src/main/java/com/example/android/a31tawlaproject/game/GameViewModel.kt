@@ -264,8 +264,8 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
     }
 
     private fun checkTwoMoves() {
-
-       val firstMove = movesList[0]
+        Log.i("playermoves", playersCells[currentColor.value!!-1].toString())
+        val firstMove = movesList[0]
        val secondMove = movesList[1]
         // Check if one piece can do the two moves
         for (cellNum in playersCells[currentColor.value!! - 1]) {
@@ -598,25 +598,26 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         addPiece(cellsArray[23])
 
         //ooooooooooooo
-          cellsArray[23].numberOfPieces.value = 15
+        cellsArray[23].numberOfPieces.value = 15
         sign = 1
-      //  collectPiecesNGameFinishTest(0)
+        //  collectPiecesNGameFinishTest(0)
 
         //ooooooooo
 
         currentColor.value = 1
         addPiece(cellsArray[0])
 
-         //ooooooooooooo
-          cellsArray[0].numberOfPieces.value = 15
+        //ooooooooooooo
+        cellsArray[0].numberOfPieces.value = 15
         sign = -1
-       // collectPiecesNGameFinishTest(23)
+        // collectPiecesNGameFinishTest(23)
         sign = 1
         //oooooooooo
         playersCells[0].clear()
         playersCells[1].clear()
-           playersCells[0].add(1)
-         playersCells[1].add(24)
+        playersCells[0].add(1)
+        playersCells[1].add(24)
+        computerTurn = false
 
     }
 
@@ -640,6 +641,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         currentColor.value = winner
         //-s
         sign = 1- currentColor.value!!
+
     }
     private fun collectPiecesNGameFinishTest (insertFrom : Int){ // 23 or 0
         //hawaza3 14 piece 3ala elhome w al3ab a5er wa7da ana 3ashan a test el collect felcomputer bas asra3
