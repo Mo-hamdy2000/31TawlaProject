@@ -189,6 +189,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
     fun selectCell(cell: Cell) {
         println("Wslnaaaaaaaaaaaaaaa")
         if (!diceRolled || computerTurn || (piecesAtHomePlayer[currentColor.value!! - 1] == 15)) {
+            println("hna")
             return
         }
         if (!startingPointSelected) {
@@ -196,17 +197,22 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
             // El la3b lazem yl3b b piece w7da w ywslha el n7ia el tania
             // Fa hwa msh hy2dr y7rk piece mn el home elly feha 14 piece l8ayt ma ykhls el first move dy
             if (piecesAtHomePlayer[currentColor.value!! - 1] == 0 && cell.numberOfPieces.value == 14) {
+                println("hnakk")
                 return
             }
+            println("1")
             if (cell.numberOfPieces.value!! > 0 && cell.color == currentColor.value) {
                 // awwel ma ydous 3ala piece at2akked ennaha bta3to w fi pieces fel 5ana di
+                println("3")
                 if (getPossibleMoves(cell)) {
+                    println("4")
                     startingPointSelected = true
                     cell.isPieceHighlighted.value = true
                     sourceCell = cell
                 }
             }
         } else { //if source cell is selected
+            println("2")
             isMoved.value = false
             for (move in movesList) {
                 if (sourceCell.cellNumber + sign * move in 1..24) {
@@ -222,6 +228,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
                         }
                         if ((piecesAtHomePlayer[currentColor.value!! - 1] == 15) && movesList.isNotEmpty()) {
                             collectPieces()
+                            println("La la la")
                             return
                         }
                         break
@@ -253,6 +260,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
     }
 
     fun oppositeColor(): Int {
+        println("Opposite color " + currentColor.value!! + sign)
         return currentColor.value!! + sign
     }
 
@@ -426,13 +434,17 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         removePiece(sourceCell)
     }
 
-
     private fun getPossibleMoves(selectedCell: Cell): Boolean {
         var isPossible = false
+        println("hn")
         for (move in movesList) {
+            println("h0")
             if (selectedCell.cellNumber + sign * move in 1..24) {
                 val destinationCell = cellsArray[selectedCell.cellNumber + sign * move - 1]
+                println("h1" + destinationCell.cellNumber)
+                println("h1" + destinationCell.color)
                 if (destinationCell.color != oppositeColor()) {
+                    println("h2")
                     destinationCell.isCellHighlighted.value = true
                     cellsArray[selectedCell.cellNumber + sign * move - 1] = destinationCell
                     isPossible = true
@@ -443,16 +455,13 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
     }
 
     open suspend fun switchTurns() {
-        print("Added time encoutered " + waitTime.toString())
         delay(waitTime.toLong())
         undoList.clear()
         movesList.clear()
         _isUndoEnabled.value = false
         diceRolled = false
-
         currentColor.value = oppositeColor()
         sign *=-1
-
         if (piecesAtHomePlayer[currentColor.value!! - 1] == 15) {
             collectPieces()
         }
@@ -586,7 +595,10 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         piecesAtHomePlayer[1] = 0
         piecesCollectedPlayer[0] = 0
         piecesCollectedPlayer[1] = 0
+        collectionStarted[0].value = false
+        collectionStarted[1].value = false
         for (cell in cellsArray) {
+            println("Reset Step " + cell.cellNumber)
             cell.numberOfPieces.value = 0
             cell.color = 0
             cell.isCellHighlighted.value = false
@@ -618,7 +630,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         playersCells[0].add(1)
         playersCells[1].add(24)
         computerTurn = false
-
+        println("Game Reset")
     }
 
     private fun endRound() {

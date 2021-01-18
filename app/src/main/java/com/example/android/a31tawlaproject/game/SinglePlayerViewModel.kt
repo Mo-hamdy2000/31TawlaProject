@@ -25,46 +25,43 @@ init {
 }
     override suspend fun switchTurns() {
         super.switchTurns()
-       if(currentColor.value == 2) {
+        if(currentColor.value == 2) {
             computerTurn = true
             uiScope.launch {
                 _isUndoEnabled.value = false
                 getComputerMoves()
-                    for (i in 0..1) {
-                        preferredCells[i].clear()
-                        singleCells[i].clear()
-                        preferredDestinationCells[i].clear()
-                        singleDestinationCells[i].clear()
-                    }
-
-                    computerTurn = false
-                   switchTurns()
-
+                for (i in 0..1) {
+                    preferredCells[i].clear()
+                    singleCells[i].clear()
+                    preferredDestinationCells[i].clear()
+                    singleDestinationCells[i].clear()
+                }
+                if (piecesAtHomePlayer[1] != 15)
+                    switchTurns()
             }
-
-        }
-        else
-               check()
+       }
+       else
+           check()
+        computerTurn = false
     }
 
     private suspend fun playMove(smallerList: Int, biggerList: Int) { // 0 or 1
         // movePossibleCells[movesListIndex].sortWith(MoveComparator())
         //here
-        if ((piecesAtHomePlayer[1] == 15)) {
+        if (piecesAtHomePlayer[1] == 15) {
             movesList.removeAll(movesPlayed)
             Log.i("MOVES", movesList.toString())
             collectPieces()
             return
         }
-    //lamma awwel piece ted5ol elhome
+        //lamma awwel piece ted5ol elhome
         sb.clear()
-
-        if( cellsArray[23].numberOfPieces.value==14 && piecesAtHomePlayer[1]==1 && cellsArray[23- movesList[biggerList]].color!=oppositeColor() ){
+        if( cellsArray[23].numberOfPieces.value==14 && piecesAtHomePlayer[1]==1 && cellsArray[23- movesList[biggerList]].color!=oppositeColor()){
             sb.append("PR at 1 is 24 \n" )
             preferredCells[biggerList].add(24)
             preferredDestinationCells[biggerList].add(24- movesList[biggerList])
         }
-
+        // TODO Some error goes here index out of bound
         singleCells[smallerList].sortByDescending {
             cellsArray[it-1].numberOfPieces.value
         }
@@ -75,7 +72,6 @@ init {
 
         if (preferredCells[smallerList].isNotEmpty()) {
          //   Toast.makeText(getApplication(), "Preferred " + preferredCells[smallerList].toString(), Toast.LENGTH_SHORT).show()
-
             sourceCellIndex = preferredCells[smallerList][0]
             sourceCell = cellsArray[sourceCellIndex - 1]
             destinationCellIndex = sourceCellIndex - movesList[smallerList]
@@ -87,7 +83,6 @@ init {
                 singleCells[smallerList].add(sourceCellIndex)
                 singleDestinationCells[smallerList].add(destinationCellIndex)
                 sb.append("SN at 2 is $sourceCellIndex \n" )
-
             }
         } else {
             if (singleCells[smallerList].size == 0)
@@ -161,13 +156,13 @@ init {
         Log.i("COMPUTERCELLS", playersCells[1].toString())
         for (cellNum in playersCells[1]) {
             for (i in 0 ..1) {
-                val sourceCell = cellsArray[cellNum - 1]
+                val tempCell = cellsArray[cellNum - 1]
                 //here aaa
                 val destinationCellIndex = cellNum - movesList[i]
                 if (destinationCellIndex in 1..24 && cellsArray[destinationCellIndex - 1].color !=1) {
                     if(cellNum == 24 && piecesAtHomePlayer[1]==0)
                         continue
-                    if (sourceCell.numberOfPieces.value!! > 1 && cellsArray[destinationCellIndex - 1].color == 0 && isOppositePlayerHere(cellNum)) {
+                    if (tempCell.numberOfPieces.value!! > 1 && cellsArray[destinationCellIndex - 1].color == 0 && isOppositePlayerHere(cellNum)) {
                         preferredCells[i].add(cellNum)
                         preferredDestinationCells[i].add(cellNum - movesList[i])
                     } else {
@@ -194,7 +189,8 @@ init {
             return
         }
 
-        when { //law elsize beta3 7add fihom b zero al3ab eltani elawwel momken yefta7li el move eltania
+        when {
+            //law elsize beta3 7add fihom b zero al3ab eltani elawwel momken yefta7li el move eltania
             // ( law elcell di hatrou7 elhome ya3ni aw hal3ab bnafs elpiece men makanha elgdeid )
             size1 == 0 -> {
                 playMove(1, 0)
@@ -222,6 +218,11 @@ init {
         for(i in playersCells[0])
             if(i < cellNum)
                 return true
+        return false
+    }
+
+    private fun detectInitialState(): Boolean {
+        if (playersCells[0].size == 1 && playersCells[1].size == 1) return true
         return false
     }
 }
