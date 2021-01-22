@@ -218,11 +218,12 @@ GameViewModel.isMoved.observe( viewLifecycleOwner, Observer {
             setDiceImg(false)
 
             //  if(!GameViewModel.read) {
-                uiScope.launch {
-                    animateSwitchMessage(it)
-                   delay(300)
-                    animateRollMessage(min(diceValues[0], diceValues[1]), max(diceValues[0], diceValues[1]))
-                }
+            //TODO saraaaaah
+//                uiScope.launch {
+//                    animateSwitchMessage(it)
+//                   delay(300)
+//                    animateRollMessage(min(diceValues[0], diceValues[1]), max(diceValues[0], diceValues[1]))
+//                }
          //   }
         })
 

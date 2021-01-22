@@ -19,7 +19,10 @@ import kotlin.math.abs
 abstract class GameViewModel(application: Application) : AndroidViewModel(
     application
 ) {
-
+/*
+player2> -1
+player1> 1
+ */
     private val uiScope = CoroutineScope(Dispatchers.Main)
     private var waitTime = 0
     private var startingPointSelected = false // -> flag for selecting source cell
@@ -171,7 +174,30 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
             cellsArray = Array(24) {
                 Cell(it + 1, MutableLiveData(0), 0, MutableLiveData(false), MutableLiveData(false))
             }
+            //ragga3i dool
             resetGame()
+//            // w sheli men hena
+//            addPiece(cellsArray[18], 1)
+//            addPiece(cellsArray[17],1)
+//            //ooooooooooooo
+//            cellsArray[18].numberOfPieces.value = 14
+//
+//
+////        sign = 1
+//            //  collectPiecesNGameFinishTest(0)
+//
+//            //ooooooooo
+//
+////        currentColor.value = 1
+//            addPiece(cellsArray[5],2)
+//            addPiece(cellsArray[6],2)
+//            //ooooooooooooo
+//            cellsArray[5].numberOfPieces.value = 14
+//            playersCells[1].add(6)
+//            playersCells[0].add(19)
+//            piecesAtHomePlayer[0] = 14
+//            piecesAtHomePlayer[1] = 14
+            // lhena
         }
         else{
             sign = if (currentColor.value == 1)
@@ -430,7 +456,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
             }
             undoList.peek().pieceMovedToHome = true
         }
-        addPiece(cell)
+        addPiece(cell, currentColor.value!!)
         removePiece(sourceCell)
     }
 
@@ -468,9 +494,9 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         waitTime = 0
     }
 
-    private fun addPiece(cell: Cell) {
+    private fun addPiece(cell: Cell,color : Int) {
         startingPointSelected = false
-        cell.color = currentColor.value!!
+        cell.color = color
         cell.numberOfPieces.value = cell.numberOfPieces.value!! + 1
         movedToCell.value = cell.cellNumber
     }
@@ -488,7 +514,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         if (startingPointSelected) {
             unhighlightMove()
         }
-        addPiece(cellsArray[movePlayed.sourceCellNo - 1])
+        addPiece(cellsArray[movePlayed.sourceCellNo - 1], currentColor.value!!)
         removePiece(cellsArray[movePlayed.destCellNo - 1])
         if (!(movePlayed.sourceCellNo in playersCells[currentColor.value!! -1])) {
             playersCells[currentColor.value!! - 1].add(movePlayed.sourceCellNo)
@@ -519,7 +545,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
                     if (i >= 19 && i + move < 25 && cellsArray[i - 1].numberOfPieces.value!! > 0
                         && cellsArray[i - 1].color == currentColor.value && cellsArray[i + move - 1].color != 2
                     ) {
-                        addPiece(cellsArray[i + move - 1])
+                        addPiece(cellsArray[i + move - 1],currentColor.value!!)
                         removePiece(cellsArray[i - 1])
                         isPlayed = true
                         break
@@ -549,7 +575,7 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
                     if (i - move > 0 && cellsArray[i - 1].numberOfPieces.value!! > 0 && cellsArray[i - 1].color == currentColor.value
                         && cellsArray[i - move - 1].color != 1
                     ) {
-                        addPiece(cellsArray[i - move - 1])
+                        addPiece(cellsArray[i - move - 1],currentColor.value!!)
                         removePiece(cellsArray[i - 1])
                         isPlayed = true
                         break
@@ -606,22 +632,25 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         }
         movesList.clear()
         diceRolled = false
-        currentColor.value = 2
-        addPiece(cellsArray[23])
 
+//        currentColor.value = 2
+//        sign = -1
+        addPiece(cellsArray[23], 2)
         //ooooooooooooo
         cellsArray[23].numberOfPieces.value = 15
-        sign = 1
+
+
+//        sign = 1
         //  collectPiecesNGameFinishTest(0)
 
         //ooooooooo
 
-        currentColor.value = 1
-        addPiece(cellsArray[0])
+//        currentColor.value = 1
+        addPiece(cellsArray[0],1)
 
         //ooooooooooooo
         cellsArray[0].numberOfPieces.value = 15
-        sign = -1
+//        sign = -1
         // collectPiecesNGameFinishTest(23)
         sign = 1
         //oooooooooo
@@ -629,7 +658,6 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         playersCells[1].clear()
         playersCells[0].add(1)
         playersCells[1].add(24)
-        computerTurn = false
         println("Game Reset")
     }
 
@@ -652,17 +680,18 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
         resetGame()
         currentColor.value = winner
         //-s
-        sign = 1- currentColor.value!!
+        sign = 3- 2*currentColor.value!!
+        computerTurn = winner == 2
 
     }
     private fun collectPiecesNGameFinishTest (insertFrom : Int){ // 23 or 0
         //hawaza3 14 piece 3ala elhome w al3ab a5er wa7da ana 3ashan a test el collect felcomputer bas asra3
         for(i in 1 .. 3){
-            addPiece(cellsArray[insertFrom + sign * i])
+            addPiece(cellsArray[insertFrom + sign * i],currentColor.value!!)
             cellsArray[insertFrom + sign * i].numberOfPieces.value = 4
             playersCells[(currentColor.value!!-1)].add(insertFrom + sign * i +1)
     }
-        addPiece(cellsArray[insertFrom + sign * 4])
+        addPiece(cellsArray[insertFrom + sign * 4], currentColor.value!!)
         cellsArray[insertFrom + sign * 4].numberOfPieces.value = 2
         playersCells[(currentColor.value!!-1)].add(insertFrom + sign * 4 +1)
         piecesAtHomePlayer[(currentColor.value!!-1)] = 14

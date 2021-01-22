@@ -10,10 +10,13 @@ fun rollDice(movesList: MutableList<Int>) {
 
     diceValues[0] = Random().nextInt(6) + 1
     diceValues[1] = Random().nextInt(6) + 1
+    diceValues[0] = 6
+    diceValues[1] = 6
 //    diceValues[0] = diceTest[test]
 //    test++
 //    diceValues[1] = diceTest[test]
 //    test++
+
     Log.i("DICE", "${diceValues[0]} and ${diceValues[1]}")
     movesList.add(diceValues[0])
 

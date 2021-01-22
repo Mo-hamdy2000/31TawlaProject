@@ -7,21 +7,21 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
-import java.lang.StringBuilder
-import java.util.*
 
 class SinglePlayerViewModel(application: Application) : GameViewModel(application) {
     private val uiScope = CoroutineScope(Dispatchers.Main)
+
     private val preferredCells: Array<MutableList<Int>> = Array(2) { mutableListOf<Int>() }
     private val singleCells: Array<MutableList<Int>> = Array(2) { mutableListOf<Int>() }
     private val preferredDestinationCells: Array<MutableList<Int>> =
         Array(2) { mutableListOf<Int>() }
     private val singleDestinationCells: Array<MutableList<Int>> = Array(2) { mutableListOf<Int>() }
+    var useless = 0
     private val movesPlayed = mutableListOf<Int>()
     val sb = StringBuilder()
 init {
-    if(cellsArray[23].numberOfPieces.value == 15) // zawwedt elcondition da 3ashan elsave welload
-    preferredCells[0].add(24)
+//    if(cellsArray[23].numberOfPieces.value == 15) // zawwedt elcondition da 3ashan elsave welload
+//    preferredCells[0].add(24)
 }
     override suspend fun switchTurns() {
         super.switchTurns()
@@ -35,14 +35,15 @@ init {
                     singleCells[i].clear()
                     preferredDestinationCells[i].clear()
                     singleDestinationCells[i].clear()
+                    movesPlayed.clear()
                 }
+                computerTurn = false
                 if (piecesAtHomePlayer[1] != 15)
                     switchTurns()
             }
        }
        else
            check()
-        computerTurn = false
     }
 
     private suspend fun playMove(smallerList: Int, biggerList: Int) { // 0 or 1
@@ -109,7 +110,11 @@ init {
                 singleDestinationCells[biggerList].remove(sourceCellIndex )
             }
         }
-        delay(1500)
+        //TODO delay
+       // delay(1500)
+        delay(1000)
+        Toast.makeText(getApplication(), "ha ha ha $useless", Toast.LENGTH_SHORT).show()
+        useless++
 
         move(cellsArray[destinationCellIndex - 1])
         movesPlayed.add(movesList[smallerList])
@@ -151,6 +156,7 @@ init {
 
 
     private suspend fun getComputerMoves() {
+        useless = 0
         if (piecesAtHomePlayer[1] == 15)
             return
         Log.i("COMPUTERCELLS", playersCells[1].toString())
@@ -161,7 +167,13 @@ init {
                 val destinationCellIndex = cellNum - movesList[i]
                 if (destinationCellIndex in 1..24 && cellsArray[destinationCellIndex - 1].color !=1) {
                     if(cellNum == 24 && piecesAtHomePlayer[1]==0)
-                        continue
+                        if(tempCell.numberOfPieces.value == 15){
+                            preferredCells[i].add(cellNum)
+                            preferredDestinationCells[i].add(cellNum - movesList[i])
+                            break
+                        }
+                    else
+                            continue
                     if (tempCell.numberOfPieces.value!! > 1 && cellsArray[destinationCellIndex - 1].color == 0 && isOppositePlayerHere(cellNum)) {
                         preferredCells[i].add(cellNum)
                         preferredDestinationCells[i].add(cellNum - movesList[i])
@@ -185,6 +197,7 @@ init {
         if (movesList.size == 4) {
             for (i in 0..3) {
                 playMove(0, 0) // baddilo nafs ellist kol marra
+//                Toast.makeText(getApplication(), "how are you $i", Toast.LENGTH_SHORT).show()
             }
             return
         }
