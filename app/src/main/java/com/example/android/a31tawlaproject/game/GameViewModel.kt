@@ -61,8 +61,8 @@ player1> 1
         val undoList = Stack<MovePlayed>()
         var _isUndoEnabled = MutableLiveData<Boolean>(false)
         var endGame = MutableLiveData<Boolean>(false)
-        var movedFromCell = MutableLiveData<Int>(0)
-        var movedToCell = MutableLiveData<Int>(0)
+        var movedFromCell = MutableLiveData(0)
+        var movedToCell = MutableLiveData(0)
         var collectionStarted = Array<MutableLiveData<Boolean>>(2) {
             MutableLiveData(false)
         }
@@ -175,28 +175,29 @@ player1> 1
                 Cell(it + 1, MutableLiveData(0), 0, MutableLiveData(false), MutableLiveData(false))
             }
             //ragga3i dool
-            resetGame()
+//            resetGame()
 //            // w sheli men hena
-//            addPiece(cellsArray[18], 1)
-//            addPiece(cellsArray[17],1)
-//            //ooooooooooooo
-//            cellsArray[18].numberOfPieces.value = 14
-//
-//
-////        sign = 1
-//            //  collectPiecesNGameFinishTest(0)
-//
-//            //ooooooooo
-//
-////        currentColor.value = 1
-//            addPiece(cellsArray[5],2)
-//            addPiece(cellsArray[6],2)
-//            //ooooooooooooo
-//            cellsArray[5].numberOfPieces.value = 14
-//            playersCells[1].add(6)
-//            playersCells[0].add(19)
-//            piecesAtHomePlayer[0] = 14
-//            piecesAtHomePlayer[1] = 14
+            addPiece(cellsArray[18], 1)
+            playersCells[0].add(19)
+
+            addPiece(cellsArray[5],2)
+            playersCells[1].add(6)
+
+            cellsArray[18].numberOfPieces.value = 14
+            cellsArray[5].numberOfPieces.value = 14
+
+            addPiece(cellsArray[12],1)
+            playersCells[0].add(13)
+
+
+
+            addPiece(cellsArray[11],2)
+            playersCells[1].add(12)
+
+
+
+            piecesAtHomePlayer[0] = 14
+            piecesAtHomePlayer[1] = 14
             // lhena
         }
         else{

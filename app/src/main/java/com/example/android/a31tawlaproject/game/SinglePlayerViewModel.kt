@@ -7,6 +7,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import java.util.*
 
 class SinglePlayerViewModel(application: Application) : GameViewModel(application) {
     private val uiScope = CoroutineScope(Dispatchers.Main)
@@ -16,7 +17,7 @@ class SinglePlayerViewModel(application: Application) : GameViewModel(applicatio
     private val preferredDestinationCells: Array<MutableList<Int>> =
         Array(2) { mutableListOf<Int>() }
     private val singleDestinationCells: Array<MutableList<Int>> = Array(2) { mutableListOf<Int>() }
-    var useless = 0
+    private var useless = 0
     private val movesPlayed = mutableListOf<Int>()
     val sb = StringBuilder()
 init {
@@ -35,8 +36,8 @@ init {
                     singleCells[i].clear()
                     preferredDestinationCells[i].clear()
                     singleDestinationCells[i].clear()
-                    movesPlayed.clear()
                 }
+                movesPlayed.clear()
                 computerTurn = false
                 if (piecesAtHomePlayer[1] != 15)
                     switchTurns()
@@ -159,7 +160,9 @@ init {
         useless = 0
         if (piecesAtHomePlayer[1] == 15)
             return
-        Log.i("COMPUTERCELLS", playersCells[1].toString())
+//        Log.i("COMPUTERCELLS", playersCells[1].toString())
+    Toast.makeText(getApplication(), playersCells.contentDeepToString(), Toast.LENGTH_LONG).show()
+
         for (cellNum in playersCells[1]) {
             for (i in 0 ..1) {
                 val tempCell = cellsArray[cellNum - 1]
