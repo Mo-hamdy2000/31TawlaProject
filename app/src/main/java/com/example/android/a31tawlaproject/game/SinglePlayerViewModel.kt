@@ -6,11 +6,9 @@ import android.widget.Toast
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import java.util.*
 
 class SinglePlayerViewModel(application: Application) : GameViewModel(application) {
-    private val uiScope = CoroutineScope(Dispatchers.Main)
+//    private val uiScope = CoroutineScope(Dispatchers.Main)
 
     private val preferredCells: Array<MutableList<Int>> = Array(2) { mutableListOf<Int>() }
     private val singleCells: Array<MutableList<Int>> = Array(2) { mutableListOf<Int>() }
@@ -28,7 +26,6 @@ init {
         super.switchTurns()
         if(currentColor.value == 2) {
             computerTurn = true
-            uiScope.launch {
                 _isUndoEnabled.value = false
                 getComputerMoves()
                 for (i in 0..1) {
@@ -41,7 +38,6 @@ init {
                 computerTurn = false
                 if (piecesAtHomePlayer[1] != 15)
                     switchTurns()
-            }
        }
        else
            check()
@@ -73,7 +69,6 @@ init {
         val sourceCellIndex: Int
 
         if (preferredCells[smallerList].isNotEmpty()) {
-         //   Toast.makeText(getApplication(), "Preferred " + preferredCells[smallerList].toString(), Toast.LENGTH_SHORT).show()
             sourceCellIndex = preferredCells[smallerList][0]
             sourceCell = cellsArray[sourceCellIndex - 1]
             destinationCellIndex = sourceCellIndex - movesList[smallerList]
@@ -82,9 +77,10 @@ init {
             if(movesList.size ==4) {
                 preferredCells[smallerList].remove(sourceCellIndex)
                 preferredDestinationCells[smallerList].remove(destinationCellIndex)
-                singleCells[smallerList].add(sourceCellIndex)
-                singleDestinationCells[smallerList].add(destinationCellIndex)
-                sb.append("SN at 2 is $sourceCellIndex \n" )
+                //123 removed this helloooooooooooo
+//                singleCells[smallerList].add(sourceCellIndex)
+//                singleDestinationCells[smallerList].add(destinationCellIndex)
+//                sb.append("SN at 2 is $sourceCellIndex \n" )
             }
         } else {
             if (singleCells[smallerList].size == 0)
@@ -111,12 +107,9 @@ init {
                 singleDestinationCells[biggerList].remove(sourceCellIndex )
             }
         }
-        //TODO delay
-       // delay(1500)
-        delay(1000)
-        Toast.makeText(getApplication(), "ha ha ha $useless", Toast.LENGTH_SHORT).show()
+//        Toast.makeText(getApplication(), "ha ha ha $useless", Toast.LENGTH_SHORT).show()
         useless++
-
+        Toast.makeText(getApplication(), "move $sourceCellIndex to $destinationCellIndex" , Toast.LENGTH_SHORT).show()
         move(cellsArray[destinationCellIndex - 1])
         movesPlayed.add(movesList[smallerList])
         //SINGLE CELLS FILTER
@@ -126,14 +119,8 @@ init {
         singleCells[biggerList].remove(sourceCellIndex)
         singleDestinationCells[biggerList].remove(destinationCellIndex)
     }
-
-    //law elle3ba elli etla3abet di fata7etlo cell yel3ab menha elmove eltania
-    if (destinationCellIndex - movesList[biggerList] in 1..24 && cellsArray[destinationCellIndex - movesList[biggerList] - 1].color == 0) { //no of pieces must be 1
-        singleCells[biggerList].add(destinationCellIndex)
-        singleDestinationCells[biggerList].add(destinationCellIndex - movesList[biggerList])
-        sb.append("SN at 4 is $destinationCellIndex \n" )
-    }
-//law la3abt fi cell feha 1 piece w ba2wt preferred
+//123 shifted this
+        //law la3abt fi cell feha 1 piece w ba2wt preferred
         if(singleCells[biggerList].contains(destinationCellIndex) && cellsArray[destinationCellIndex - movesList[biggerList]-1].color == 0){
             preferredCells[biggerList].add(destinationCellIndex)
             preferredDestinationCells[biggerList].add(destinationCellIndex- movesList[biggerList] )
@@ -141,10 +128,19 @@ init {
             singleCells[biggerList].remove(destinationCellIndex)
             singleDestinationCells[biggerList].remove(destinationCellIndex- movesList[biggerList] )
         }
+  //123 before this
+    //law elle3ba elli etla3abet di fata7etlo cell yel3ab menha elmove eltania
+    if (destinationCellIndex - movesList[biggerList] in 1..24 && cellsArray[destinationCellIndex - movesList[biggerList] - 1].color == 0) { //no of pieces must be 1
+        singleCells[biggerList].add(destinationCellIndex)
+        singleDestinationCells[biggerList].add(destinationCellIndex - movesList[biggerList])
+        sb.append("SN at 4 is $destinationCellIndex \n" )
+    }
+
     //PREFERRED CELLS FILTER
     //law elcell elli la3abtelha di kanet preferred cell ashelha OR elcell elli la3abtaha ba2a feha piece wa7da
+        //123 5alletha and badal ||
     if (preferredCells[biggerList].isNotEmpty() && preferredDestinationCells[biggerList].contains(destinationCellIndex)
-        || sourceCell.numberOfPieces.value == 1
+        && sourceCell.numberOfPieces.value == 1
     ) {
         preferredCells[biggerList].remove(destinationCellIndex + movesList[biggerList]) //elsource cell bta3etha
         preferredDestinationCells[biggerList].remove(destinationCellIndex)
@@ -153,6 +149,13 @@ init {
         sb.append("SN at 6 is ${destinationCellIndex + movesList[biggerList]} \n" )
 }
         Log.i("LOOK AT ME", sb.toString())
+        Log.i("QQ Preferred",preferredCells[smallerList].toString())
+        Log.i("QQ Single",singleCells[smallerList].toString())
+
+        //TODO delay
+        // delay(1500)
+        delay(1000)
+
     }
 
 
@@ -198,10 +201,8 @@ init {
         if(size1+size2==0)
                 return
         if (movesList.size == 4) {
-            for (i in 0..3) {
+            for (i in 0..3)
                 playMove(0, 0) // baddilo nafs ellist kol marra
-//                Toast.makeText(getApplication(), "how are you $i", Toast.LENGTH_SHORT).show()
-            }
             return
         }
 

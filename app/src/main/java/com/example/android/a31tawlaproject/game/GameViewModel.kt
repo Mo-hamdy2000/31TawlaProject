@@ -53,6 +53,7 @@ player1> 1
         private var _scoreTwo = MutableLiveData<Int> (0)
         val scoreTwo: LiveData<Int>
             get() = _scoreTwo
+        //TODO lateinit currentcolor
         var currentColor = MutableLiveData (1)
         var gameMode = 0
         val movesList = mutableListOf<Int>()
@@ -189,8 +190,6 @@ player1> 1
             addPiece(cellsArray[12],1)
             playersCells[0].add(13)
 
-
-
             addPiece(cellsArray[11],2)
             playersCells[1].add(12)
 
@@ -213,7 +212,7 @@ player1> 1
         }
     }
 
-    fun selectCell(cell: Cell) {
+    suspend fun selectCell(cell: Cell) {
         println("Wslnaaaaaaaaaaaaaaa")
         if (!diceRolled || computerTurn || (piecesAtHomePlayer[currentColor.value!! - 1] == 15)) {
             println("hna")
@@ -482,6 +481,7 @@ player1> 1
     }
 
     open suspend fun switchTurns() {
+        //aaaaaabbbbbbcccccc
         delay(waitTime.toLong())
         undoList.clear()
         movesList.clear()
@@ -533,7 +533,7 @@ player1> 1
         isMoved.value = false
     }
 
-    fun collectPieces() {
+    suspend fun collectPieces() {
         if (currentColor.value == 1) {
             for (move in movesList) {
                 if (cellsArray[24 - move].numberOfPieces.value!! > 0 && cellsArray[24 - move].color == currentColor.value) {
@@ -601,10 +601,10 @@ player1> 1
             endRound()
         }
         else {
-            uiScope.launch {
+//            uiScope.launch {
                 waitTime = 4500
                 switchTurns()
-            }
+//            }
         }
     }
 
