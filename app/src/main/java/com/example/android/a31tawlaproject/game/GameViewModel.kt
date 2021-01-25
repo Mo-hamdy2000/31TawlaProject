@@ -42,11 +42,11 @@ player1> 1
     companion object {
 
         var read = false
-        var isMoved = MutableLiveData<Boolean> (false)
+        var isMoved = MutableLiveData(false)
         lateinit var cellsArray: Array<Cell>
         val piecesAtHomePlayer: Array<Int>  = Array(2){ 0 }
         val piecesCollectedPlayer: Array<Int> = Array(2) { 0 }
-        private var _scoreOne = MutableLiveData<Int> (0)
+        private var _scoreOne = MutableLiveData(0)
         val scoreOne: LiveData<Int>
             get() = _scoreOne
         private var _scoreTwo = MutableLiveData(0)

@@ -16,7 +16,8 @@ import com.example.android.a31tawlaproject.miscUtils.load
 
 class HomeFragment : Fragment() {
     companion object{
-        var isMuted = false
+        var isMusicMuted = false
+        var isSoundMuted = false
     }
     private lateinit var binding : HomeFragmentBinding
 
@@ -28,6 +29,7 @@ class HomeFragment : Fragment() {
         val twoPlayerButton : ImageView = binding.twoPlayersImageView
         val resume : ImageView = binding.resumeImageView
         val sound : ImageView = binding.soundImageView
+        val music : ImageView = binding.musicImageView
         val about : ImageView = binding.aboutImageView
         singlePlayerButton.setOnClickListener {
             GameViewModel.gameMode = 1
@@ -45,18 +47,26 @@ class HomeFragment : Fragment() {
                 findNavController(it).navigate(R.id.action_home_to_twoPlayerFragment)
         }
 
-        sound.setOnClickListener {
+        music.setOnClickListener {
             if (MainActivity.homeMusic.isPlaying) {
-                sound.setImageResource(R.drawable.sound_off)
+                music.setImageResource(R.drawable.music_off)
                 MainActivity.homeMusic.pause()
-                isMuted = true
+                isMusicMuted = true
             }
             else {
-                sound.setImageResource(R.drawable.sound_bars)
+                music.setImageResource(R.drawable.music_on)
                 MainActivity.homeMusic.start()
             }
         }
 
+        sound.setOnClickListener{
+            isSoundMuted = !isSoundMuted
+            if(isSoundMuted)
+                sound.setImageResource(R.drawable.sound_off)
+            else
+                sound.setImageResource(R.drawable.sound_on)
+
+        }
         about.setOnClickListener {
             findNavController(it).navigate(R.id.action_home_to_aboutFragment)
         }
@@ -68,7 +78,7 @@ class HomeFragment : Fragment() {
     override fun onPause() {
         super.onPause()
         MainActivity.homeMusic.pause()
-        if(!isMuted)
+        if(!isMusicMuted)
         MainActivity.gameMusic.start()
     }
 

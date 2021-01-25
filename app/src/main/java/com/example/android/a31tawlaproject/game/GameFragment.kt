@@ -21,13 +21,13 @@ import com.example.android.a31tawlaproject.R
 import com.example.android.a31tawlaproject.databinding.GameFragmentBinding
 import com.example.android.a31tawlaproject.game.GameViewModel.Companion.movedFromCell
 import com.example.android.a31tawlaproject.game.GameViewModel.Companion.movedToCell
+import com.example.android.a31tawlaproject.home.HomeFragment
 import com.example.android.a31tawlaproject.miscUtils.diceValues
 import com.example.android.a31tawlaproject.miscUtils.rollDice
 import com.example.android.a31tawlaproject.miscUtils.save
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.Main
-import kotlin.math.max
-import kotlin.math.min
+
 
 abstract class GameFragment : Fragment() {
 
@@ -190,6 +190,7 @@ GameViewModel.isMoved.observe( viewLifecycleOwner, Observer {
                     )
                 }
                 //TODO MUSIC
+                if(!HomeFragment.isSoundMuted)
                 moveFromSound.start()
             }
         })
@@ -203,6 +204,7 @@ GameViewModel.isMoved.observe( viewLifecycleOwner, Observer {
                     val piece = getCell(movedToCell.value!!)[1]
                     piece.animation = AnimationUtils.loadAnimation(this.requireContext(), R.anim.bottom_fade_in_animation)
                 }
+                if(!HomeFragment.isSoundMuted)
                 moveToSound.start()
             }
         })
@@ -309,7 +311,7 @@ GameViewModel.isMoved.observe( viewLifecycleOwner, Observer {
             if(reset)
                 diceImages[i].setBackgroundResource(imgSrc)
             else {
-
+                if(!HomeFragment.isSoundMuted)
                 diceSoundEffect.start()
                 diceSoundEffect.isLooping = false
                 diceImages[i].setBackgroundResource(R.drawable.dice_animation)

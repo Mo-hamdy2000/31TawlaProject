@@ -98,7 +98,6 @@ class SinglePlayerViewModel(application: Application) : GameViewModel(applicatio
         }
 //        Toast.makeText(getApplication(), "ha ha ha $useless", Toast.LENGTH_SHORT).show()
         useless++
-        Toast.makeText(getApplication(), "move $sourceCellIndex to $destinationCellIndex" , Toast.LENGTH_SHORT).show()
         move(cellsArray[destinationCellIndex - 1])
         Log.i("switch", "playMove: $useless")
         movesPlayed.add(movesList[smallerList])

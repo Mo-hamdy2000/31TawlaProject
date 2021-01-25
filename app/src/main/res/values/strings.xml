@@ -30,6 +30,6 @@
     <string name="upper_message">upper message</string>
     <string name="lower_message">lower message</string>
     <string name="scoreFormat">%1$d - %2$d</string>
-    <string name="about_string">This app was developed by \nSarah Osama\n Mo\'men Mohamed Hamdy\n students at \nComputer and Systems Engneering Department,
+    <string name="about_string">This app was developed by \nSarah Osama\n Mo\'men Mohamed Hamdy\n students at \nComputer and Systems Engineering Department,
         \nFaculty of Engineering, \nAlexandria University</string>
 </resources>
