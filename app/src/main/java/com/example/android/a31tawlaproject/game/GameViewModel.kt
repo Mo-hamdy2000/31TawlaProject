@@ -53,10 +53,9 @@ player1> 1
         val scoreTwo: LiveData<Int>
             get() = _scoreTwo
         //TODO lateinit currentcolor
-        var currentColor = MutableLiveData (1)
+        lateinit var currentColor  :  MutableLiveData<Int>
         var gameMode = 0
         val movesList = mutableListOf<Int>()
-       // var currentColor = MutableLiveData (1)
         var diceRolled = false
         val undoList = Stack<MovePlayed>()
         var _isUndoEnabled = MutableLiveData(false)
@@ -121,9 +120,7 @@ player1> 1
 
             _scoreOne.value = st.nextToken().toInt()
             _scoreTwo.value = st.nextToken().toInt()
-
-            currentColor.value = st.nextToken().toInt()
-
+            currentColor =  MutableLiveData ( st.nextToken().toInt())
             diceRolled = st.nextToken()!!.toBoolean()
             diceValues[0] = st.nextToken().toInt()
             diceValues[1] = st.nextToken().toInt()
@@ -171,31 +168,25 @@ player1> 1
     init {
 
         if (!read) {
+            currentColor = MutableLiveData (1)
             cellsArray = Array(24) {
                 Cell(it + 1, MutableLiveData(0), 0, MutableLiveData(false), MutableLiveData(false))
             }
             //ragga3i dool
-//            resetGame()
+            resetGame()
 //            // w sheli men hena
-            addPiece(cellsArray[18], 1)
-            playersCells[0].add(19)
-
-            addPiece(cellsArray[5],2)
-            playersCells[1].add(6)
-
-            cellsArray[18].numberOfPieces.value = 14
-            cellsArray[5].numberOfPieces.value = 14
-
-            addPiece(cellsArray[12],1)
-            playersCells[0].add(13)
-
-            addPiece(cellsArray[11],2)
-            playersCells[1].add(12)
-
-
-
-            piecesAtHomePlayer[0] = 14
-            piecesAtHomePlayer[1] = 14
+//            addPiece(cellsArray[18], 1)
+//            playersCells[0].add(19)
+//            addPiece(cellsArray[5],2)
+//            playersCells[1].add(6)
+//            cellsArray[18].numberOfPieces.value = 14
+//            cellsArray[5].numberOfPieces.value = 14
+//            addPiece(cellsArray[12],1)
+//            playersCells[0].add(13)
+//            addPiece(cellsArray[11],2)
+//            playersCells[1].add(12)
+//            piecesAtHomePlayer[0] = 14
+//            piecesAtHomePlayer[1] = 14
             // lhena
         }
         else{
@@ -252,12 +243,12 @@ player1> 1
                             movesList.clear() //eh lazmetha :O
                         }
                         if ((piecesAtHomePlayer[currentColor.value!! - 1] == 15) && movesList.isNotEmpty()) {
-//                            uiScope.launch {
+                            uiScope.launch {
                                     collectPieces()
                                     println("La la la")
 //                                    return
-//                            }
-
+                            }
+                            return
                         }
                         break
                     }
@@ -535,12 +526,12 @@ player1> 1
         isMoved.value = false
     }
 
-     fun collectPieces() {
+     suspend fun collectPieces() {
         if (currentColor.value == 1) {
             for (move in movesList) {
                 if (cellsArray[24 - move].numberOfPieces.value!! > 0 && cellsArray[24 - move].color == currentColor.value) {
                     removePiece(cellsArray[24 - move])
-//                    delay(1500)
+                    delay(1500)
                     piecesCollectedPlayer[0]++
                     continue
                 }
@@ -551,7 +542,7 @@ player1> 1
                     ) {
                         addPiece(cellsArray[i + move - 1],currentColor.value!!)
                         removePiece(cellsArray[i - 1])
-//                        delay(1500)
+                        delay(1500)
                         isPlayed = true
                         break
                     }
@@ -560,7 +551,7 @@ player1> 1
                     for (i in (25 - move)..24) {
                         if (i <= 24 && cellsArray[i - 1].numberOfPieces.value!! > 0 && cellsArray[i - 1].color == currentColor.value) {
                             removePiece(cellsArray[i - 1])
-//                            delay(1500)
+                            delay(1500)
                             println("The cell " + i + " is collected")
                             piecesCollectedPlayer[0]++
                             break
@@ -572,7 +563,7 @@ player1> 1
             for (move in movesList) {
                 if (cellsArray[move - 1].numberOfPieces.value!! > 0 && cellsArray[move - 1].color == currentColor.value) {
                     removePiece(cellsArray[move - 1])
-//                    delay(1500)
+                    delay(1500)
                     println("The cell " + move + " is collected")
                     piecesCollectedPlayer[1]++
                     continue
@@ -584,7 +575,7 @@ player1> 1
                     ) {
                         addPiece(cellsArray[i - move - 1],currentColor.value!!)
                         removePiece(cellsArray[i - 1])
-//                        delay(1500)
+                        delay(1500)
                         isPlayed = true
                         break
                     }
@@ -594,7 +585,7 @@ player1> 1
                         println("cell " + i + "no of pieces " + cellsArray[i - 1].numberOfPieces.value)
                         if (i > 0 && cellsArray[i - 1].numberOfPieces.value!! > 0 && cellsArray[i - 1].color == currentColor.value) {
                             removePiece(cellsArray[i - 1])
-//                            delay(1500)
+                            delay(1500)
                             println("The cell " + i + " is collected")
                             piecesCollectedPlayer[1]++
                             break
@@ -610,7 +601,7 @@ player1> 1
         }
         else {
             uiScope.launch {
-                waitTime = 4500
+                waitTime = 0
                 switchTurns()
             }
         }
@@ -642,35 +633,47 @@ player1> 1
         movesList.clear()
         diceRolled = false
 
-//        currentColor.value = 2
-//        sign = -1
-        addPiece(cellsArray[23], 2)
-        //ooooooooooooo
-        cellsArray[23].numberOfPieces.value = 15
-
-
+////        currentColor.value = 2
+////        sign = -1
+//        addPiece(cellsArray[23], 2)
+//        //ooooooooooooo
+//        cellsArray[23].numberOfPieces.value = 15
+//
+//
+////        sign = 1
+//        //  collectPiecesNGameFinishTest(0)
+//
+//        //ooooooooo
+//
+////        currentColor.value = 1
+//        addPiece(cellsArray[0],1)
+//
+//        //ooooooooooooo
+//        cellsArray[0].numberOfPieces.value = 15
+////        sign = -1
+//        // collectPiecesNGameFinishTest(23)
 //        sign = 1
-        //  collectPiecesNGameFinishTest(0)
-
-        //ooooooooo
-
-//        currentColor.value = 1
-        addPiece(cellsArray[0],1)
-
-        //ooooooooooooo
-        cellsArray[0].numberOfPieces.value = 15
-//        sign = -1
-        // collectPiecesNGameFinishTest(23)
-        sign = 1
-        //oooooooooo
-        playersCells[0].clear()
-        playersCells[1].clear()
-        playersCells[0].add(1)
-        playersCells[1].add(24)
+//        //oooooooooo
+//        playersCells[0].clear()
+//        playersCells[1].clear()
+//        playersCells[0].add(1)
+//        playersCells[1].add(24)
         println("Game Reset")
+        addPiece(cellsArray[18], 1)
+        playersCells[0].add(19)
+        addPiece(cellsArray[5],2)
+        playersCells[1].add(6)
+        cellsArray[18].numberOfPieces.value = 14
+        cellsArray[5].numberOfPieces.value = 14
+        addPiece(cellsArray[12],1)
+        playersCells[0].add(13)
+        addPiece(cellsArray[11],2)
+        playersCells[1].add(12)
+        piecesAtHomePlayer[0] = 14
+        piecesAtHomePlayer[1] = 14
     }
 
-    private fun endRound() {
+    open fun endRound() {
         val winner: Int
         if (currentColor.value == 1) {
             _scoreOne.value = scoreOne.value!! + (15 - piecesCollectedPlayer[1])
@@ -686,11 +689,10 @@ player1> 1
                 endGame.value = true
             }
         }
+
         resetGame()
         currentColor.value = winner
-        //-s
         sign = 3- 2*currentColor.value!!
-        computerTurn = winner == 2
 
     }
 }

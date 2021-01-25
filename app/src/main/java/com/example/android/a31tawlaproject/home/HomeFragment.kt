@@ -70,17 +70,17 @@ class HomeFragment : Fragment() {
         about.setOnClickListener {
             findNavController(it).navigate(R.id.action_home_to_aboutFragment)
         }
-
-
+        MainActivity.homeMusic.start()
         return binding.root
     }
 
     override fun onPause() {
         super.onPause()
         MainActivity.homeMusic.pause()
-        if(!isMusicMuted)
-        MainActivity.gameMusic.start()
     }
 
-
+    override fun onResume() {
+        super.onResume()
+        MainActivity.homeMusic.start()
+    }
 }

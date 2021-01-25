@@ -2,11 +2,13 @@ package com.example.android.a31tawlaproject.game
 
 import android.app.Application
 import android.util.Log
-import android.widget.Toast
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class SinglePlayerViewModel(application: Application) : GameViewModel(application) {
-//    private val uiScope = CoroutineScope(Dispatchers.Main)
+    private val uiScope = CoroutineScope(Dispatchers.Main)
 
     private val preferredCells: Array<MutableList<Int>> = Array(2) { mutableListOf<Int>() }
     private val singleCells: Array<MutableList<Int>> = Array(2) { mutableListOf<Int>() }
@@ -15,7 +17,6 @@ class SinglePlayerViewModel(application: Application) : GameViewModel(applicatio
     private val singleDestinationCells: Array<MutableList<Int>> = Array(2) { mutableListOf<Int>() }
     private var useless = 0
     private val movesPlayed = mutableListOf<Int>()
-    private val sb = StringBuilder()
 
     override suspend fun switchTurns() {
         super.switchTurns()
@@ -40,11 +41,8 @@ class SinglePlayerViewModel(application: Application) : GameViewModel(applicatio
     }
 
     private suspend fun playMove(smallerList: Int, biggerList: Int) { // 0 or 1
-        //here
         //lamma awwel piece ted5ol elhome
-        sb.clear()
         if( cellsArray[23].numberOfPieces.value==14 && piecesAtHomePlayer[1]==1 && cellsArray[23- movesList[biggerList]].color!=oppositeColor()){
-            sb.append("PR at 1 is 24 \n" )
             preferredCells[biggerList].add(24)
             preferredDestinationCells[biggerList].add(24- movesList[biggerList])
         }
@@ -53,7 +51,6 @@ class SinglePlayerViewModel(application: Application) : GameViewModel(applicatio
             cellsArray[it-1].numberOfPieces.value
         }
         preferredCells[smallerList].sort()
-        Log.i("I_HATE_YOU", movesList[smallerList].toString() + singleCells[smallerList].toString() +preferredCells[smallerList].toString())
         val destinationCellIndex: Int
         val sourceCellIndex: Int
 
@@ -69,13 +66,10 @@ class SinglePlayerViewModel(application: Application) : GameViewModel(applicatio
                 //123 removed this helloooooooooooo
 //                singleCells[smallerList].add(sourceCellIndex)
 //                singleDestinationCells[smallerList].add(destinationCellIndex)
-//                sb.append("SN at 2 is $sourceCellIndex \n" )
             }
         } else {
             if (singleCells[smallerList].size == 0)
                 return
-         //   Toast.makeText(getApplication(), "Single " + singleCells[smallerList].toString(), Toast.LENGTH_SHORT).show()
-
             sourceCellIndex = singleCells[smallerList][0]
             sourceCell = cellsArray[sourceCellIndex - 1]
             destinationCellIndex = sourceCellIndex - movesList[smallerList]
@@ -91,7 +85,6 @@ class SinglePlayerViewModel(application: Application) : GameViewModel(applicatio
             if (singleDestinationCells[biggerList].contains(sourceCellIndex)) {
                 preferredCells[biggerList].add(sourceCellIndex + movesList[biggerList])
                 preferredDestinationCells[biggerList].add(sourceCellIndex )
-                sb.append("PR at 3 is ${sourceCellIndex+ movesList[biggerList]} \n" )
                 singleCells[biggerList].remove(sourceCellIndex + movesList[biggerList])
                 singleDestinationCells[biggerList].remove(sourceCellIndex )
             }
@@ -113,7 +106,6 @@ class SinglePlayerViewModel(application: Application) : GameViewModel(applicatio
         if(singleCells[biggerList].contains(destinationCellIndex) && cellsArray[destinationCellIndex - movesList[biggerList]-1].color == 0){
             preferredCells[biggerList].add(destinationCellIndex)
             preferredDestinationCells[biggerList].add(destinationCellIndex- movesList[biggerList] )
-            sb.append("pr at 5 is $destinationCellIndex \n" )
             singleCells[biggerList].remove(destinationCellIndex)
             singleDestinationCells[biggerList].remove(destinationCellIndex- movesList[biggerList] )
         }
@@ -122,7 +114,6 @@ class SinglePlayerViewModel(application: Application) : GameViewModel(applicatio
     if (destinationCellIndex - movesList[biggerList] in 1..24 && cellsArray[destinationCellIndex - movesList[biggerList] - 1].color == 0) { //no of pieces must be 1
         singleCells[biggerList].add(destinationCellIndex)
         singleDestinationCells[biggerList].add(destinationCellIndex - movesList[biggerList])
-        sb.append("SN at 4 is $destinationCellIndex \n" )
     }
 
     //PREFERRED CELLS FILTER
@@ -135,15 +126,8 @@ class SinglePlayerViewModel(application: Application) : GameViewModel(applicatio
         preferredDestinationCells[biggerList].remove(destinationCellIndex)
         singleCells[biggerList].add(destinationCellIndex + movesList[biggerList])
         singleDestinationCells[biggerList].add(destinationCellIndex)
-        sb.append("SN at 6 is ${destinationCellIndex + movesList[biggerList]} \n" )
 }
-        Log.i("LOOK AT ME", sb.toString())
-        Log.i("QQ Preferred",preferredCells[smallerList].toString())
-        Log.i("QQ Single",singleCells[smallerList].toString())
-
-        //TODO delay
-        // delay(1500)
-        delay(1000)
+         delay(1500)
 
     }
 
@@ -152,9 +136,6 @@ class SinglePlayerViewModel(application: Application) : GameViewModel(applicatio
         useless = 0
         if (piecesAtHomePlayer[1] == 15)
             return
-//        Log.i("COMPUTERCELLS", playersCells[1].toString())
-    Toast.makeText(getApplication(), playersCells.contentDeepToString(), Toast.LENGTH_LONG).show()
-
         for (cellNum in playersCells[1]) {
             for (i in 0 ..1) {
                 val tempCell = cellsArray[cellNum - 1]
@@ -238,12 +219,21 @@ class SinglePlayerViewModel(application: Application) : GameViewModel(applicatio
 
     private fun checkForCollect() : Boolean{
         if (piecesAtHomePlayer[1] == 15) {
-            movesList.removeAll(movesPlayed)
+            for(move in movesPlayed)
+              movesList.remove(move)
             Log.i("MOVES", movesList.toString())
-            collectPieces()
+            uiScope.launch {
+                collectPieces()
+            }
             return true
         }
         return false
+    }
+
+    override fun endRound() {
+        super.endRound()
+        computerTurn = currentColor.value == 2
+
     }
     private fun detectInitialState(): Boolean {
         if (playersCells[0].size == 1 && playersCells[1].size == 1) return true

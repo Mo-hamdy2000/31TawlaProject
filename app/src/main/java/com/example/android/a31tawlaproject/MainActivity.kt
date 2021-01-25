@@ -17,20 +17,7 @@ class MainActivity : AppCompatActivity() {
         gameMusic = MediaPlayer.create(this.applicationContext, R.raw.amahmed)
         gameMusic.isLooping = true
         homeMusic = MediaPlayer.create(this.applicationContext, R.raw.home_fragment_music)
-        homeMusic.start()
-
+        homeMusic.isLooping = true
         setContentView(R.layout.activity_main)
-        //val gameViewModel = GameViewModel(application, binding)
-
-    }
-
-
-    override fun onPause() {
-        super.onPause()
-        homeMusic.pause()
-    }
-    override fun onResume() {
-        super.onResume()
-        homeMusic.start()
     }
 }

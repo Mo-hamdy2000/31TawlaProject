@@ -17,6 +17,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.navigation.Navigation
+import com.example.android.a31tawlaproject.MainActivity
 import com.example.android.a31tawlaproject.R
 import com.example.android.a31tawlaproject.databinding.GameFragmentBinding
 import com.example.android.a31tawlaproject.game.GameViewModel.Companion.movedFromCell
@@ -42,17 +43,26 @@ abstract class GameFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate view and obtain an instance of the binding class.
-        //m- oo is not used
-        //val oo = activity?.filesDir
         binding = DataBindingUtil.inflate(inflater, R.layout.game_fragment, container, false)
         diceSoundEffect = MediaPlayer.create(activity?.applicationContext, R.raw.dice_effect)
         moveToSound = MediaPlayer.create(activity?.applicationContext, R.raw.move_to)
         moveFromSound = MediaPlayer.create(activity?.applicationContext, R.raw.move_from)
+        if(!HomeFragment.isMusicMuted)
+            MainActivity.gameMusic.start()
         return binding.root
     }
 
+    override fun onPause() {
+        super.onPause()
+        MainActivity.gameMusic.pause()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        MainActivity.gameMusic.start()
+    }
+
     fun initializationWithViewModel(gameViewModel: GameViewModel, lifeCycleOwner: Fragment) {
-       // val rollButton : Button = binding.rollButton
         val undoButton : Button = binding.undoButton
         diceImages = arrayOf(binding.diceImg1, binding.diceImg2)
         if(GameViewModel.read){
@@ -189,7 +199,6 @@ GameViewModel.isMoved.observe( viewLifecycleOwner, Observer {
                         R.anim.top_fade_out_animation
                     )
                 }
-                //TODO MUSIC
                 if(!HomeFragment.isSoundMuted)
                 moveFromSound.start()
             }
