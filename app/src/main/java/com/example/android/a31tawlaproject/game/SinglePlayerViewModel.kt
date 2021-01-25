@@ -3,8 +3,6 @@ package com.example.android.a31tawlaproject.game
 import android.app.Application
 import android.util.Log
 import android.widget.Toast
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 
 class SinglePlayerViewModel(application: Application) : GameViewModel(application) {
@@ -17,13 +15,11 @@ class SinglePlayerViewModel(application: Application) : GameViewModel(applicatio
     private val singleDestinationCells: Array<MutableList<Int>> = Array(2) { mutableListOf<Int>() }
     private var useless = 0
     private val movesPlayed = mutableListOf<Int>()
-    val sb = StringBuilder()
-init {
-//    if(cellsArray[23].numberOfPieces.value == 15) // zawwedt elcondition da 3ashan elsave welload
-//    preferredCells[0].add(24)
-}
+    private val sb = StringBuilder()
+
     override suspend fun switchTurns() {
         super.switchTurns()
+        Log.i("switch", "switchTurns: ${currentColor.value}")
         if(currentColor.value == 2) {
             computerTurn = true
                 _isUndoEnabled.value = false
@@ -44,14 +40,7 @@ init {
     }
 
     private suspend fun playMove(smallerList: Int, biggerList: Int) { // 0 or 1
-        // movePossibleCells[movesListIndex].sortWith(MoveComparator())
         //here
-        if (piecesAtHomePlayer[1] == 15) {
-            movesList.removeAll(movesPlayed)
-            Log.i("MOVES", movesList.toString())
-            collectPieces()
-            return
-        }
         //lamma awwel piece ted5ol elhome
         sb.clear()
         if( cellsArray[23].numberOfPieces.value==14 && piecesAtHomePlayer[1]==1 && cellsArray[23- movesList[biggerList]].color!=oppositeColor()){
@@ -111,6 +100,7 @@ init {
         useless++
         Toast.makeText(getApplication(), "move $sourceCellIndex to $destinationCellIndex" , Toast.LENGTH_SHORT).show()
         move(cellsArray[destinationCellIndex - 1])
+        Log.i("switch", "playMove: $useless")
         movesPlayed.add(movesList[smallerList])
         //SINGLE CELLS FILTER
         //law elcell di mawgouda fel possible moves bta3et elmove eltania w mafeesh
@@ -201,8 +191,11 @@ init {
         if(size1+size2==0)
                 return
         if (movesList.size == 4) {
-            for (i in 0..3)
+            for (i in 0..3){
                 playMove(0, 0) // baddilo nafs ellist kol marra
+                if(checkForCollect())
+                    return
+            }
             return
         }
 
@@ -211,10 +204,14 @@ init {
             // ( law elcell di hatrou7 elhome ya3ni aw hal3ab bnafs elpiece men makanha elgdeid )
             size1 == 0 -> {
                 playMove(1, 0)
+                if(checkForCollect())
+                    return
                 playMove(0, 1)
             }
             size2 == 0 -> {
                 playMove(0, 1)
+                if(checkForCollect())
+                    return
                 playMove(1, 0)
             }
             else -> {
@@ -224,6 +221,8 @@ init {
                 else
                     1
                 playMove(smallerList, smallerList xor 1)
+                if(checkForCollect())
+                    return
                 playMove(smallerList xor 1, smallerList)
             }
         }
@@ -238,6 +237,15 @@ init {
         return false
     }
 
+    private fun checkForCollect() : Boolean{
+        if (piecesAtHomePlayer[1] == 15) {
+            movesList.removeAll(movesPlayed)
+            Log.i("MOVES", movesList.toString())
+            collectPieces()
+            return true
+        }
+        return false
+    }
     private fun detectInitialState(): Boolean {
         if (playersCells[0].size == 1 && playersCells[1].size == 1) return true
         return false

@@ -9,10 +9,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.android.a31tawlaproject.miscUtils.Cell
 import com.example.android.a31tawlaproject.miscUtils.MovePlayed
 import com.example.android.a31tawlaproject.miscUtils.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import java.util.*
 import kotlin.math.abs
 
@@ -23,7 +20,9 @@ abstract class GameViewModel(application: Application) : AndroidViewModel(
 player2> -1
 player1> 1
  */
-    private val uiScope = CoroutineScope(Dispatchers.Main)
+//    private val uiScope = CoroutineScope(Dispatchers.Main)
+    private var viewModelJob = Job()
+    private val uiScope = CoroutineScope(Dispatchers.Main + viewModelJob)
     private var waitTime = 0
     private var startingPointSelected = false // -> flag for selecting source cell
     lateinit var sourceCell: Cell
@@ -50,7 +49,7 @@ player1> 1
         private var _scoreOne = MutableLiveData<Int> (0)
         val scoreOne: LiveData<Int>
             get() = _scoreOne
-        private var _scoreTwo = MutableLiveData<Int> (0)
+        private var _scoreTwo = MutableLiveData(0)
         val scoreTwo: LiveData<Int>
             get() = _scoreTwo
         //TODO lateinit currentcolor
@@ -60,8 +59,8 @@ player1> 1
        // var currentColor = MutableLiveData (1)
         var diceRolled = false
         val undoList = Stack<MovePlayed>()
-        var _isUndoEnabled = MutableLiveData<Boolean>(false)
-        var endGame = MutableLiveData<Boolean>(false)
+        var _isUndoEnabled = MutableLiveData(false)
+        var endGame = MutableLiveData(false)
         var movedFromCell = MutableLiveData(0)
         var movedToCell = MutableLiveData(0)
         var collectionStarted = Array<MutableLiveData<Boolean>>(2) {
@@ -212,7 +211,7 @@ player1> 1
         }
     }
 
-    suspend fun selectCell(cell: Cell) {
+    fun selectCell(cell: Cell) {
         println("Wslnaaaaaaaaaaaaaaa")
         if (!diceRolled || computerTurn || (piecesAtHomePlayer[currentColor.value!! - 1] == 15)) {
             println("hna")
@@ -253,9 +252,12 @@ player1> 1
                             movesList.clear() //eh lazmetha :O
                         }
                         if ((piecesAtHomePlayer[currentColor.value!! - 1] == 15) && movesList.isNotEmpty()) {
-                            collectPieces()
-                            println("La la la")
-                            return
+//                            uiScope.launch {
+                                    collectPieces()
+                                    println("La la la")
+//                                    return
+//                            }
+
                         }
                         break
                     }
@@ -533,11 +535,12 @@ player1> 1
         isMoved.value = false
     }
 
-    suspend fun collectPieces() {
+     fun collectPieces() {
         if (currentColor.value == 1) {
             for (move in movesList) {
                 if (cellsArray[24 - move].numberOfPieces.value!! > 0 && cellsArray[24 - move].color == currentColor.value) {
                     removePiece(cellsArray[24 - move])
+//                    delay(1500)
                     piecesCollectedPlayer[0]++
                     continue
                 }
@@ -548,6 +551,7 @@ player1> 1
                     ) {
                         addPiece(cellsArray[i + move - 1],currentColor.value!!)
                         removePiece(cellsArray[i - 1])
+//                        delay(1500)
                         isPlayed = true
                         break
                     }
@@ -556,6 +560,7 @@ player1> 1
                     for (i in (25 - move)..24) {
                         if (i <= 24 && cellsArray[i - 1].numberOfPieces.value!! > 0 && cellsArray[i - 1].color == currentColor.value) {
                             removePiece(cellsArray[i - 1])
+//                            delay(1500)
                             println("The cell " + i + " is collected")
                             piecesCollectedPlayer[0]++
                             break
@@ -567,6 +572,7 @@ player1> 1
             for (move in movesList) {
                 if (cellsArray[move - 1].numberOfPieces.value!! > 0 && cellsArray[move - 1].color == currentColor.value) {
                     removePiece(cellsArray[move - 1])
+//                    delay(1500)
                     println("The cell " + move + " is collected")
                     piecesCollectedPlayer[1]++
                     continue
@@ -578,6 +584,7 @@ player1> 1
                     ) {
                         addPiece(cellsArray[i - move - 1],currentColor.value!!)
                         removePiece(cellsArray[i - 1])
+//                        delay(1500)
                         isPlayed = true
                         break
                     }
@@ -587,6 +594,7 @@ player1> 1
                         println("cell " + i + "no of pieces " + cellsArray[i - 1].numberOfPieces.value)
                         if (i > 0 && cellsArray[i - 1].numberOfPieces.value!! > 0 && cellsArray[i - 1].color == currentColor.value) {
                             removePiece(cellsArray[i - 1])
+//                            delay(1500)
                             println("The cell " + i + " is collected")
                             piecesCollectedPlayer[1]++
                             break
@@ -601,10 +609,10 @@ player1> 1
             endRound()
         }
         else {
-//            uiScope.launch {
+            uiScope.launch {
                 waitTime = 4500
                 switchTurns()
-//            }
+            }
         }
     }
 
@@ -684,19 +692,5 @@ player1> 1
         sign = 3- 2*currentColor.value!!
         computerTurn = winner == 2
 
-    }
-    private fun collectPiecesNGameFinishTest (insertFrom : Int){ // 23 or 0
-        //hawaza3 14 piece 3ala elhome w al3ab a5er wa7da ana 3ashan a test el collect felcomputer bas asra3
-        for(i in 1 .. 3){
-            addPiece(cellsArray[insertFrom + sign * i],currentColor.value!!)
-            cellsArray[insertFrom + sign * i].numberOfPieces.value = 4
-            playersCells[(currentColor.value!!-1)].add(insertFrom + sign * i +1)
-    }
-        addPiece(cellsArray[insertFrom + sign * 4], currentColor.value!!)
-        cellsArray[insertFrom + sign * 4].numberOfPieces.value = 2
-        playersCells[(currentColor.value!!-1)].add(insertFrom + sign * 4 +1)
-        piecesAtHomePlayer[(currentColor.value!!-1)] = 14
-        Log.i("MAMAAA", playersCells[currentColor.value!!-1].toString())
-        Log.i("MAMAAA", currentColor.value.toString())
     }
 }

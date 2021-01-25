@@ -46,15 +46,14 @@ class HomeFragment : Fragment() {
         }
 
         sound.setOnClickListener {
-            if (MainActivity.gameMusic.isPlaying) {
+            if (MainActivity.homeMusic.isPlaying) {
                 sound.setImageResource(R.drawable.sound_off)
-                MainActivity.gameMusic.pause()
                 MainActivity.homeMusic.pause()
                 isMuted = true
             }
             else {
                 sound.setImageResource(R.drawable.sound_bars)
-                MainActivity.gameMusic.start()
+                MainActivity.homeMusic.start()
             }
         }
 
@@ -68,8 +67,8 @@ class HomeFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
-        if(!isMuted)
         MainActivity.homeMusic.pause()
+        if(!isMuted)
         MainActivity.gameMusic.start()
     }
 

@@ -24,10 +24,8 @@ import com.example.android.a31tawlaproject.game.GameViewModel.Companion.movedToC
 import com.example.android.a31tawlaproject.miscUtils.diceValues
 import com.example.android.a31tawlaproject.miscUtils.rollDice
 import com.example.android.a31tawlaproject.miscUtils.save
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers.Main
 import kotlin.math.max
 import kotlin.math.min
 
@@ -191,6 +189,7 @@ GameViewModel.isMoved.observe( viewLifecycleOwner, Observer {
                         R.anim.top_fade_out_animation
                     )
                 }
+                //TODO MUSIC
                 moveFromSound.start()
             }
         })
@@ -230,7 +229,7 @@ GameViewModel.isMoved.observe( viewLifecycleOwner, Observer {
         for (i in 0..1) {
             GameViewModel.collectionStarted[i].observe(lifeCycleOwner, Observer {
                 if (it) {
-                    uiScope.launch {
+                    GlobalScope.launch(Main) {
                         animateCollectionMessage()
                     }
                 }
