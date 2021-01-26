@@ -68,6 +68,7 @@ player1> 1
         fun writeArray(): String {
             //TOO MUCHHH
             //CODE 3ERRAAAAAAAAAA
+            Log.i("Load bug", "D5lna el Write")
             val sb = StringBuilder()
             sb.append(gameMode).append(" ")
             for (cell in cellsArray) {
@@ -95,7 +96,7 @@ player1> 1
 
 
         fun readArray(string: String?) { //sets read to false if the file was empty " nothing is saved "
-
+            Log.i("Load bug", "D5lna hnaaaaaaa")
             if (string == null) {
                 read = false
                 return
@@ -166,14 +167,16 @@ player1> 1
     private var oneMoveOnly = false
 
     init {
-
+        Log.i("Load bug", "init hereeeeeeeeeeeeeeeeeee")
         if (!read) {
             currentColor = MutableLiveData (1)
             cellsArray = Array(24) {
                 Cell(it + 1, MutableLiveData(0), 0, MutableLiveData(false), MutableLiveData(false))
             }
+            Log.i("Load bug", "New cells array created")
             //ragga3i dool
             resetGame()
+            Log.i("Load bug", "3dina el reset")
 //            // w sheli men hena
 //            addPiece(cellsArray[18], 1)
 //            playersCells[0].add(19)
@@ -187,7 +190,7 @@ player1> 1
 //            playersCells[1].add(12)
 //            piecesAtHomePlayer[0] = 14
 //            piecesAtHomePlayer[1] = 14
-            // lhena
+                // lhena
         }
         else{
             sign = if (currentColor.value == 1)
@@ -229,6 +232,7 @@ player1> 1
             }
         } else { //if source cell is selected
             println("2")
+            Log.i("Load bug", "hna 10")
             isMoved.value = false
             for (move in movesList) {
                 if (sourceCell.cellNumber + sign * move in 1..24) {
@@ -423,6 +427,7 @@ player1> 1
     }
 
     fun move(cell: Cell) {
+        Log.i("Load bug", "Hna 1")
         unhighlightMove()
         if (!(cell.cellNumber in playersCells[currentColor.value!!-1])) {
             playersCells[currentColor.value!!-1].add(cell.cellNumber)
@@ -482,7 +487,7 @@ player1> 1
         diceRolled = false
         currentColor.value = oppositeColor()
         sign *=-1
-        if (piecesAtHomePlayer[currentColor.value!! - 1] == 15) {
+        if (currentColor.value!! != 0 && piecesAtHomePlayer[currentColor.value!! - 1] == 15) {
             collectPieces()
         }
         waitTime = 0
@@ -496,7 +501,7 @@ player1> 1
     }
 
     private fun removePiece(cell: Cell){
-        Log.i("Moved_From", cell.cellNumber.toString())
+        Log.i("Load bug", cell.cellNumber.toString())
         movedFromCell.value = cell.cellNumber
         cell.numberOfPieces.value = cell.numberOfPieces.value!! - 1
         if (cell.numberOfPieces.value == 0)
@@ -504,6 +509,7 @@ player1> 1
     }
 
     fun undo() {
+        Log.i("Load bug", "hna 2")
         val movePlayed = undoList.pop()
         if (startingPointSelected) {
             unhighlightMove()
@@ -527,7 +533,8 @@ player1> 1
     }
 
      suspend fun collectPieces() {
-        if (currentColor.value == 1) {
+         Log.i("Load bug", "hna 5")
+         if (currentColor.value == 1) {
             for (move in movesList) {
                 if (cellsArray[24 - move].numberOfPieces.value!! > 0 && cellsArray[24 - move].color == currentColor.value) {
                     removePiece(cellsArray[24 - move])
@@ -617,6 +624,7 @@ player1> 1
     }
 
     private fun resetGame() {
+        Log.i("Load bug", "reset Game here")
         piecesAtHomePlayer[0] = 0
         piecesAtHomePlayer[1] = 0
         piecesCollectedPlayer[0] = 0
@@ -633,44 +641,32 @@ player1> 1
         movesList.clear()
         diceRolled = false
 
-////        currentColor.value = 2
-////        sign = -1
-//        addPiece(cellsArray[23], 2)
-//        //ooooooooooooo
-//        cellsArray[23].numberOfPieces.value = 15
-//
-//
-////        sign = 1
-//        //  collectPiecesNGameFinishTest(0)
-//
-//        //ooooooooo
-//
-////        currentColor.value = 1
-//        addPiece(cellsArray[0],1)
-//
-//        //ooooooooooooo
-//        cellsArray[0].numberOfPieces.value = 15
-////        sign = -1
-//        // collectPiecesNGameFinishTest(23)
-//        sign = 1
-//        //oooooooooo
-//        playersCells[0].clear()
-//        playersCells[1].clear()
-//        playersCells[0].add(1)
-//        playersCells[1].add(24)
+        currentColor.value = 2
+        sign = -1
+        addPiece(cellsArray[23], 2)
+        //ooooooooooooo
+        cellsArray[23].numberOfPieces.value = 15
+
+
+        sign = 1
+        //  collectPiecesNGameFinishTest(0)
+
+        //ooooooooo
+
+        currentColor.value = 1
+        addPiece(cellsArray[0],1)
+
+        //ooooooooooooo
+        cellsArray[0].numberOfPieces.value = 15
+        sign = -1
+        // collectPiecesNGameFinishTest(23)
+        sign = 1
+        //oooooooooo
+        playersCells[0].clear()
+        playersCells[1].clear()
+        playersCells[0].add(1)
+        playersCells[1].add(24)
         println("Game Reset")
-        addPiece(cellsArray[18], 1)
-        playersCells[0].add(19)
-        addPiece(cellsArray[5],2)
-        playersCells[1].add(6)
-        cellsArray[18].numberOfPieces.value = 14
-        cellsArray[5].numberOfPieces.value = 14
-        addPiece(cellsArray[12],1)
-        playersCells[0].add(13)
-        addPiece(cellsArray[11],2)
-        playersCells[1].add(12)
-        piecesAtHomePlayer[0] = 14
-        piecesAtHomePlayer[1] = 14
     }
 
     open fun endRound() {

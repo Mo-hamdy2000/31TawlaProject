@@ -184,7 +184,7 @@ GameViewModel.isMoved.observe( viewLifecycleOwner, Observer {
         })
 
         movedFromCell.observe(viewLifecycleOwner, Observer {
-            if (it in 1..24) {
+            if (it in 1..24 && GameViewModel.cellsArray[movedFromCell.value!!-1].numberOfPieces.value!!.compareTo(0) > 0) {
                 if (movedFromCell.value!! <= 12) {
                     val piece = getCell(movedFromCell.value!!)[0]
                     piece.animation = AnimationUtils.loadAnimation(
